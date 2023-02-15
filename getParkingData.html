@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<title>Accueil</title>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<table id="tableParkings">
+	</table>
+	<script>				
+		function addTd(tr, content){
+			var td = document.createElement('td');
+			td.innerHTML = content;
+			tr.appendChild(td);
+		}
+		function addTh(tr, content){
+			var th = document.createElement('th');
+			th.innerHTML = content;
+			tr.appendChild(th);
+		}
+
+		function distMeters(lat1, lon1, lat2, lon2){
+			//src : https://www.movable-type.co.uk/scripts/latlong.html
+			const R = 6371e3; // metres
+				const φ1 = lat1 * Math.PI/180; // φ, λ in radians
+				const φ2 = lat2 * Math.PI/180;
+				const Δφ = (lat2-lat1) * Math.PI/180;
+				const Δλ = (lon2-lon1) * Math.PI/180;
+
+				const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+						Math.cos(φ1) * Math.cos(φ2) *
+						Math.sin(Δλ/2) * Math.sin(Δλ/2);
+				const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+				return R * c; // in metres	
+		}
+
+		let pos = {lat:49.023079,lon:2.047221};
+
+		let table = document.getElementById("tableParkings");
+		let url = 'http://overpass-api.de/api/interpreter?data=[out:json];way[amenity=parking](around:2000,'+pos.lat+',' + pos.lon+');out bb;';
+
+		let tr = document.createElement('tr');
+		addTh(tr, "surface");
+		addTh(tr, "nombre de places max");
+		addTh(tr, "distance");
+		table.appendChild(tr);
+
+		
+		fetch(url)
+		.then((res) => res.json())
+		.then((out) => {
+		 	console.log(out);
+			for(let element in out.elements){
+				console.log(out.elements[element]);
+				
+				console.log();
+
+				let tr = document.createElement('tr');
+
+				let lonDiff = out.elements[element].bounds.maxlon -out.elements[element].bounds.minlon;
+				let latDiff = out.elements[element].bounds.maxlat -out.elements[element].bounds.minlat;
+				let latMean = (out.elements[element].bounds.maxlat + out.elements[element].bounds.minlat) / 2;
+				let lonMean = (out.elements[element].bounds.maxlon + out.elements[element].bounds.minlon) / 2;
+
+				let lat1 = latMean;
+				let lat2 = pos.lat;
+				let lon1 = lonMean;
+				let lon2 = pos.lon
+
+				
+				
+				let latWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.maxlat, out.elements[element].bounds.minlon);
+				let lonWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.minlat, out.elements[element].bounds.maxlon);
+				let surface = latWidth * lonWidth;
+				
+				addTd(tr, surface);
+				//Surface -> capacity : https://www.dimensions.com/element/90-degree-parking-spaces-layouts
+				/*
+				400m² -> 12 slots
+				*/
+				if(out.elements[element].tags.hasOwnProperty('capacity')){
+					addTd(tr,out.elements[element].tags.capacity);
+				}else{
+					addTd(tr, surface *(3/100));
+				}
+				addTd(tr, distMeters(latMean, lonMean, pos.lat, pos.lon));
+				table.appendChild(tr);
+			} 
+		  })
+		.catch(err => { throw err });
+	</script>
+
+	
+	
+</body>
+</html>
