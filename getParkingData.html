@@ -30,30 +30,66 @@
 		}
 
 		function distMeters(lat1, lon1, lat2, lon2){
-			//src : https://www.movable-type.co.uk/scripts/latlong.html
-			const R = 6371e3; // metres
-				const φ1 = lat1 * Math.PI/180; // φ, λ in radians
-				const φ2 = lat2 * Math.PI/180;
-				const Δφ = (lat2-lat1) * Math.PI/180;
-				const Δλ = (lon2-lon1) * Math.PI/180;
+			//src : https://en.wikipedia.org/wiki/Haversine_formula
+			const R = 6371e3; // Earth radius
 
-				const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-						Math.cos(φ1) * Math.cos(φ2) *
-						Math.sin(Δλ/2) * Math.sin(Δλ/2);
-				const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+			// Convert degrees to radians
+			const phi1 = lat1 * Math.PI/180;
+			const phi2 = lat2 * Math.PI/180;
+			
+			// Get lat and lon variation in radians
+			const dphi = (lat2-lat1) * Math.PI/180;
+			const dlambda = (lon2-lon1) * Math.PI/180;
 
-				return R * c; // in metres	
+			// Haversine function
+			const h = Math.sin(dphi/2) ** 2 + Math.cos(phi1) * Math.cos(phi2) * (Math.sin(dlambda/2) ** 2);
+			
+			// Distance in meters = (Inverse haversine of h) * r = 2 * r * arcsin(sqrt(h))
+			return 2 * R * Math.asin(Math.sqrt(h));
 		}
 
-		let pos = {lat:49.023079,lon:2.047221};
+		function getCapacity(data, surface){
+			/*
+			Surface -> capacity : https://www.dimensions.com/element/90-degree-parking-spaces-layouts
+			400m² -> 12 slots
+			*/
+			let capacity = 0;
+
+			if(data.hasOwnProperty('capacity')){
+				capacity = data.capacity;
+			}else{
+				capacity = surface * (3/100);
+				capacity = Math.round(capacity);
+			}
+			if(capacity < 0){
+				capacity = 0;
+			}
+			return capacity
+		}
+
+		function getFee(data){
+			if(data.hasOwnProperty('fee')){
+				switch(data.fee){
+					case "yes": return "payant"; break;
+					case "no" : return "gratuit"; break;
+					default : return "non renseigné";
+				}
+			} else{
+				return "non renseigné"
+			}
+		}
+
+
+		let searchPos = {lat:49.023079,lon:2.047221};
+		let searchRadius = 100;
 
 		let table = document.getElementById("tableParkings");
-		let url = 'http://overpass-api.de/api/interpreter?data=[out:json];way[amenity=parking](around:2000,'+pos.lat+',' + pos.lon+');out bb;';
+		let url = 'http://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+'););out bb;';
 
 		let tr = document.createElement('tr');
-		addTh(tr, "surface");
 		addTh(tr, "nombre de places max");
 		addTh(tr, "distance");
+		addTh(tr, "payant");
 		table.appendChild(tr);
 
 		
@@ -61,47 +97,83 @@
 		.then((res) => res.json())
 		.then((out) => {
 		 	console.log(out);
+			let capacity = 0;
+			let fee = 0;
+			let surface = 0;
+			let latMean = 0;
+			let lonMean = 0;
+
 			for(let element in out.elements){
-				console.log(out.elements[element]);
-				
-				console.log();
+				capacity = 0;
+				fee = getFee(out.elements[element].tags);
+				surface = 0;
 
 				let tr = document.createElement('tr');
+				if(out.elements[element].type != "node"){
+					let lonDiff = out.elements[element].bounds.maxlon -out.elements[element].bounds.minlon;
+					let latDiff = out.elements[element].bounds.maxlat -out.elements[element].bounds.minlat;
+					latMean = (out.elements[element].bounds.maxlat + out.elements[element].bounds.minlat) / 2;
+					lonMean = (out.elements[element].bounds.maxlon + out.elements[element].bounds.minlon) / 2;
 
-				let lonDiff = out.elements[element].bounds.maxlon -out.elements[element].bounds.minlon;
-				let latDiff = out.elements[element].bounds.maxlat -out.elements[element].bounds.minlat;
-				let latMean = (out.elements[element].bounds.maxlat + out.elements[element].bounds.minlat) / 2;
-				let lonMean = (out.elements[element].bounds.maxlon + out.elements[element].bounds.minlon) / 2;
+					let lat1 = latMean;
+					let lat2 = searchPos.lat;
+					let lon1 = lonMean;
+					let lon2 = searchPos.lon
 
-				let lat1 = latMean;
-				let lat2 = pos.lat;
-				let lon1 = lonMean;
-				let lon2 = pos.lon
-
-				
-				
-				let latWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.maxlat, out.elements[element].bounds.minlon);
-				let lonWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.minlat, out.elements[element].bounds.maxlon);
-				let surface = latWidth * lonWidth;
-				
-				addTd(tr, surface);
-				//Surface -> capacity : https://www.dimensions.com/element/90-degree-parking-spaces-layouts
-				/*
-				400m² -> 12 slots
-				*/
-				if(out.elements[element].tags.hasOwnProperty('capacity')){
-					addTd(tr,out.elements[element].tags.capacity);
-				}else{
-					addTd(tr, surface *(3/100));
+					let latWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.maxlat, out.elements[element].bounds.minlon);
+					let lonWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.minlat, out.elements[element].bounds.maxlon);
+					surface = latWidth * lonWidth;
 				}
-				addTd(tr, distMeters(latMean, lonMean, pos.lat, pos.lon));
+				else{
+					latMean = out.elements[element].lat;
+					lonMean = out.elements[element].lon;
+				}
+				capacity = getCapacity(out.elements[element].tags, surface);
+				
+				addTd(tr,capacity);
+				addTd(tr, distMeters(latMean, lonMean, searchPos.lat, searchPos.lon));
+				addTd(tr, fee);
 				table.appendChild(tr);
-			} 
+			}
 		  })
 		.catch(err => { throw err });
-	</script>
+		
+		searchPos.lat=49.0101759;
+		searchPos.lon=2.0421101; 
 
-	
+		url = 
+		'http://overpass-api.de/api/interpreter?data='
+		+'[out:json];'
+		+'(node[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
+		+'node[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
+		+'node[amenity="place_of_worship"](around:500,49.0101759,2.0421101);'
+		+'node[shop](around:500,49.0101759,2.0421101);'
+		+'node[airway="airport"](around:500,49.0101759,2.0421101);'
+		+'node[healthcare](around:500,49.0101759,2.0421101);'
+		+'node[historic](around:500,49.0101759,2.0421101);'
+		+'node[leisure](around:500,49.0101759,2.0421101);'
+		+'node[office](around:500,49.0101759,2.0421101);'
+		+'node[tourism](around:500,49.0101759,2.0421101);'
+		+'way[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
+		+'way[amenity="place_of_worship"](around:500,49.0101759,2.0421101);'
+		+'way[shop](around:500,49.0101759,2.0421101);'
+		+'way[airway="airport"](around:500,49.0101759,2.0421101);'
+		+'way[healthcare](around:500,49.0101759,2.0421101);'
+		+'way[historic](around:500,49.0101759,2.0421101);'
+		+'way[leisure](around:500,49.0101759,2.0421101);'
+		+'way[office](around:500,49.0101759,2.0421101);'
+		+'way[tourism](around:500,49.0101759,2.0421101););out;';
+		
+		fetch(url)
+		.then((res) => res.json())
+		.then((out) => {
+			console.log(out);
+		})
+		.catch(err => { throw err });
+
+
+
+	</script>
 	
 </body>
 </html>
