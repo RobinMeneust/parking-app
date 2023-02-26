@@ -15,9 +15,10 @@
 	<meta charset="UTF-8">
 </head>
 <body>
+	<button id="getUserLocation">Trouver des parkings proches de votre position</button>
 	<table id="tableParkings">
 	</table>
-	<script>				
+	<script>	
 		function addTd(tr, content){
 			var td = document.createElement('td');
 			td.innerHTML = content;
@@ -53,91 +54,148 @@
 			Surface -> capacity : https://www.dimensions.com/element/90-degree-parking-spaces-layouts
 			400m² -> 12 slots
 			*/
-			let capacity = 0;
+			let capacity = {value:0, approx:false};
 
 			if(data.hasOwnProperty('capacity')){
-				capacity = data.capacity;
+				capacity.value = parseInt(data.capacity);
 			}else{
-				capacity = surface * (3/100);
-				capacity = Math.round(capacity);
+				capacity.value = surface * (3/100);
+				capacity.value = Math.round(capacity.value);
+				capacity.approx = true;
 			}
-			if(capacity < 0){
-				capacity = 0;
+			if(capacity.value < 0){
+				capacity.value = 0;
 			}
 			return capacity
 		}
 
 		function getFee(data){
 			if(data.hasOwnProperty('fee')){
-				switch(data.fee){
-					case "yes": return "payant"; break;
-					case "no" : return "gratuit"; break;
-					default : return "non renseigné";
-				}
+				return data.fee;
 			} else{
-				return "non renseigné"
+				return ""
 			}
 		}
 
+		function getPaymentMethod(data){
+			let payment = {cash:"", credit_card:"", coins:""}
+			if(data.hasOwnProperty('payment:cash')){
+				payment.cash = data['payment:cash'];
+			}
+			if(data.hasOwnProperty('payment:credit_card')){
+				payment.cash = data['payment:credit_card'];
+			}
+			if(data.hasOwnProperty('payment:coins')){
+				payment.cash = data['payment:coins'];
+			}
+			return payment;
+		}
 
-		let searchPos = {lat:49.023079,lon:2.047221};
-		let searchRadius = 100;
+		async function getAddressFromPos(pos){
+			const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lon+"&key=6ed462e0c4a54f39a14230ff783fc470")
+			const json = await response.json();
+			return json.results[0].formatted;
+		}
 
-		let table = document.getElementById("tableParkings");
-		let url = 'http://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+'););out bb;';
-
-		let tr = document.createElement('tr');
-		addTh(tr, "nombre de places max");
-		addTh(tr, "distance");
-		addTh(tr, "payant");
-		table.appendChild(tr);
-
+		async function getParkingsData(latitude, longitude){
+			//let searchPos = {lat:49.023079,lon:2.047221};
+			let searchPos = {lat:latitude,lon:longitude};
+			let searchRadius = 600;
+			
+			let url = 'http://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+'););out bb;';
+			let data = [];
 		
-		fetch(url)
-		.then((res) => res.json())
-		.then((out) => {
-		 	console.log(out);
-			let capacity = 0;
-			let fee = 0;
-			let surface = 0;
-			let latMean = 0;
-			let lonMean = 0;
-
-			for(let element in out.elements){
-				capacity = 0;
-				fee = getFee(out.elements[element].tags);
-				surface = 0;
-
-				let tr = document.createElement('tr');
-				if(out.elements[element].type != "node"){
-					let lonDiff = out.elements[element].bounds.maxlon -out.elements[element].bounds.minlon;
-					let latDiff = out.elements[element].bounds.maxlat -out.elements[element].bounds.minlat;
-					latMean = (out.elements[element].bounds.maxlat + out.elements[element].bounds.minlat) / 2;
-					lonMean = (out.elements[element].bounds.maxlon + out.elements[element].bounds.minlon) / 2;
-
-					let lat1 = latMean;
-					let lat2 = searchPos.lat;
-					let lon1 = lonMean;
-					let lon2 = searchPos.lon
-
-					let latWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.maxlat, out.elements[element].bounds.minlon);
-					let lonWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.minlat, out.elements[element].bounds.maxlon);
-					surface = latWidth * lonWidth;
-				}
-				else{
-					latMean = out.elements[element].lat;
-					lonMean = out.elements[element].lon;
-				}
-				capacity = getCapacity(out.elements[element].tags, surface);
+			try{
+				const response = await fetch(url)
+				const out = await response.json();
+				console.log(out);
 				
-				addTd(tr,capacity);
-				addTd(tr, distMeters(latMean, lonMean, searchPos.lat, searchPos.lon));
-				addTd(tr, fee);
+				for(let element in out.elements){
+					let parking = {
+						capacity:{value:0,approx:true}, 
+						fee:getFee(out.elements[element].tags), 
+						surface:0, 
+						address:"",
+						distance:0,
+						pos:{lat:0.0,lon:0.0},
+						paymentMethod:{cash:"", credit_card:"", coins:""}
+					};
+					
+					let tr = document.createElement('tr');
+					if(out.elements[element].type != "node"){
+						let lonDiff = out.elements[element].bounds.maxlon -out.elements[element].bounds.minlon;
+						let latDiff = out.elements[element].bounds.maxlat -out.elements[element].bounds.minlat;
+						parking.pos.lat = (out.elements[element].bounds.maxlat + out.elements[element].bounds.minlat) / 2;
+						parking.pos.lon = (out.elements[element].bounds.maxlon + out.elements[element].bounds.minlon) / 2;
+						
+						let lat1 = parking.pos.lat;
+						let lat2 = searchPos.lat;
+						let lon1 = parking.pos.lon;
+						let lon2 = searchPos.lon;
+
+						let latWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.maxlat, out.elements[element].bounds.minlon);
+						let lonWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.minlat, out.elements[element].bounds.maxlon);
+						parking.surface = latWidth * lonWidth;
+					}
+					else{
+						parking.pos.lat = out.elements[element].lat;
+						parking.pos.lon = out.elements[element].lon;
+					}
+					parking.paymentMethod = getPaymentMethod(out.elements[element].tags);
+					parking.capacity = getCapacity(out.elements[element].tags, parking.surface);
+					parking.address = await getAddressFromPos(parking.pos);
+					parking.distance = distMeters(parking.pos.lat, parking.pos.lon, searchPos.lat, searchPos.lon);
+					data.push(parking);
+				}
+				return data;
+			}
+			catch(error){
+				console.log("Error: could not fetch and parse data");
+			}
+		}
+		
+		function createTable(data){
+			let table = document.getElementById("tableParkings");
+			let tr = document.createElement('tr');
+			addTh(tr, "adresse");
+			addTh(tr, "nombre de places max");
+			addTh(tr, "distance");
+			addTh(tr, "payant");
+			addTh(tr, "paiement en carte de crédit");
+			addTh(tr, "paiement en billets");
+			addTh(tr, "paiement en pièces");
+			table.appendChild(tr);
+			
+			for(let element in data){
+				let tr = document.createElement('tr');
+				addTd(tr, data[element].address);
+				addTd(tr, (data[element].capacity.approx ? "~":"") + data[element].capacity.value);
+				addTd(tr, data[element].distance);
+				addTd(tr, data[element].fee);
+				addTd(tr, data[element].paymentMethod.credit_card);
+				addTd(tr, data[element].paymentMethod.cash);
+				addTd(tr, data[element].paymentMethod.coins);
 				table.appendChild(tr);
 			}
-		  })
-		.catch(err => { throw err });
+		}
+
+		let button = document.getElementById("getUserLocation");
+		let latText = document.getElementById("latitude");
+		let longText = document.getElementById("longitude");
 		
+		button.addEventListener("click", () => {
+			navigator.geolocation.getCurrentPosition((position) => {
+				let lat = position.coords.latitude;
+				let lon = position.coords.longitude;
+				getParkingsData(lat,lon).then((data) => {
+					console.log(data);
+					createTable(data);
+				})
+			});
+		});
+		
+		// Used to get predict the number of free slots
+		/*
 		searchPos.lat=49.0101759;
 		searchPos.lon=2.0421101; 
 
@@ -168,12 +226,20 @@
 		.then((res) => res.json())
 		.then((out) => {
 			console.log(out);
+			let probabilityFull = 0.0;
 		})
-		.catch(err => { throw err });
-
-
-
+		.catch(error => { throw error });
+		*/
+		/*
+		- Create a variable that will start at 0 and increase if the probability that the parking is full increase. It'll be influenced by the following elements :
+		- Display the accuracy of the prediction (e.g by using capacity.approx) ?
+		- Get traffic data and/or city density -> nominatim (density) & TomTom (traffic)
+		- Get current time and adjust the coefficients of the nodes and ways got just before (ex at night college will have a smaller weight and bar a higher one; in summer tourism will have a higher weight during holidays...)-
+		- Check if there are other parkings nearby (it'll lower the probability, -> divide it by the quantity of parkings, or their capacity?)
+		*/
+		
 	</script>
 	
-</body>
-</html>
+	</body>
+	</html>
+	
