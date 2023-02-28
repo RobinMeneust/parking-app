@@ -16,6 +16,8 @@
 </head>
 <body>
 	<button id="getUserLocation">Trouver des parkings proches de votre position</button>
+	<input id="searchBox" type="text" value="Paris 1er Arrondissement"></input>
+	<button id="getSearchParams">Chercher un département ou une région entrée</button>
 	<table id="tableParkings">
 	</table>
 	<script>	
@@ -97,23 +99,37 @@
 			return json.results[0].formatted;
 		}
 
-		async function getParkingsData(latitude, longitude){
+		async function getParkingsData(latitude, longitude, areaParams){
 			//let searchPos = {lat:49.023079,lon:2.047221};
 			let searchPos = {lat:latitude,lon:longitude};
 			let searchRadius = 600;
 			
-			let url = 'http://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+'););out bb;';
+			// We only take nodes with the capacity tag because we don't have borders to get an surface used to get an approximation of this capacity
+
+			let url ='';
+			if(areaParams==""){
+				url = 'http://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+'););out bb 200;';
+			}
+			else{
+				url = 'http://overpass-api.de/api/interpreter?data=[out:json];('+areaParams+'way[amenity=parking](area);relation[amenity=parking](area);node[amenity=parking][capacity](area););out bb 200;';
+			}
+			
 			let data = [];
 		
 			try{
 				const response = await fetch(url)
 				const out = await response.json();
+				let nbParkings = out.elements.length;
+				if(areaParams!=""){
+					nbParkings--; // to ignore the area element at the end of the json
+				}
+
 				console.log(out);
 				
-				for(let element in out.elements){
+				for(let i=0; i<nbParkings; i++){
 					let parking = {
 						capacity:{value:0,approx:true}, 
-						fee:getFee(out.elements[element].tags), 
+						fee:getFee(out.elements[i].tags), 
 						surface:0, 
 						address:"",
 						distance:0,
@@ -121,31 +137,31 @@
 						paymentMethod:{cash:"", credit_card:"", coins:""}
 					};
 					
-					let tr = document.createElement('tr');
-					if(out.elements[element].type != "node"){
-						let lonDiff = out.elements[element].bounds.maxlon -out.elements[element].bounds.minlon;
-						let latDiff = out.elements[element].bounds.maxlat -out.elements[element].bounds.minlat;
-						parking.pos.lat = (out.elements[element].bounds.maxlat + out.elements[element].bounds.minlat) / 2;
-						parking.pos.lon = (out.elements[element].bounds.maxlon + out.elements[element].bounds.minlon) / 2;
-						
+					if(out.elements[i].type != "node"){
+						let lonDiff = out.elements[i].bounds.maxlon -out.elements[i].bounds.minlon;
+						let latDiff = out.elements[i].bounds.maxlat -out.elements[i].bounds.minlat;
+						parking.pos.lat = (out.elements[i].bounds.maxlat + out.elements[i].bounds.minlat) / 2;
+						parking.pos.lon = (out.elements[i].bounds.maxlon + out.elements[i].bounds.minlon) / 2;
 						let lat1 = parking.pos.lat;
 						let lat2 = searchPos.lat;
 						let lon1 = parking.pos.lon;
 						let lon2 = searchPos.lon;
-
-						let latWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.maxlat, out.elements[element].bounds.minlon);
-						let lonWidth = distMeters(out.elements[element].bounds.minlat, out.elements[element].bounds.minlon, out.elements[element].bounds.minlat, out.elements[element].bounds.maxlon);
+						let latWidth = distMeters(out.elements[i].bounds.minlat, out.elements[i].bounds.minlon, out.elements[i].bounds.maxlat, out.elements[i].bounds.minlon);
+						let lonWidth = distMeters(out.elements[i].bounds.minlat, out.elements[i].bounds.minlon, out.elements[i].bounds.minlat, out.elements[i].bounds.maxlon);
 						parking.surface = latWidth * lonWidth;
 					}
 					else{
-						parking.pos.lat = out.elements[element].lat;
-						parking.pos.lon = out.elements[element].lon;
+						parking.pos.lat = out.elements[i].lat;
+						parking.pos.lon = out.elements[i].lon;
 					}
-					parking.paymentMethod = getPaymentMethod(out.elements[element].tags);
-					parking.capacity = getCapacity(out.elements[element].tags, parking.surface);
+					parking.paymentMethod = getPaymentMethod(out.elements[i].tags);
+					parking.capacity = getCapacity(out.elements[i].tags, parking.surface);
 					parking.address = await getAddressFromPos(parking.pos);
+					//console.log(parking);
 					parking.distance = distMeters(parking.pos.lat, parking.pos.lon, searchPos.lat, searchPos.lon);
-					data.push(parking);
+					if(parking.capacity.value>0){
+						data.push(parking);
+					}
 				}
 				return data;
 			}
@@ -179,18 +195,35 @@
 			}
 		}
 
-		let button = document.getElementById("getUserLocation");
+		let buttonPos = document.getElementById("getUserLocation");
+		let buttonSearchParam = document.getElementById("getSearchParams")
 		let latText = document.getElementById("latitude");
 		let longText = document.getElementById("longitude");
 		
-		button.addEventListener("click", () => {
+		buttonPos.addEventListener("click", () => {
 			navigator.geolocation.getCurrentPosition((position) => {
 				let lat = position.coords.latitude;
 				let lon = position.coords.longitude;
-				getParkingsData(lat,lon).then((data) => {
+				let areaParams = "";
+				getParkingsData(lat,lon,areaParams).then((data) => {
 					console.log(data);
 					createTable(data);
-				})
+				});
+			});
+		});
+
+		buttonSearchParam.addEventListener("click", () => {
+			navigator.geolocation.getCurrentPosition((position) => {
+				let lat = position.coords.latitude;
+				let lon = position.coords.longitude;
+
+				// example: area[name="Paris 20e Arrondissement"];
+				let areaParams = 'area[name="'+document.getElementById("searchBox").value+'"];';
+
+				getParkingsData(lat,lon,areaParams).then((data) => {
+					console.log(data);
+					createTable(data);
+				});
 			});
 		});
 		
@@ -220,7 +253,7 @@
 		+'way[historic](around:500,49.0101759,2.0421101);'
 		+'way[leisure](around:500,49.0101759,2.0421101);'
 		+'way[office](around:500,49.0101759,2.0421101);'
-		+'way[tourism](around:500,49.0101759,2.0421101););out;';
+		+'way[tourism](around:500,49.0101759,2.0421101););out 200 ;';
 		
 		fetch(url)
 		.then((res) => res.json())
