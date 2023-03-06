@@ -18,6 +18,7 @@
 	<button id="getUserLocation">Trouver des parkings proches de votre position</button>
 	<input id="searchBox" type="text" value="Paris 1er Arrondissement"></input>
 	<button id="getSearchParams">Chercher un département ou une région entrée</button>
+	<button onclick="testFreeSlotSim()">Test simulation emplacements libres</button>
 	<table id="tableParkings">
 	</table>
 	<script>	
@@ -108,10 +109,10 @@
 
 			let url ='';
 			if(areaParams==""){
-				url = 'http://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+'););out bb 200;';
+				url = 'https://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+'););out bb 200;';
 			}
 			else{
-				url = 'http://overpass-api.de/api/interpreter?data=[out:json];('+areaParams+'way[amenity=parking](area);relation[amenity=parking](area);node[amenity=parking][capacity](area););out bb 200;';
+				url = 'https://overpass-api.de/api/interpreter?data=[out:json];('+areaParams+'way[amenity=parking](area);relation[amenity=parking](area);node[amenity=parking][capacity](area););out bb 200;';
 			}
 			
 			let data = [];
@@ -228,48 +229,54 @@
 		});
 		
 		// Used to get predict the number of free slots
-		/*
-		searchPos.lat=49.0101759;
-		searchPos.lon=2.0421101; 
+		function testFreeSlotSim(){
+			searchPos ={lat:49.0101759,lon:2.0421101};
 
-		url = 
-		'http://overpass-api.de/api/interpreter?data='
-		+'[out:json];'
-		+'(node[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
-		+'node[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
-		+'node[amenity="place_of_worship"](around:500,49.0101759,2.0421101);'
-		+'node[shop](around:500,49.0101759,2.0421101);'
-		+'node[airway="airport"](around:500,49.0101759,2.0421101);'
-		+'node[healthcare](around:500,49.0101759,2.0421101);'
-		+'node[historic](around:500,49.0101759,2.0421101);'
-		+'node[leisure](around:500,49.0101759,2.0421101);'
-		+'node[office](around:500,49.0101759,2.0421101);'
-		+'node[tourism](around:500,49.0101759,2.0421101);'
-		+'way[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
-		+'way[amenity="place_of_worship"](around:500,49.0101759,2.0421101);'
-		+'way[shop](around:500,49.0101759,2.0421101);'
-		+'way[airway="airport"](around:500,49.0101759,2.0421101);'
-		+'way[healthcare](around:500,49.0101759,2.0421101);'
-		+'way[historic](around:500,49.0101759,2.0421101);'
-		+'way[leisure](around:500,49.0101759,2.0421101);'
-		+'way[office](around:500,49.0101759,2.0421101);'
-		+'way[tourism](around:500,49.0101759,2.0421101););out 200 ;';
-		
-		fetch(url)
-		.then((res) => res.json())
-		.then((out) => {
-			console.log(out);
-			let probabilityFull = 0.0;
-		})
-		.catch(error => { throw error });
-		*/
-		/*
-		- Create a variable that will start at 0 and increase if the probability that the parking is full increase. It'll be influenced by the following elements :
-		- Display the accuracy of the prediction (e.g by using capacity.approx) ?
-		- Get traffic data and/or city density -> nominatim (density) & TomTom (traffic)
-		- Get current time and adjust the coefficients of the nodes and ways got just before (ex at night college will have a smaller weight and bar a higher one; in summer tourism will have a higher weight during holidays...)-
-		- Check if there are other parkings nearby (it'll lower the probability, -> divide it by the quantity of parkings, or their capacity?)
-		*/
+			url = 
+			'https://overpass-api.de/api/interpreter?data='
+			+'[out:json];'
+			+'(node[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
+			+'node[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
+			+'node[amenity="place_of_worship"](around:500,49.0101759,2.0421101);'
+			+'node[shop](around:500,49.0101759,2.0421101);'
+			+'node[airway="airport"](around:500,49.0101759,2.0421101);'
+			+'node[healthcare](around:500,49.0101759,2.0421101);'
+			+'node[historic](around:500,49.0101759,2.0421101);'
+			+'node[leisure](around:500,49.0101759,2.0421101);'
+			+'node[office](around:500,49.0101759,2.0421101);'
+			+'node[tourism](around:500,49.0101759,2.0421101);'
+			+'way[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
+			+'way[amenity="place_of_worship"](around:500,49.0101759,2.0421101);'
+			+'way[shop](around:500,49.0101759,2.0421101);'
+			+'way[airway="airport"](around:500,49.0101759,2.0421101);'
+			+'way[healthcare](around:500,49.0101759,2.0421101);'
+			+'way[historic](around:500,49.0101759,2.0421101);'
+			+'way[leisure](around:500,49.0101759,2.0421101);'
+			+'way[office](around:500,49.0101759,2.0421101);'
+			+'way[tourism](around:500,49.0101759,2.0421101););out 200;';
+			
+			fetch(url)
+			.then((res) => res.json())
+			.then((out) => {
+				console.log(out);
+				let probabilityFull = 0.0;
+
+				//for(let i=0; i<out.elements.length; i++){
+					//console.log(out.elements[i]);
+				//}
+
+
+			})
+			.catch(error => { throw error });
+			
+			/*
+			Create a variable that will start at 0 and increase if the probability that the parking is full increase. It'll be influenced by the following elements :
+			- Display the accuracy of the prediction (e.g by using capacity.approx) ?
+			- Get traffic data and/or city density -> nominatim (density) & TomTom (traffic)
+			- Get current time and adjust the coefficients of the nodes and ways got just before (ex at night college will have a smaller weight and bar a higher one; in summer tourism will have a higher weight during holidays...)-
+			- Check if there are other parkings nearby (it'll lower the probability, -> divide it by the quantity of parkings, or their capacity?)
+			*/
+		}
 		
 	</script>
 	
