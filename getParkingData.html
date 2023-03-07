@@ -229,14 +229,112 @@
 		});
 		
 		// Used to get predict the number of free slots
-		function testFreeSlotSim(){
-			searchPos ={lat:49.0101759,lon:2.0421101};
 
-			url = 
-			'https://overpass-api.de/api/interpreter?data='
-			+'[out:json];'
+		async function fetchNearbyElements(pos, params, weightValue){
+			url = 'https://overpass-api.de/api/interpreter?data=[out:json];(node'+params+'(around:500,'+pos.lat+','+pos.lon+');way'+params+'(around:500,'+pos.lat+','+pos.lon+');relation'+params+'(around:500,'+pos.lat+','+pos.lon+'););out count;';
+			return fetch(url).then((res) => res.json()).then((out) => {
+				let result = {weight:weightValue, count:out.elements[0].tags.total};
+				return result;
+			}).catch(error => { throw error });
+		}
+
+		async function getCityName(pos){
+			const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lon+"&key=6ed462e0c4a54f39a14230ff783fc470&limit=1")
+			const json = await response.json();
+			return json.results[0].components.city;
+		}
+
+		async function getCityPopulation(pos){			
+			const city = await getCityName(pos);
+			const response = await fetch('https://nominatim.openstreetmap.org/search.php?city="'+city+'"&format=json&extratags=1');
+			const json = await response.json();
+			return json [0].extratags.population;
+		}
+
+		//holidays ratio : 0 means that the date has no influence whereas 1 means that this place is only open during holidays. Values between 0 and 1 are accepted and gives the increase rate depending on if we are during holidays or not
+
+		function sigmoid(x) {
+			return 1 / (1 + Math.exp((1-x)/2));
+		}
+
+		function getTimePeriod(hour){
+
+			/*
+			9 - 11 morning
+			11 - 14 noon
+			14 - 18 afternoon
+			18 - 21 evening
+			21 - 3 night
+			*/
+			
+			if(hour>=9){
+				if(hour>=11){
+					if(hour>=14){
+						if(hour>=18){
+							if(hour>=21){
+								return "night";
+							}
+							else{
+								return "evening";
+							}
+						}
+						else{
+							return "afternoon";
+						}
+					}
+					else{
+						return "noon";
+					}
+				}
+				else{
+					return "morning";
+				}
+			} else if(hour<=3){
+				return "night";
+			} else{
+				return "ignore";
+			}
+		}
+
+		function isHolidays(date){
+			if((date.month==10 && date.day>=21)
+			|| (date.month==11 && date.day<7)
+			|| (date.month==12 && date.day>=17)
+			|| (date.month==1 && date.day<3)
+			|| (date.month==2 && date.day>=18)
+			|| (date.month==3 && date.day<6)
+			|| (date.month==4 && date.day>=22)
+			|| (date.month==5 && date.day<9)
+			|| (date.month==7 && date.day>=8)
+			|| (date.month==8)){
+				return true;
+			}
+			return false;
+		}
+
+		function getWeight(population, currentDate, holidays_ratio, opening_hours, importance){
+			let weight = importance;
+						
+			if(opening_hours[getTimePeriod(currentDate.hour)] == false){
+				weight+=0.1*importance;
+			}
+
+			if(isHolidays(currentDate)){
+				if(holidays_ratio>0.0)
+					weight+=importance*holidays_ratio;
+			} else if(holidays_ratio>0.0){
+				weight*=(1-holidays_ratio);
+			}
+	
+			weight += (population/1000000);
+
+			return sigmoid(weight);
+		}
+
+		async function testFreeSlotSim(){
+			let searchPos ={lat:49.0101759,lon:2.0421101};
+			/*
 			+'(node[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
-			+'node[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
 			+'node[amenity="place_of_worship"](around:500,49.0101759,2.0421101);'
 			+'node[shop](around:500,49.0101759,2.0421101);'
 			+'node[airway="airport"](around:500,49.0101759,2.0421101);'
@@ -245,29 +343,21 @@
 			+'node[leisure](around:500,49.0101759,2.0421101);'
 			+'node[office](around:500,49.0101759,2.0421101);'
 			+'node[tourism](around:500,49.0101759,2.0421101);'
-			+'way[amenity~"^(restaurant|bar|cafe|fast_food|food_court|college|kindergarten|library|music_school|school|university|bank|clinic|dentist|doctors|hospital|pharmacy|veterinary|arts_centre|casino|cinema|community_centre|conference_centre|events_venue|exhibition_center|music_venue|planetarium|theatre|courthouse|police|post_depot|townhall|animal_boarding|internet_cafe|marketplace|place_of_worship|train_station)$"](around:500,49.0101759,2.0421101);'
-			+'way[amenity="place_of_worship"](around:500,49.0101759,2.0421101);'
-			+'way[shop](around:500,49.0101759,2.0421101);'
-			+'way[airway="airport"](around:500,49.0101759,2.0421101);'
-			+'way[healthcare](around:500,49.0101759,2.0421101);'
-			+'way[historic](around:500,49.0101759,2.0421101);'
-			+'way[leisure](around:500,49.0101759,2.0421101);'
-			+'way[office](around:500,49.0101759,2.0421101);'
-			+'way[tourism](around:500,49.0101759,2.0421101););out 200;';
-			
-			fetch(url)
-			.then((res) => res.json())
-			.then((out) => {
-				console.log(out);
-				let probabilityFull = 0.0;
+			*/
+			let promises = new Array();
+			let date = new Date();
+			let currentDate = {hour:date.getHours(), month:date.getMonth()};
+			let cityPopulation = await getCityPopulation(searchPos);
 
-				//for(let i=0; i<out.elements.length; i++){
-					//console.log(out.elements[i]);
-				//}
+			promises.push(fetchNearbyElements(searchPos, '[amenity~"^(restaurant|fast_food|food_court)$"]', getWeight(cityPopulation, currentDate, 0.0, {morning:false, noon:true, afternoon:false, evening:true, night:false}, 0.8)));
+			promises.push(fetchNearbyElements(searchPos, '[shop]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 0.8)));
 
+			data = await Promise.all(promises);
 
-			})
-			.catch(error => { throw error });
+			console.log(data);
+			//console.log(promises.get('shop'));
+
+			let probabilityFull = 0.0;
 			
 			/*
 			Create a variable that will start at 0 and increase if the probability that the parking is full increase. It'll be influenced by the following elements :
