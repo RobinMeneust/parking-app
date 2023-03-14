@@ -1,0 +1,106 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+section {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 200px 0px 0px 0px;
+}
+
+.Form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 1;
+    margin: 0 400px;
+    border: red solid 15px;
+}
+
+.Form-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100%;
+    margin: 0px 20px ;
+}
+
+#Login .Form-card .form-header.active  {
+    border-right: none;
+}
+
+.Form-card .form-header {
+    flex: 50%;
+    text-align: center;
+    padding: 10px 5px;
+    border: 5px solid ;
+    backdrop-filter: blur(15px) grayscale(0.5) opacity(0.8);
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+
+
+ .form-header.active {
+    background-color: pink;
+    opacity: 1;
+    transition: border-color 0.3s;
+    
+}
+
+.Form-body {
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 40px 0;
+    text-align: center;
+}
+
+form {
+    flex: 0 0 100%;
+}
+
+form > h2 {
+    font-size: 30px;
+    margin-bottom: 50px;
+}
+
+.ToggleForm {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0,3s, visibility 0.3s;
+}
+
+.inputField {
+    width: 70%;
+    margin-bottom: 50px;
+    size: 2cm;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+.intputField:focus {
+    border: 3px solid #555;
+  }
+
+
+
+.button {
+    border: 1px solid transparent;
+    padding: 1rem 3rem;
+    background-color: gray;
+    margin-top: 1rem;
+    font-size: 1rem;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.button:hover {
+    box-shadow: 2px 5px 15px red;
+    transform: translateY(-3px);
+}
