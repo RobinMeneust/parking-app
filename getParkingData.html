@@ -1,14 +1,4 @@
 <!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-	
-
-</body>
-</html>
-
-<!DOCTYPE html>
 <html lang="fr">
 <head>
 	<title>Accueil</title>
@@ -164,7 +154,7 @@
 					parking.capacity = getCapacity(out.elements[i].tags, parking.surface);
 					parking.address = await getAddressFromPos(parking.pos);
 					//console.log(parking);
-					parking.distance = distMeters(parking.pos.lat, parking.pos.lon, searchPos.lat, searchPos.lon);
+					parking.distance = distMeters(parking.pos, searchPos);
 					if(parking.capacity.value>0){
 						data.push(parking);
 					}
@@ -398,7 +388,6 @@
 			console.log(availability);
 			console.log("estimated number of slots: "+numberOfSlots);
 		}
-		
 	</script>
 	
 	</body>
