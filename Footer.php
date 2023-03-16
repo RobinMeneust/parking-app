@@ -57,13 +57,13 @@
 
     darkMode.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-        darkMode.document.classList.toggle('hide');
+        darkMode.classList.toggle('hide');
         lightMode.classList.remove('hide');
     })
 
     lightMode.addEventListener('click', () => {
         document.body.classList.remove('dark-mode');
-        lightMode.document.classList.toggle('hide');
+        lightMode.classList.toggle('hide');
         darkMode.classList.remove('hide');
     })
 </script>

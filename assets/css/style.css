@@ -1,11 +1,15 @@
 :root {
     --primary-color: #fff;
-    --secondary-color: #000;
+    --secondary-color: black;
 }
 
 .dark-mode {
-    --primary-color: #000;
+    --primary-color: #22202f;
     --secondary-color: #fff;
+}
+
+.fa-moon{
+    color:#22202f;
 }
 
 *, ::before, ::after {
