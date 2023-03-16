@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<title>Accueil</title>
+	<meta charset="UTF-8">
+	<script src="getParkingData.js"></script>
+</head>
+<body onload="addEvents();">
+	<button id="getUserLocation">Trouver des parkings proches de votre position</button>
+	<input id="searchBox" type="text" value="Paris 1er Arrondissement"></input>
+	<button id="getSearchParams">Chercher un département ou une région entrée</button>
+	<button onclick="testFreeSlotSim()">Test simulation emplacements libres</button>
+	<table id="tableParkings"></table>
+</body>
+</html>
+	
