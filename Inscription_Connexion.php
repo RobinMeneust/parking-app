@@ -1,14 +1,21 @@
+<?php session_start(); 
+
+var_dump($_SESSION);
+?>
+
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <title>Inscription</title>
    
     <link rel="stylesheet" type="text/css" href="CSS/Inscription_Connexion.css">
-
+    <?php include_once("head.php"); ?>
 </head>
 
 <body>
 <!-- include header there : <?php //include('Header.php'); ?> -->
+    <?php include_once("Header.php"); ?>
+
     <section>
 
         <div class="Form-container">
@@ -16,29 +23,38 @@
             <div class="Form-card">
             
                 <div id="Login" class="form-header active">
-                    <h2>CONNEXION</h2>
+                    <h1>CONNEXION</h1>
                 </div> 
 
                 <div id="Register" class="form-header">
-                    <h2>INSCRIPTION</h2>
+                    <h1>INSCRIPTION</h1>
                 </div>
 
             </div> 
 
             <div id="IDForm-Body"class="Form-body">
 
-                <form id="FormLogin" method="post" action="PHP/verif_connexion.php" >
+                
 
-                    <h2> CONNECTEZ-VOUS SUR Park'o Top</h2>
+                <form id="FormLogin" method="post" action="./PHP/verification_Connexion.php" >
+
+                    <h2> Connectez-vous <br />sur <br/>Park'o Top</h2>
+
+                    <?php 
+                        if (isset($_GET["message"]) && !empty($_GET["message"]) ) {
+                            $error_msg = htmlspecialchars($_GET["message"]);
+                            include("PHP/error_msg.php");
+                        }
+                    ?>
 
                     <div> 
 
                         <div class="inputBox">
-                            <span>Mail</span>
-                            <input type="text" class="inputField" name="identifiant" placeholder="Entrez votre identifiant">
+                            <span>Mail</span><br /> 
+                            <input type="text" class="inputField" name="identifiant" placeholder="Entrez votre identifiant" value="<?= isset($_SESSION["VAR_profil"]["email"]) && $_SESSION["VAR_profil"]["email"] != "error" ? $_SESSION["VAR_profil"]["email"] : "";?>">
                         </div>
                         <div class="inputBox">
-                            <span>Mot de passe</span>
+                            <span>Mot de passe</span><br />
                             <input type="password" class="inputField" name="password" placeholder="Entrez votre mot de passe">
                         </div>
                         <div class="inputBox">
@@ -51,7 +67,7 @@
 
                 
 
-                <form id="FormRegister" class="ToggleForm" method="post" action="PHP/verification_Inscription_Connexion.php">
+                <form id="FormRegister" class="ToggleForm" method="post" action="./PHP/verification_Inscription.php">
 
                     <h2> BIENVENUE SUR Park'o Top </h2>
 
@@ -134,7 +150,19 @@
         const Login= _('Login');
         const Register= _('Register');
         const FormBody= _('IDForm-Body');
+        
 
+        function urlGet(parameterName) {
+            var result = null,
+                tmp = [];
+                location.search.substr(1).split("&").forEach(function (item) {
+                tmp = item.split("=");
+                if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+                });
+            return result;
+        }
+        const form=urlGet("form")
+        
         Login.addEventListener('click', () => {
             Register.classList.remove('active');
             Login.classList.add('active');
@@ -156,19 +184,24 @@
                 FormLogin.classList.add('ToggleForm');
             }
         })
+
+        if(form!=null && form == "Register") {
+            Register.click();
+        }
      
 
 
 
         console.log("hello");
         console.log(FormBody);
+        console.log(urlGet('form'))
 
         function _(e) {
             return document.getElementById(e);
         }
     </script>
     
-    <?php include('Footer.php'); ?>
+    <?php include_once("Footer.php"); ?>
 </body>
 
 </html>
