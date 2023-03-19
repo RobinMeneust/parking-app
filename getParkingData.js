@@ -139,7 +139,6 @@ async function getParkingsData(latitude, longitude, areaParams){
 			}
 			parking.paymentMethod = getPaymentMethod(out.elements[i].tags);
 			parking.capacity = getCapacity(out.elements[i].tags, parking.surface);
-			parking.address = await getAddressFromPos(parking.pos);
 			//console.log(parking);
 			parking.distance = distMeters(parking.pos, searchPos);
 			if(parking.capacity.value>0){
