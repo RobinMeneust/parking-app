@@ -246,6 +246,11 @@ hr {
     letter-spacing: 0.135rem;
 }
 
+#map {
+	height: 95%;
+	width: 95%;
+}
+
 @media screen and (max-width: 768px) {
     .content_footer {
         flex-wrap: wrap;

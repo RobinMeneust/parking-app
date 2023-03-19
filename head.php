@@ -9,4 +9,10 @@
 
     <!-- Styling css file -->
     <link rel="stylesheet" href="./assets/css/style.css" />
+
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+	<link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
+	<script src="./index.js"></script>
+	<script src="./getParkingData.js"></script>
 </head>

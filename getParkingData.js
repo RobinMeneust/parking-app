@@ -18,9 +18,9 @@ function distMeters(x0, x1){
 	const phi1 = x0.lat * Math.PI/180;
 	const phi2 = x1.lat * Math.PI/180;
 	
-	// Get lat and lon variation in radians
+	// Get lat and lng variation in radians
 	const dphi = (x1.lat-x0.lat) * Math.PI/180;
-	const dlambda = (x1.lon-x0.lon) * Math.PI/180;
+	const dlambda = (x1.lng-x0.lng) * Math.PI/180;
 
 	// Haversine function
 	const h = Math.sin(dphi/2) ** 2 + Math.cos(phi1) * Math.cos(phi2) * (Math.sin(dlambda/2) ** 2);
@@ -72,31 +72,31 @@ function getPaymentMethod(data){
 }
 
 async function getAddressFromPos(pos){
-	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lon+"&key=6ed462e0c4a54f39a14230ff783fc470")
+	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470")
 	const json = await response.json();
 	return json.results[0].formatted;
 }
 
 function getSurface(x0,x1){
 	let lowerLeft = x0;
-	let upperLeft = {lat:x1.lat, lon:x0.lon};
-	let lowerRight = {lat:x0.lat, lon:x1.lon};
+	let upperLeft = {lat:x1.lat, lng:x0.lng};
+	let lowerRight = {lat:x0.lat, lng:x1.lng};
 	let latLength = distMeters(lowerLeft,upperLeft);
-	let lonLength = distMeters(lowerLeft,lowerRight);
+	let lngLength = distMeters(lowerLeft,lowerRight);
 
-	return latLength * lonLength;
+	return latLength * lngLength;
 }
 
 async function getParkingsData(latitude, longitude, areaParams){
-	//let searchPos = {lat:49.023079,lon:2.047221};
-	let searchPos = {lat:latitude,lon:longitude};
+	//let searchPos = {lat:49.023079,lng:2.047221};
+	let searchPos = {lat:latitude,lng:longitude};
 	let searchRadius = 600;
 	
 	// We only take nodes with the capacity tag because we don't have borders to get an surface used to get an approximation of this capacity
 
 	let url ='';
 	if(areaParams==""){
-		url = 'https://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lon+'););out bb 200;';
+		url = 'https://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+'););out bb 200;';
 	}
 	else{
 		url = 'https://overpass-api.de/api/interpreter?data=[out:json];('+areaParams+'way[amenity=parking](area);relation[amenity=parking](area);node[amenity=parking][capacity](area););out bb 200;';
@@ -121,21 +121,21 @@ async function getParkingsData(latitude, longitude, areaParams){
 				surface:0, 
 				address:"",
 				distance:0,
-				pos:{lat:0.0,lon:0.0},
+				pos:{lat:0.0,lng:0.0},
 				paymentMethod:{cash:"", credit_card:"", coins:""}
 			};
 			
 			if(out.elements[i].type != "node"){
 				parking.pos.lat = (out.elements[i].bounds.maxlat + out.elements[i].bounds.minlat) / 2;
-				parking.pos.lon = (out.elements[i].bounds.maxlon + out.elements[i].bounds.minlon) / 2;
+				parking.pos.lng = (out.elements[i].bounds.maxlon + out.elements[i].bounds.minlon) / 2;
 
-				let x0 = {lat:out.elements[i].bounds.minlat, lon:out.elements[i].bounds.minlon};
-				let x1 = {lat:out.elements[i].bounds.maxlat, lon:out.elements[i].bounds.maxlon};
+				let x0 = {lat:out.elements[i].bounds.minlat, lng:out.elements[i].bounds.minlon};
+				let x1 = {lat:out.elements[i].bounds.maxlat, lng:out.elements[i].bounds.maxlon};
 				parking.surface = getSurface(x0,x1);
 			}
 			else{
 				parking.pos.lat = out.elements[i].lat;
-				parking.pos.lon = out.elements[i].lon;
+				parking.pos.lng = out.elements[i].lng;
 			}
 			parking.paymentMethod = getPaymentMethod(out.elements[i].tags);
 			parking.capacity = getCapacity(out.elements[i].tags, parking.surface);
@@ -177,45 +177,11 @@ function createTable(data){
 		table.appendChild(tr);
 	}
 }
-
-function addEvents(){
-	buttonPos = document.getElementById("getUserLocation");
-	buttonSearchParam = document.getElementById("getSearchParams")
-	latText = document.getElementById("latitude");
-	longText = document.getElementById("longitude");
 	
-	buttonPos.addEventListener("click", () => {
-		navigator.geolocation.getCurrentPosition((position) => {
-			let lat = position.coords.latitude;
-			let lon = position.coords.longitude;
-			let areaParams = "";
-			getParkingsData(lat,lon,areaParams).then((data) => {
-				console.log(data);
-				createTable(data);
-			});
-		});
-	});
-	
-	buttonSearchParam.addEventListener("click", () => {
-		navigator.geolocation.getCurrentPosition((position) => {
-			let lat = position.coords.latitude;
-			let lon = position.coords.longitude;
-			
-			// example: area[name="Paris 20e Arrondissement"];
-			let areaParams = 'area[name="'+document.getElementById("searchBox").value+'"];';
-			
-			getParkingsData(lat,lon,areaParams).then((data) => {
-				console.log(data);
-				createTable(data);
-			});
-		});
-	});
-}
-	
-	// Used to get predict the number of free slots
+// Used to get predict the number of free slots
 
 async function fetchNearbyElements(pos, params, weightValue){
-	url = 'https://overpass-api.de/api/interpreter?data=[out:json];(node'+params+'(around:500,'+pos.lat+','+pos.lon+');way'+params+'(around:500,'+pos.lat+','+pos.lon+');relation'+params+'(around:500,'+pos.lat+','+pos.lon+'););out count;';
+	url = 'https://overpass-api.de/api/interpreter?data=[out:json];(node'+params+'(around:500,'+pos.lat+','+pos.lng+');way'+params+'(around:500,'+pos.lat+','+pos.lng+');relation'+params+'(around:500,'+pos.lat+','+pos.lng+'););out count;';
 	return fetch(url).then((res) => res.json()).then((out) => {
 		let result = {weight:weightValue, count:parseInt(out.elements[0].tags.total)};
 		return result;
@@ -223,7 +189,7 @@ async function fetchNearbyElements(pos, params, weightValue){
 }
 
 async function getCityName(pos){
-	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lon+"&key=6ed462e0c4a54f39a14230ff783fc470&limit=1")
+	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470&limit=1")
 	const json = await response.json();
 	return json.results[0].components.city;
 }
@@ -348,7 +314,7 @@ function getAvailability(data){
 async function testFreeSlotSim(){
 	let capacity = 240; // Value used for testing. It'll be real values when we will link the parking search with this function
 
-	let searchPos ={lat:49.0101759,lon:2.0421101};
+	let searchPos ={lat:49.0101759,lng:2.0421101};
 	let promises = new Array();
 	let date = new Date();
 	let currentDate = {hour:date.getHours(), month:date.getMonth()};
