@@ -105,6 +105,14 @@ function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 	});
 }
 
+function displaySelectedParking(parking){
+	let container = document.getElementById("selectedParkingData");
+
+	container.innerHTML = "Calcul du nombre de places disponibles...";
+	testFreeSlotSim(parking).then((nbFreeSlots) =>{
+		container.innerHTML = "Nombre de places estimées : " + nbFreeSlots + "/" + parking.capacity.value;
+	});
+}
 
 function placeMarker(data) {
 	data.forEach((parking) => {
@@ -124,17 +132,19 @@ function placeMarker(data) {
 			});
 			marker.setMap(map);
 			marker.addListener("click", () => {
+				let promise = [];
 				if(infoWindow.getContent()== ""){
-					getAddressFromPos(parking.pos).then((address) => {
+					promise[0] = getAddressFromPos(parking.pos).then((address) => {
+						parking.adress = address;
 						infoWindow.setContent(address);
-						openInfoWindow(infoWindow, prevInfoWindow, marker, map);
-						prevInfoWindow = infoWindow;
 					});
 				}
-				else{
-					openInfoWindow(infoWindow, prevInfoWindow, marker, map);
-					prevInfoWindow = infoWindow;
-				}
+				Promise.all(promise);
+
+				openInfoWindow(infoWindow, prevInfoWindow, marker, map);
+				prevInfoWindow = infoWindow;
+				
+				displaySelectedParking(parking);
 			});
 			allMarkers.push(marker);
 			return 1;
@@ -149,4 +159,12 @@ function removeAllMarkers(allMarkers) {
 	allMarkers.forEach((marker) => {
 		marker.setMap(null);
 	});
+}
+
+
+function toggleMenuVisiblity(){
+	let element = document.getElementById("sideBarContent");
+
+	element.classList.toggle("visible");
+	element.classList.toggle("hidden");
 }

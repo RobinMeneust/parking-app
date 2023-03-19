@@ -1,15 +1,3 @@
-
-function addTd(tr, content){
-	var td = document.createElement('td');
-	td.innerHTML = content;
-	tr.appendChild(td);
-}
-function addTh(tr, content){
-	var th = document.createElement('th');
-	th.innerHTML = content;
-	tr.appendChild(th);
-}
-
 function distMeters(x0, x1){
 	//src : https://en.wikipedia.org/wiki/Haversine_formula
 	const R = 6371e3; // Earth radius
@@ -152,33 +140,7 @@ async function getParkingsData(latitude, longitude, areaParams){
 	}
 }
 
-function createTable(data){
-	let table = document.getElementById("tableParkings");
-	let tr = document.createElement('tr');
-	addTh(tr, "adresse");
-	addTh(tr, "nombre de places max");
-	addTh(tr, "distance");
-	addTh(tr, "payant");
-	addTh(tr, "paiement en carte de crédit");
-	addTh(tr, "paiement en billets");
-	addTh(tr, "paiement en pièces");
-	table.appendChild(tr);
-	
-	for(let element in data){
-		let tr = document.createElement('tr');
-		addTd(tr, data[element].address);
-		addTd(tr, (data[element].capacity.approx ? "~":"") + data[element].capacity.value);
-		addTd(tr, data[element].distance);
-		addTd(tr, data[element].fee);
-		addTd(tr, data[element].paymentMethod.credit_card);
-		addTd(tr, data[element].paymentMethod.cash);
-		addTd(tr, data[element].paymentMethod.coins);
-		table.appendChild(tr);
-	}
-}
-	
 // Used to get predict the number of free slots
-
 async function fetchNearbyElements(pos, params, weightValue){
 	url = 'https://overpass-api.de/api/interpreter?data=[out:json];(node'+params+'(around:500,'+pos.lat+','+pos.lng+');way'+params+'(around:500,'+pos.lat+','+pos.lng+');relation'+params+'(around:500,'+pos.lat+','+pos.lng+'););out count;';
 	return fetch(url).then((res) => res.json()).then((out) => {
@@ -310,10 +272,9 @@ function getAvailability(data){
 	return availability;
 }
 
-async function testFreeSlotSim(){
-	let capacity = 240; // Value used for testing. It'll be real values when we will link the parking search with this function
-
-	let searchPos ={lat:49.0101759,lng:2.0421101};
+async function testFreeSlotSim(parking){
+	let capacity = parking.capacity.value;
+	let searchPos = parking.pos;
 	let promises = new Array();
 	let date = new Date();
 	let currentDate = {hour:date.getHours(), month:date.getMonth()};
@@ -334,11 +295,8 @@ async function testFreeSlotSim(){
 	
 	data = await Promise.all(promises);
 
-	console.log(data);
-	//console.log(promises.get('shop'));
-
 	let availability = getAvailability(data);
 	let numberOfSlots = Math.floor(availability * capacity);
-	console.log(availability);
-	console.log("estimated number of slots: "+numberOfSlots);
+
+	return numberOfSlots
 }
