@@ -105,12 +105,18 @@ function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 	});
 }
 
-function displaySelectedParking(parking){
-	let container = document.getElementById("selectedParkingData");
+function addTD(tr, content){
+	var td = document.createElement('td');
+	td.innerHTML = content;
+	tr.appendChild(td);
+}
 
-	container.innerHTML = "Calcul du nombre de places disponibles...";
-	testFreeSlotSim(parking).then((nbFreeSlots) =>{
-		container.innerHTML = "Nombre de places estimées : " + nbFreeSlots + "/" + parking.capacity.value;
+function displaySelectedParking(parking){
+	let row = document.getElementById("selectedParkingTableRowData");
+
+	//container.innerHTML = "Calcul du nombre de places disponibles...";
+	getNbOfAvailableSlots(parking).then((nbFreeSlots) =>{
+		addTD(row, nbFreeSlots + "/" + parking.capacity.value);
 	});
 }
 
@@ -123,12 +129,12 @@ function placeMarker(data) {
 					lng: parking.pos.lng
 				},
 				map,
-				title: parking.distance.toString(),
+				title: parking.distance.toFixed(2).toString(),
 			});
 			marker.id = allMarkers.length;
 			var infoWindow = new google.maps.InfoWindow({
 				content: "",
-				ariaLabel: parking.distance.toString(),
+				ariaLabel: parking.distance.toFixed(2).toString(),
 			});
 			marker.setMap(map);
 			marker.addListener("click", () => {
@@ -162,7 +168,7 @@ function removeAllMarkers(allMarkers) {
 }
 
 
-function toggleMenuVisiblity(){
+function toggleMenuVisibility(){
 	let element = document.getElementById("sideBarContent");
 
 	element.classList.toggle("visible");

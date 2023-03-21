@@ -79,7 +79,6 @@ async function getParkingsData(latitude, longitude, areaParams){
 	//let searchPos = {lat:49.023079,lng:2.047221};
 	let searchPos = {lat:latitude,lng:longitude};
 	let searchRadius = 600;
-	
 	// We only take nodes with the capacity tag because we don't have borders to get an surface used to get an approximation of this capacity
 
 	let url ='';
@@ -99,8 +98,6 @@ async function getParkingsData(latitude, longitude, areaParams){
 		if(areaParams!=""){
 			nbParkings--; // to ignore the area element at the end of the json
 		}
-
-		console.log(out);
 		
 		for(let i=0; i<nbParkings; i++){
 			let parking = {
@@ -127,7 +124,7 @@ async function getParkingsData(latitude, longitude, areaParams){
 			}
 			parking.paymentMethod = getPaymentMethod(out.elements[i].tags);
 			parking.capacity = getCapacity(out.elements[i].tags, parking.surface);
-			//console.log(parking);
+
 			parking.distance = distMeters(parking.pos, searchPos);
 			if(parking.capacity.value>0){
 				data.push(parking);
@@ -152,10 +149,14 @@ async function fetchNearbyElements(pos, params, weightValue){
 async function getCityName(pos){
 	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470&limit=1")
 	const json = await response.json();
-	return json.results[0].components.city;
+	if(json.results[0].components.hasOwnProperty("city")){
+		return json.results[0].components.city;
+	} else{
+		return json.results[0].components.town;
+	}
 }
 
-async function getCityPopulation(pos){			
+async function getCityPopulation(pos){	
 	const city = await getCityName(pos);
 	const response = await fetch('https://nominatim.openstreetmap.org/search.php?city="'+city+'"&format=json&extratags=1');
 	const json = await response.json();
@@ -258,8 +259,6 @@ function getAvailability(data){
 		availability += e.weight * flatten(e.count, 10, 1);
 	}
 
-	console.log(availability);
-
 	availability = 1-flatten(availability, 1, 0.1);
 
 	// Adjust values to be more realistic (we rarely have an empty or a completely full parking)
@@ -272,7 +271,7 @@ function getAvailability(data){
 	return availability;
 }
 
-async function testFreeSlotSim(parking){
+async function getNbOfAvailableSlots(parking){
 	let capacity = parking.capacity.value;
 	let searchPos = parking.pos;
 	let promises = new Array();

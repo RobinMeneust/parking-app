@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
-<?php include_once("head.php"); ?>
-
+<head>
+	<?php include_once("head.php"); ?>
+	<script src="./index.js"></script>
+	<script src="./getParkingData.js"></script>
+</head>
 <body class="light" onload="addEvents()">
 	<?php include_once("Header.php"); ?>
 	<div class="content">
@@ -12,7 +15,7 @@
 		<button id="getSearchParams"> <- Parking near a location</button>
 		<button id="locationButton">Pan to current location</button>
 		<br>
-		<button class="menuButton" onclick="toggleMenuVisiblity()"><i class="fa-solid fa-filter"></i></button>
+		<button class="menuButton" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
 		
 		<div class="sideBar column">
 			<div class="sideBar hidden" id="sideBarContent">Filtres</div>
@@ -21,7 +24,13 @@
 			<div class="column" id="map"></div>
 			<div class="column" id="searchDetailsSideBar">
 				<h2>Détail du parking sélectionné</h2>
-				<p id="selectedParkingData"></p>
+				<table id="selectedParkingTable">
+					<tr id="selectedParkingTableRowHeadings">
+						<th>Nombre de places disponibles</th>
+					</tr>
+					<tr id="selectedParkingTableRowData">
+					</tr>
+				</table>
 			</div>
 		</div>
 			<?php include_once("Footer.php"); ?>
