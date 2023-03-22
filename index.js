@@ -1,6 +1,5 @@
 let map, infoWindow, locationButton, buttonPos, buttonSearchParam;
 window.initMap = initMap;
-let allMarkers = [];
 let prevInfoWindow = null;
 
 function addEvents(){
@@ -29,6 +28,8 @@ function addEvents(){
 	
 	
 	buttonSearchParam.addEventListener("click", () => {
+        let allMarkers = [];
+        let userMarker = [];
 		navigator.geolocation.getCurrentPosition((position) => {
 			let lat = position.coords.latitude;
 			let lng = position.coords.longitude;
@@ -37,13 +38,15 @@ function addEvents(){
 				lng
 			});
 			map.setZoom(13);
+            if(userMarker.length != 0 || userMarker != undefined) userMarker.pop();
+            userMarker.push(placeUserMarker({lat, lng}));
 			// example: area[name="Paris 20e Arrondissement"];
 			let areaParams = 'area[name="' + document.getElementById("searchBox").value + '"];';
 			getParkingsData(lat, lng, areaParams).then((data) => {
 				if (allMarkers.length != 0 || allMarkers != undefined){
 					removeAllMarkers(allMarkers);
 				}
-				placeMarker(data);
+				placeMarker(allMarkers, data);
 				if (allMarkers.length != 0 || allMarkers != undefined){
                     const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
                     map.setCenter(coordFirstMarker);
@@ -54,6 +57,8 @@ function addEvents(){
 	});
 	
 	buttonPos.addEventListener("click", () => {
+        let allMarkers = [];
+        let userMarker = [];
 		navigator.geolocation.getCurrentPosition((position) => {
 			let lat = position.coords.latitude;
 			let lng = position.coords.longitude;
@@ -63,11 +68,13 @@ function addEvents(){
 				lng
 			});
 			map.setZoom(13);
+            if(userMarker.length != 0 || userMarker != undefined) userMarker.pop();
+            userMarker.push(placeUserMarker({lat, lng}));
 			getParkingsData(lat, lng, areaParams).then((data) => {
 				if (allMarkers.length != 0 || allMarkers != undefined){
 					removeAllMarkers(allMarkers);
 				}
-				placeMarker(data);
+				placeMarker(allMarkers, data);
                 if (allMarkers.length != 0 || allMarkers != undefined){
                     const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
                     map.setCenter(coordFirstMarker);
@@ -122,7 +129,7 @@ function displaySelectedParking(parking){
 	});
 }
 
-function placeMarker(data) {
+function placeMarker(allMarkers, data) {
 	data.forEach((parking) => {
 		if (parking.pos.lat != undefined && parking.pos.lng != undefined) {
 			const marker = new google.maps.Marker({
@@ -131,7 +138,7 @@ function placeMarker(data) {
 					lng: parking.pos.lng
 				},
 				map,
-				title: parking.distance.toFixed(2).toString(),
+				title: parking.address.toFixed(2).toString(),
 			});
 			marker.id = allMarkers.length;
 			var infoWindow = new google.maps.InfoWindow({
@@ -175,4 +182,26 @@ function toggleMenuVisibility(){
 
 	element.classList.toggle("visible");
 	element.classList.toggle("hidden");
+}
+
+function placeUserMarker(coords){
+    const marker = new google.maps.Marker({
+        position: {
+            lat: coords.lat,
+            lng: coords.lng
+        },
+        map,
+        icon: {
+            path: "M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z",
+            fillColor: "blue",
+            fillOpacity: 1.0,
+            strokeWeight: 0,
+            rotation: 0,
+            scale: 2,
+            anchor: new google.maps.Point(12,12),
+        },
+        title: "Ma position actuelle",
+    });
+    marker.setMap(map);
+    return marker;
 }
