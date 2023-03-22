@@ -16,26 +16,27 @@
 		<div class="sideBar column">
 			<div class="sideBar hidden" id="sideBarContent"><h2>Filtres</h2>
 				<form>
-					<legend>Recherche par départements ou arrondissements</legend>
+					<legend>Départements ou arrondissements :</legend>
+					<br>
 					<select id="selectSearchParams">
 						<optgroup label="Paris - Arrondissement" id="arrondissementsOptgroup"></optgroup>
 						<optgroup label="Département d'Île-de-France" id="departementsOptgroup"></optgroup>
 					</select>
-					<br>
+					<br><br>
 					<label name="nbMaxSlider">Nombre maximum de parkings à afficher : </label>
 
 					<input id="nbMaxSlider" name="nbMaxSlider" type="range" oninput="this.nextElementSibling.value = this.value;" value="10" min="1" max="200" step="1">
-					<output>10</output> parkings
+					<output>10</output>
 				</form>
-				<button id="getSearchParams"><i class="fa-solid fa-magnifying-glass"></i></button>
-				<br><br>
+				<button class="menuButton"  id="getSearchParams"><i class="fa-solid fa-magnifying-glass"></i></button>
+				<br><br><hr><br><br>
 				<form>
 					<legend>Recherche en fonction de notre position</legend>
-					<label name="distanceSlider">Distance: </label>
+					<label name="distanceSlider">Distance (en km) : </label>
 					<input id="distanceSlider" name="distanceSlider" type="range" oninput="this.nextElementSibling.value = this.value;" value="1" min="0.5" max="10" step="0.5">
-					<output>1</output> km
+					<output>1</output>
 				</form>
-				<button id="getUserLocation"><i class="fa-solid fa-magnifying-glass"></i></button>
+				<button class="menuButton" id="getUserLocation"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</div>
 		</div>
 		<div class="row">
