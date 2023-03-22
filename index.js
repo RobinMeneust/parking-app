@@ -44,11 +44,11 @@ function addEvents(){
 					removeAllMarkers(allMarkers);
 				}
 				placeMarker(data);
-				map.setCenter({
-					lat,
-					lng
-				});
-				map.setZoom(13);
+				if (allMarkers.length != 0 || allMarkers != undefined){
+                    const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
+                    map.setCenter(coordFirstMarker);
+                    map.setZoom(15);
+                }
 			});
 		});
 	});
@@ -68,9 +68,11 @@ function addEvents(){
 					removeAllMarkers(allMarkers);
 				}
 				placeMarker(data);
-				const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
-				map.setCenter(coordFirstMarker);
-				map.setZoom(15);
+                if (allMarkers.length != 0 || allMarkers != undefined){
+                    const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
+                    map.setCenter(coordFirstMarker);
+                    map.setZoom(15);
+                }
 			});
 		});
 	});
