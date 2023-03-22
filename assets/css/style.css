@@ -309,7 +309,17 @@ hr {
     width:0;
     visibility:hidden;
     color:rgba(0, 0, 0, 0) !important;
-    transition: width 0.5s, visibility 0.5s;
+    transition: width 0.5s, visibility 0.1s;
+}
+
+#selectedParkingTable{
+	border-collapse: collapse;
+	visibility: hidden;
+}
+
+#selectedParkingTable td, #selectedParkingTable th{
+	border: solid black 1px;
+	padding: 5px;
 }
 
 

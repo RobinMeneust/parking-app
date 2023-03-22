@@ -25,14 +25,13 @@ function getCapacity(data, surface){
 	let capacity = {value:0, approx:false};
 
 	if(data.hasOwnProperty('capacity')){
-		capacity.value = parseInt(data.capacity);
+		capacity = parseInt(data.capacity);
 	}else{
-		capacity.value = surface * (3/100);
-		capacity.value = Math.round(capacity.value);
-		capacity.approx = true;
+		capacity = surface * (3/100);
+		capacity = Math.round(capacity);
 	}
-	if(capacity.value < 0){
-		capacity.value = 0;
+	if(capacity < 0){
+		capacity = 0;
 	}
 	return capacity
 }
@@ -46,15 +45,35 @@ function getFee(data){
 }
 
 function getPaymentMethod(data){
-	let payment = {cash:"", credit_card:"", coins:""}
+	let payment = {cash:"", card:""};
 	if(data.hasOwnProperty('payment:cash')){
-		payment.cash = data['payment:cash'];
-	}
-	if(data.hasOwnProperty('payment:credit_card')){
-		payment.cash = data['payment:credit_card'];
+		if(data["payment:cash"] == "yes" || data["payment:cash"] == "only"){
+			payment.cash = "accepté";
+		} else if(data["payment:cash"] == "no"){
+			payment.cash = "refusé";
+		}
 	}
 	if(data.hasOwnProperty('payment:coins')){
-		payment.cash = data['payment:coins'];
+		if(data["payment:coins"] == "yes" || data["payment:cash"] == "only"){
+			payment.cash = "accepté";
+		} else if(payment.cash == "" && data["payment:coins"] == "no"){
+			payment.cash = "refusé";
+		}
+	}
+
+	if(data.hasOwnProperty('payment:credit_card')){
+		if(data["payment:credit_card"] == "yes" || data["payment:credit_card"] == "only"){
+			payment.card = "accepté";
+		} else if(data["payment:credit_card"] == "no"){
+			payment.card = "refusé";
+		}
+	}
+	if(data.hasOwnProperty('payment:debit_card')){
+		if(data["payment:debit_card"] == "yes" || data["payment:credit_card"] == "only"){
+			payment.card = "accepté";
+		} else if(payment.card == "" && data["payment:debit_card"] == "no"){
+			payment.card = "refusé";
+		}
 	}
 	return payment;
 }
@@ -75,18 +94,27 @@ function getSurface(x0,x1){
 	return latLength * lngLength;
 }
 
-async function getParkingsData(latitude, longitude, areaParams){
+async function getParkingsData(latitude, longitude, areaParams, maxDistance, maxElements){
+	if(maxElements<1){
+		maxElements = 10;
+	}
 	//let searchPos = {lat:49.023079,lng:2.047221};
 	let searchPos = {lat:latitude,lng:longitude};
-	let searchRadius = 600;
+	let searchRadius = maxDistance * 1000; // in meters
+
+	if(searchRadius<0.5){
+		searchRadius = 0.5;
+	}
 	// We only take nodes with the capacity tag because we don't have borders to get an surface used to get an approximation of this capacity
 
 	let url ='';
 	if(areaParams==""){
-		url = 'https://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+'););out bb 200;';
+		// default query
+		url = 'https://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+'););out bb '+maxElements+';';
 	}
 	else{
-		url = 'https://overpass-api.de/api/interpreter?data=[out:json];('+areaParams+'way[amenity=parking](area);relation[amenity=parking](area);node[amenity=parking][capacity](area););out bb 200;';
+		// query with a specific area
+		url = 'https://overpass-api.de/api/interpreter?data=[out:json];('+areaParams+'way[amenity=parking](area);relation[amenity=parking](area);node[amenity=parking][capacity](area););out bb '+maxElements+';';
 	}
 	
 	let data = [];
@@ -96,18 +124,20 @@ async function getParkingsData(latitude, longitude, areaParams){
 		const out = await response.json();
 		let nbParkings = out.elements.length;
 		if(areaParams!=""){
-			nbParkings--; // to ignore the area element at the end of the json
+			nbParkings--; // to ignore the "area" element at the end of the json
 		}
-		
+
 		for(let i=0; i<nbParkings; i++){
 			let parking = {
-				capacity:{value:0,approx:true}, 
+				capacity:0,
+				nbFreeSlots:-1,
 				fee:getFee(out.elements[i].tags), 
 				surface:0, 
 				address:"",
 				distance:0,
 				pos:{lat:0.0,lng:0.0},
-				paymentMethod:{cash:"", credit_card:"", coins:""}
+				paymentMethod:{cash:"", card:""},
+				opening_hours:""
 			};
 			
 			if(out.elements[i].type != "node"){
@@ -117,23 +147,30 @@ async function getParkingsData(latitude, longitude, areaParams){
 				let x0 = {lat:out.elements[i].bounds.minlat, lng:out.elements[i].bounds.minlon};
 				let x1 = {lat:out.elements[i].bounds.maxlat, lng:out.elements[i].bounds.maxlon};
 				parking.surface = getSurface(x0,x1);
-			}
-			else{
+			} else{
 				parking.pos.lat = out.elements[i].lat;
-				parking.pos.lng = out.elements[i].lng;
+				parking.pos.lng = out.elements[i].lon;
 			}
-			parking.paymentMethod = getPaymentMethod(out.elements[i].tags);
-			parking.capacity = getCapacity(out.elements[i].tags, parking.surface);
-
-			parking.distance = distMeters(parking.pos, searchPos);
-			if(parking.capacity.value>0){
-				data.push(parking);
+			
+			if(out.elements[i].hasOwnProperty("tags")){
+				parking.paymentMethod = getPaymentMethod(out.elements[i].tags);
+				if(parking.paymentMethod.card == "yes" || parking.paymentMethod.cash == "yes"){
+					parking.fee = "yes";
+				}
+				parking.capacity = getCapacity(out.elements[i].tags, parking.surface);
+				parking.distance = distMeters(parking.pos, searchPos);
+				if(parking.capacity>0){
+					data.push(parking);
+				}
+				if(out.elements[i].tags.hasOwnProperty("opening_hours")){
+					parking.opening_hours = out.elements[i].tags.opening_hours;
+				}
 			}
 		}
 		return data;
 	}
 	catch(error){
-		console.log("Error: could not fetch and parse data");
+		throw error;
 	}
 }
 
@@ -147,20 +184,28 @@ async function fetchNearbyElements(pos, params, weightValue){
 }
 
 async function getCityName(pos){
-	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470&limit=1")
-	const json = await response.json();
-	if(json.results[0].components.hasOwnProperty("city")){
-		return json.results[0].components.city;
-	} else{
-		return json.results[0].components.town;
+	try{
+		const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470&limit=1")
+		const json = await response.json();
+		if(json.results[0].components.hasOwnProperty("city")){
+			return json.results[0].components.city;
+		} else{
+			return json.results[0].components.town;
+		}
+	} catch(err){
+		throw err;
 	}
 }
 
 async function getCityPopulation(pos){	
-	const city = await getCityName(pos);
-	const response = await fetch('https://nominatim.openstreetmap.org/search.php?city="'+city+'"&format=json&extratags=1');
-	const json = await response.json();
-	return json[0].extratags.population;
+	try{
+		const city = await getCityName(pos);
+		const response = await fetch('https://nominatim.openstreetmap.org/search.php?city="'+city+'"&format=json&extratags=1');
+		const json = await response.json();
+		return json[0].extratags.population;
+	} catch(err){
+		throw err;
+	}
 }
 
 //holidays ratio : 0 means that the date has no influence whereas 1 means that this place is only open during holidays. Values between 0 and 1 are accepted and gives the increase rate depending on if we are during holidays or not
@@ -243,7 +288,10 @@ function getWeight(population, currentDate, holidays_ratio, opening_hours, impor
 		weight*=(1-holidays_ratio);
 	}
 
-	weight += (population/1000000);
+	// for area with a very low density, there isn't a big difference between 10 and 100 inhabitants. And if population <= 0 then that's an error so we should not use it in our calculations
+	if(population>100){
+		weight += (population/1000000);
+	}
 	weight *= Math.abs(importance);
 	weight = flatten(weight, 1, 1);
 	if(importance<0){
@@ -272,30 +320,37 @@ function getAvailability(data){
 }
 
 async function getNbOfAvailableSlots(parking){
-	let capacity = parking.capacity.value;
+	let capacity = parking.capacity;
 	let searchPos = parking.pos;
 	let promises = new Array();
 	let date = new Date();
 	let currentDate = {hour:date.getHours(), month:date.getMonth()};
+
+	// the following line isn't in the try/catch since the size of the population in the current area is more optional than necessary for our calculations, it give a more accurate value but we should not stop our function if we don't have it
 	let cityPopulation = await getCityPopulation(searchPos);
-
-	promises.push(await fetchNearbyElements(searchPos, '[amenity~"^(restaurant|fast_food|food_court)$"]', getWeight(cityPopulation, currentDate, 0.0, {morning:false, noon:true, afternoon:false, evening:true, night:false}, 0.5)));
-	promises.push(await fetchNearbyElements(searchPos, '[amenity~"^(college|library|music_school|university)$"]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 0.3))); // we don't consider that it's closed during week-end here
-	promises.push(await fetchNearbyElements(searchPos, '[amenity~"hospital"]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:true}, 1)));
-	promises.push(await fetchNearbyElements(searchPos, '[amenity~"^(cinema|theatre)"]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 1)));
-	promises.push(await fetchNearbyElements(searchPos, '[shop]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 1)));
-	promises.push(await fetchNearbyElements(searchPos, '[airway="airport"]', getWeight(cityPopulation, currentDate, 0.2, {morning:true, noon:true, afternoon:true, evening:true, night:true}, 5)));
-	promises.push(await fetchNearbyElements(searchPos, '[amenity="train_station"]', getWeight(cityPopulation, currentDate, 0.2, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 0.7)));
-	promises.push(await fetchNearbyElements(searchPos, '[tourism]', getWeight(cityPopulation, currentDate, 0.8, {morning:true, noon:true, afternoon:true, evening:false, night:false}, 0.5)));
-	promises.push(await fetchNearbyElements(searchPos, '[leisure]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 1)));
-	promises.push(await fetchNearbyElements(searchPos, '[office]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:false, afternoon:true, evening:false, night:false}, 0.7)));
-
-	promises.push(fetchNearbyElements(searchPos, '[parking]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:true}, -0.8)));
 	
-	data = await Promise.all(promises);
+	try{
 
-	let availability = getAvailability(data);
-	let numberOfSlots = Math.floor(availability * capacity);
+		promises.push(await fetchNearbyElements(searchPos, '[amenity~"^(restaurant|fast_food|food_court)$"]', getWeight(cityPopulation, currentDate, 0.0, {morning:false, noon:true, afternoon:false, evening:true, night:false}, 0.5)));
+		promises.push(await fetchNearbyElements(searchPos, '[amenity~"^(college|library|music_school|university)$"]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 0.3))); // we don't consider that it's closed during week-end here
+		promises.push(await fetchNearbyElements(searchPos, '[amenity~"hospital"]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:true}, 1)));
+		promises.push(await fetchNearbyElements(searchPos, '[amenity~"^(cinema|theatre)"]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 1)));
+		promises.push(await fetchNearbyElements(searchPos, '[shop]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 1)));
+		promises.push(await fetchNearbyElements(searchPos, '[airway="airport"]', getWeight(cityPopulation, currentDate, 0.2, {morning:true, noon:true, afternoon:true, evening:true, night:true}, 5)));
+		promises.push(await fetchNearbyElements(searchPos, '[amenity="train_station"]', getWeight(cityPopulation, currentDate, 0.2, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 0.7)));
+		promises.push(await fetchNearbyElements(searchPos, '[tourism]', getWeight(cityPopulation, currentDate, 0.8, {morning:true, noon:true, afternoon:true, evening:false, night:false}, 0.5)));
+		promises.push(await fetchNearbyElements(searchPos, '[leisure]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:false}, 1)));
+		promises.push(await fetchNearbyElements(searchPos, '[office]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:false, afternoon:true, evening:false, night:false}, 0.7)));
 
-	return numberOfSlots
+		promises.push(fetchNearbyElements(searchPos, '[parking]', getWeight(cityPopulation, currentDate, 0.0, {morning:true, noon:true, afternoon:true, evening:true, night:true}, -0.8)));
+		
+		data = await Promise.all(promises);
+
+		let availability = getAvailability(data);
+		let numberOfSlots = Math.floor(availability * capacity);
+
+		return numberOfSlots;
+	} catch(err){
+		throw err;
+	}
 }
