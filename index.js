@@ -81,7 +81,7 @@ function addEvents(){
 					if (allMarkers.length != 0 || allMarkers != undefined){
 						removeAllMarkers(allMarkers);
 					}
-					placeMarker(allMarkers, data);
+					placeMarkers(allMarkers, data);
 					if (allMarkers.length != 0 || allMarkers != undefined){
 						const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
 						map.setCenter(coordFirstMarker);
@@ -120,7 +120,7 @@ function addEvents(){
 					if (allMarkers.length != 0 || allMarkers != undefined){
 						removeAllMarkers(allMarkers);
 					}
-					placeMarker(allMarkers, data);
+					placeMarkers(allMarkers, data);
 					if (allMarkers.length != 0 || allMarkers != undefined){
 						const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
 						map.setCenter(coordFirstMarker);
@@ -131,6 +131,55 @@ function addEvents(){
 				console.error("Data could not be fetched or parsed from Overpass API");
 				alert("Les données n'ont pas pu être récupérées. Vous avez peut-être fait trop de requêtes en peu de temps ou le service est surchargé. Veuillez réessayer ultérieuremnt.")
 			}
+		});
+	});
+}
+
+async function getCoordFromAddress(address){
+	url = 'https://nominatim.openstreetmap.org/search?q='+address+'&format=json';
+	return fetch(url).then((res) => res.json()).then((out) => {
+		let coord = {lat:parseFloat(out[0].lat), lng:parseFloat(out[0].lon)};
+		return coord;
+	}).catch(error => { throw error });
+}
+
+function getParkingsNearAddress(address){
+	let allMarkers = [];
+	let userMarker = [];
+	navigator.geolocation.getCurrentPosition((position) => {
+		let lat = position.coords.latitude;
+		let lng = position.coords.longitude;
+		let areaParams = "";
+		
+		if(userMarker.length != 0 || userMarker != undefined) userMarker.pop();
+		userMarker.push(placeUserMarker({lat, lng}));
+		
+		if(address == ""){
+			return -1;
+		}
+		
+		getCoordFromAddress(address).then((coord) =>{
+			let latAddress = coord.lat;
+			let lngAddress = coord.lng;
+
+			
+			getParkingsData(latAddress, lngAddress, areaParams, document.getElementById("distanceSlider").value, 100).then((data) => {
+				if(data.length == 0){
+					alert("Aucun parking n'a été trouvé dans cette zone");
+					return;
+				}
+				if (allMarkers.length != 0 || allMarkers != undefined){
+					removeAllMarkers(allMarkers);
+				}
+				allMarkers.push(placeMarker(coord, address));
+				placeMarkers(allMarkers, data);
+				const coordFirstMarker = new google.maps.LatLng(coord.lat, coord.lng);
+				map.setCenter(coordFirstMarker);
+				map.setZoom(15);
+				return 0;
+			});
+		}).catch((err) => {
+			return -1;
 		});
 	});
 }
@@ -207,7 +256,7 @@ function displaySelectedParking(parking){
 	}
 }
 
-function placeMarker(allMarkers, data) {
+function placeMarkers(allMarkers, data) {
 	data.forEach((parking) => {
 		if (parking.pos.lat != undefined && parking.pos.lng != undefined) {
 			const marker = new google.maps.Marker({
@@ -218,7 +267,6 @@ function placeMarker(allMarkers, data) {
 				map,
 				title: parking.distance.toFixed(0).toString()+" m",
 			});
-			marker.id = allMarkers.length;
 			var infoWindow = new google.maps.InfoWindow({
 				content: "",
 				ariaLabel: parking.distance.toFixed(0).toString()+" m",
@@ -281,6 +329,38 @@ function placeUserMarker(coords){
         title: "Ma position actuelle",
     });
     marker.setMap(map);
+    return marker;
+}
+
+function placeMarker(coords, description){		
+    const marker = new google.maps.Marker({
+        position: {
+			lat: coords.lat,
+            lng: coords.lng
+        },
+		icon:{
+			path: "M 0 0 V 15 H 0.5 V 0 H 0 M 0.5 1 L 10 4 L 0.5 8",
+			fillColor: "blue",
+            fillOpacity: 1.0,
+            strokeWeight: 0,
+            rotation: 0,
+            scale: 3,
+            anchor: new google.maps.Point(12,12),
+		},
+		title: "Addresse recherchée",
+    });
+
+	var infoWindow = new google.maps.InfoWindow({
+		content: description,
+	});
+
+	marker.addListener("click", async function(){
+		openInfoWindow(infoWindow, prevInfoWindow, marker, map);
+		prevInfoWindow = infoWindow;
+	});
+	
+	
+	marker.setMap(map);
     return marker;
 }
 	

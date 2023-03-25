@@ -3,9 +3,9 @@
     <a href="./index.php">PARK'O TOP</a>
   </div>
   <div class="search-bar">
-    <form>
-      <input type="text" placeholder="Rechercher...">
-      <button type="submit">Rechercher</button>
+    <form id="search-address-form" action="index.php" method="post">
+      <input id="search-address-text" name="search-address-text" type="text" placeholder="99 rue de Rivoli, Paris">
+      <input type="submit" name="submit" value="Rechercher">
     </form>
   </div>
   <div class="account">

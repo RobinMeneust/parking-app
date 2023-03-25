@@ -8,6 +8,38 @@
 <body class="light" onload="addEvents(); initializeForms();">
 	<?php include_once("Header.php"); ?>
 	<div class="content">
+		<?php
+		if($_SERVER["REQUEST_METHOD"] == "POST"){
+			$address = $_POST["search-address-text"];
+
+			/*
+			ToDo : CHECK THE FORMAT !
+			*/
+
+			if(strlen($address) > 200){
+				$address = "";
+			}
+		}
+		?>
+
+		<script>
+			let isAddressSet = "<?php echo isSet($address) ?>";
+			if(isAddressSet){
+				console.log("if OK");
+				let address = "<?php echo $address ?>";
+				if(address == ""){
+					console.log("chaîne vide ou trop de caractères");
+				} else{
+					let success = getParkingsNearAddress(address);
+
+					if(success == -1){
+						alert("Aucun parking n'a été trouvé : Vérifier si l'addresse est correcte. Il est aussi possible que vous ayez fait trop de requêtes")
+					}
+				}
+			}
+		
+		</script>
+
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M&callback=initMap&v=weekly"	defer></script>
 		<button id="locationButton">Pan to current location</button>
 		<br>
