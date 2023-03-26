@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <header>
   <div class="logo">
     <a href="./index.php">PARK'O TOP</a>
@@ -9,6 +13,6 @@
     </form>
   </div>
   <div class="account">
-    <a href="#">Se connecter</a>
+    <a href="<?php echo (isset($_SESSION['VAR_profil']["connecte"]) && $_SESSION["VAR_profil"]["connecte"] == 1) ? "Profil.php" : "Inscription_Connexion.php"; ?>"><?php echo (isset($_SESSION['VAR_profil']["connecte"]) && $_SESSION["VAR_profil"]["connecte"] == 1) ? "Profil" : "Se connecter"; ?></a>
   </div>
 </header>
