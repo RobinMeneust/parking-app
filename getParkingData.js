@@ -202,7 +202,9 @@ async function getCityPopulation(pos){
 		const city = await getCityName(pos);
 		const response = await fetch('https://nominatim.openstreetmap.org/search.php?city="'+city+'"&format=json&extratags=1');
 		const json = await response.json();
-		return json[0].extratags.population;
+        if(json != undefined && json.length != 0){
+		    return json[0].extratags.population;
+        }
 	} catch(err){
 		throw err;
 	}
