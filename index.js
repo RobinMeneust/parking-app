@@ -75,16 +75,11 @@ async function searchNearUser(){
 	}
 
 	if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
-		userMarker.pop();
+        userMarker.pop();
 		_globalUserMarker.pop()
 	}
 	userMarker.push(placeUserMarker());
 	_globalUserMarker = userMarker;
-	
-	userMarker.push(placeUserMarker());
-	if(userMarker[0] == null){
-		userMarker.pop();
-	}
 
 	try{
 		getParkingsData(userLocation.lat, userLocation.lng, areaParams, searchRadius, nbMaxResults).then((data) => {
@@ -493,7 +488,7 @@ function createLocationButton(map) {
 				map.setZoom(15);
 
 				if(_globalUserMarker != undefined || _globalUserMarker.length != 0){
-                    _globalUserMarker.pop()
+                    _globalUserMarker.pop();
                 }
                 _globalUserMarker.push(placeUserMarker());
 			} else {
