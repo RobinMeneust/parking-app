@@ -481,7 +481,6 @@ function createLocationButton(map) {
 
 
 function calculateAndDisplayRoute(directionsRenderer, directionsService, origin, destination/*, allMarkers, map*/) {
-    console.log("ici");
     directionsService
       .route({
         origin: origin,
