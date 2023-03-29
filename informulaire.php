@@ -33,49 +33,49 @@ if(gettype($Nom) == "string" && (strlen($Nom)>0 && strlen($Nom)<40)){
                                 }
                             }else{
                                 if($erreur != "erreur="){
-                                    $erreur=$erreur . "+et+";
+                                    $erreur=$erreur . "_et_";
                                 }
                                 $erreur=$erreur . "Sujet";
                             }
                         }else{
                             if($erreur != "erreur="){
-                                $erreur=$erreur . "+et+";
+                                $erreur=$erreur . "_et_";
                             }
-                            $erreur=$erreur . "Type+du+Message";
+                            $erreur=$erreur . "Type_du_Message";
                         }
                     }else{
                         if($erreur != "erreur="){
-                            $erreur=$erreur . "+et+";
+                            $erreur=$erreur . "_et_";
                         }
-                        $erreur=$erreur . "Date+de+Naissance";
+                        $erreur=$erreur . "Date_de_Naissance";
                     }
                 }else{
                     if($erreur != "erreur="){
-                        $erreur=$erreur . "+et+";
+                        $erreur=$erreur . "_et_";
                     }
                     $erreur=$erreur . "Genre";
                 }
             }else{
                 if($erreur != "erreur="){
-                    $erreur=$erreur . "+et+";
+                    $erreur=$erreur . "_et_";
                 }
                 $erreur=$erreur . "Email";
             }
         }else{
             if($erreur != "erreur="){
-                $erreur=$erreur . "+et+";
+                $erreur=$erreur . "_et_";
             }
-            $erreur=$erreur . "Date+du+Message";
+            $erreur=$erreur . "Date_du_Message";
         }
     }else{
         if($erreur != "erreur="){
-            $erreur=$erreur . "+et+";
+            $erreur=$erreur . "_et_";
         }
         $erreur=$erreur . "Prenom";
     }
 }else{
     if($erreur != "erreur="){
-        $erreur=$erreur . "+et+";
+        $erreur=$erreur . "_et_";
     }
     $erreur=$erreur . "Nom";
 }
