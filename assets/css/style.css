@@ -23,7 +23,6 @@ html, body {
 }
 
 body {
-    color: #ff0000;
     display: flex;
     flex-direction: column;
 }
@@ -245,6 +244,83 @@ hr {
     font-weight: 400;
     letter-spacing: 0.135rem;
 }
+
+#map {
+	height: 524px;
+	width: 950px;
+}
+
+.row{
+    display: table;
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    margin-left: 30px;
+}
+
+.column{
+    display: table-cell;
+    height: 524px;
+}
+
+.sideBar{
+    position: absolute;
+    width: 90px;
+	left:0;
+    background-color: #22202f;
+    z-index: 2;
+}
+
+
+.menuButton{
+    border-radius: 100%;
+    border:#e94560 solid 1px;
+    color:white;
+    background-color: rgba(0, 0, 0, 0);
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 5px;
+    z-index: 3;
+    transition: all 0.2s;
+}
+
+.menuButton:hover{
+    border:#e94560 solid 1px;
+    color:#e94560;
+    background-color: rgba(53, 53, 53, 0);
+    width: 32px;
+    height: 32px;
+    transition: all 0.2s;
+}
+
+#sideBarContent{
+    padding: 50px 15px 15px 15px;
+	width: 250px;
+    height:524px;
+    color:white;
+}
+
+.visible{
+    left:30px;
+    transition: left ease-out 0.5s;
+}
+
+.hidden{
+    left:-500px;
+    transition: left ease-in 0.5s;
+}
+
+#selectedParkingTable{
+	border-collapse: collapse;
+	visibility: hidden;
+}
+
+#selectedParkingTable td, #selectedParkingTable th{
+	border: solid black 1px;
+	padding: 5px;
+}
+
 
 @media screen and (max-width: 768px) {
     .content_footer {

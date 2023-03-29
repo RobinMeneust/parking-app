@@ -53,8 +53,6 @@
     const darkMode = document.getElementById("moon");
     const lightMode = document.getElementById('sun hide');
 
-    console.log(darkMode);
-
     darkMode.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         darkMode.classList.toggle('hide');
@@ -62,7 +60,7 @@
     })
 
     lightMode.addEventListener('click', () => {
-        document.body.classList.remove('dark-mode');
+        document.body.classList.toggle('dark-mode');
         lightMode.classList.toggle('hide');
         darkMode.classList.remove('hide');
     })
