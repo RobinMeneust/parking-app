@@ -46,7 +46,6 @@ session_start();
 			</script>
 
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M&callback=initMap&v=weekly"	defer></script>
-			<button id="locationButton">Pan to current location</button>
 			<br>
 			<button class="menuButton" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
 			

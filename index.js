@@ -1,6 +1,11 @@
-let map, infoWindow, locationButton, buttonPos, buttonSearchParam;
+let map, infoWindow, buttonPos, buttonSearchParam;
 window.initMap = initMap;
 let prevInfoWindow = null;
+let _globalAllMarkers = [];
+let _globalUserMarker = [];
+let _selectedMarker = undefined;
+let _globalDirectionsService = undefined;
+let _globalDirectionsRenderer = undefined;
 
 function addOption(selectField, value, name){
 	var opt = document.createElement('option');
@@ -30,29 +35,8 @@ function initializeForms(){
 }
 
 function addEvents(){
-	locationButton = document.getElementById("locationButton");
 	buttonPos = document.getElementById("getUserLocation");
 	buttonSearchParam = document.getElementById("getSearchParams");
-	
-	locationButton.addEventListener("click", () => {
-		// Try HTML5 geolocation.
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition((position) => {
-				const pos = {
-					lat: position.coords.latitude,
-					lng: position.coords.longitude,
-				};
-				map.setCenter(pos);
-				map.setZoom(13);
-			}, () => {
-				handleLocationError(true, infoWindow, map.getCenter());
-			});
-		} else {
-			// Browser doesn't support Geolocation
-			handleLocationError(false, infoWindow, map.getCenter());
-		}
-	});
-	
 	
 	buttonSearchParam.addEventListener("click", () => {
 		let allMarkers = [];
@@ -66,8 +50,12 @@ function addEvents(){
 			});
 			map.setZoom(13);
 
-			if(userMarker.length != 0 || userMarker != undefined) userMarker.pop();
+            if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
+                userMarker.pop();
+                _globalUserMarker.pop()
+            }
             userMarker.push(placeUserMarker({lat, lng}));
+            _globalUserMarker = userMarker;
 			
 			let selectElement = document.getElementById("selectSearchParams");
 			let areaParams = 'area[name="' + selectElement.options[selectElement.selectedIndex].value + '"];';
@@ -108,9 +96,12 @@ function addEvents(){
 			});
 			map.setZoom(13);
 			
-			if(userMarker.length != 0 || userMarker != undefined) userMarker.pop();
+			if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker.length != 0 || _globalUserMarker != undefined)){
+                userMarker.pop();
+                _globalUserMarker.pop()
+            }
             userMarker.push(placeUserMarker({lat, lng}));
-
+            _globalUserMarker = userMarker;
 			try{
 				getParkingsData(lat, lng, areaParams, document.getElementById("distanceSlider").value, 100).then((data) => {
 					if(data.length == 0){
@@ -151,8 +142,12 @@ function getParkingsNearAddress(address){
 		let lng = position.coords.longitude;
 		let areaParams = "";
 		
-		if(userMarker.length != 0 || userMarker != undefined) userMarker.pop();
-		userMarker.push(placeUserMarker({lat, lng}));
+		if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker.length != 0 || _globalUserMarker != undefined)){
+            userMarker.pop();
+            _globalUserMarker.pop()
+        }
+        userMarker.push(placeUserMarker({lat, lng}));
+        _globalUserMarker = userMarker;
 		
 		if(address == ""){
 			return -1;
@@ -193,6 +188,25 @@ function initMap() {
 		zoom: 8,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 	});
+    map.addListener('click', () => {
+        if(_globalAllMarkers != undefined || _globalAllMarkers.length != 0){
+            for (let i = 0; i < _globalAllMarkers.length; i++) {
+                if(_globalAllMarkers[i].getMap() == null && _globalAllMarkers[i] != _selectedMarker){
+                    _globalAllMarkers[i].setMap(map);
+                }
+            }
+        }
+    });
+    const directionsService = new google.maps.DirectionsService();
+    _globalDirectionsService = directionsService;
+    const directionsRenderer = new google.maps.DirectionsRenderer({map: map});
+    _globalDirectionsRenderer = directionsRenderer;
+
+    const bottomRightDiv = document.createElement("div");
+    const locationButton = createLocationButton(map);
+
+    bottomRightDiv.appendChild(locationButton);
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(bottomRightDiv);
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -258,6 +272,7 @@ function displaySelectedParking(parking){
 
 function placeMarkers(allMarkers, data) {
 	data.forEach((parking) => {
+        let addedButton;
 		if (parking.pos.lat != undefined && parking.pos.lng != undefined) {
 			const marker = new google.maps.Marker({
 				position: {
@@ -291,10 +306,51 @@ function placeMarkers(allMarkers, data) {
 
 				openInfoWindow(infoWindow, prevInfoWindow, marker, map);
 				prevInfoWindow = infoWindow;
+
+                if(addedButton != true){
+                    const button = document.createElement("button");
+                    // Set CSS for the control.
+                    button.style.backgroundColor = "#fff";
+                    button.style.border = "2px solid #fff";
+                    button.style.borderRadius = "3px";
+                    button.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+                    button.style.color = "rgb(25,25,25)";
+                    button.style.cursor = "pointer";
+                    button.style.fontFamily = "Roboto,Arial,sans-serif";
+                    button.style.fontSize = "16px";
+                    button.style.lineHeight = "38px";
+                    button.style.margin = "8px 0 22px";
+                    button.style.padding = "0 5px";
+                    button.style.textAlign = "center";
+                    button.textContent = "Itinéraire";
+                    button.title = "Cliquez pour rejoindre le parking.";
+                    button.type = "button";
+                    
+                    await infoWindow.setContent(infoWindow.getContent() + '<br>' +
+                    '<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+_globalUserMarker[0].getPosition().lat() +','+_globalUserMarker[0].getPosition().lng()+','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button>');
+                    addedButton = true;
+                }
 				
 				displaySelectedParking(parking);
 			});
+            
+            marker.addListener("click", () => {
+                _selectedMarker = marker;
+                for (let i = 0; i < allMarkers.length; i++) {
+                    if(allMarkers[i].getPosition() != marker.getPosition()){
+                        if(allMarkers[i].getMap() == null){
+                            allMarkers[i].setMap(map);
+                        }else{
+                            openInfoWindow(infoWindow, prevInfoWindow, marker, map);
+                            allMarkers[i].setMap(null);
+                        }
+                    }
+                }
+            });
+
+
 			allMarkers.push(marker);
+            _globalAllMarkers = allMarkers;
 			return 1;
 		} else {
 			return 0;
@@ -302,6 +358,13 @@ function placeMarkers(allMarkers, data) {
 	});
 	return 0;
 }
+
+const goTo = function (latOrigin, lngOrigin, latDestination, lngDestination) {
+    const origin = new google.maps.LatLng(latOrigin, lngOrigin);
+    const destination = new google.maps.LatLng(latDestination, lngDestination);
+
+    calculateAndDisplayRoute(_globalDirectionsRenderer, _globalDirectionsService, origin, destination);
+};
 
 function removeAllMarkers(allMarkers) {
 	allMarkers.forEach((marker) => {
@@ -369,4 +432,91 @@ function toggleMenuVisibility(){
 
 	element.classList.toggle("visible");
 	element.classList.toggle("hidden");
+}
+
+function createLocationButton(map) {
+    const controlButton = document.createElement("button");
+  
+    // Set CSS for the control.
+    controlButton.style.backgroundColor = "#fff";
+    controlButton.style.border = "2px solid #fff";
+    controlButton.style.borderRadius = "3px";
+    controlButton.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+    controlButton.style.color = "rgb(25,25,25)";
+    controlButton.style.cursor = "pointer";
+    controlButton.style.fontFamily = "Roboto,Arial,sans-serif";
+    controlButton.style.fontSize = "16px";
+    controlButton.style.lineHeight = "38px";
+    controlButton.style.margin = "8px 0 22px";
+    controlButton.style.padding = "0 5px";
+    controlButton.style.textAlign = "center";
+    controlButton.textContent = "Localisez-moi";
+    controlButton.title = "Cliquez pour recentrer la carte sur votre position";
+    controlButton.type = "button";
+
+    controlButton.addEventListener("click", () => {
+		// Try HTML5 geolocation.
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition((position) => {
+				const pos = {
+					lat: position.coords.latitude,
+					lng: position.coords.longitude,
+				};
+				map.setCenter(pos);
+				map.setZoom(13);
+                if(_globalUserMarker != undefined || _globalUserMarker.length != 0){
+                    _globalUserMarker.pop()
+                }
+                _globalUserMarker.push(placeUserMarker(pos));
+			}, () => {
+				handleLocationError(true, infoWindow, map.getCenter());
+			});
+		} else {
+			// Browser doesn't support Geolocation
+			handleLocationError(false, infoWindow, map.getCenter());
+		}
+	});
+    return controlButton;
+  }
+
+
+function calculateAndDisplayRoute(directionsRenderer, directionsService, origin, destination/*, allMarkers, map*/) {
+    console.log("ici");
+    directionsService
+      .route({
+        origin: origin,
+        destination: destination,
+        travelMode: google.maps.TravelMode.DRIVING,
+      })
+      .then((result) => {
+        /*
+        document.getElementById("warnings-panel").innerHTML =
+          "<b>" + result.routes[0].warnings + "</b>";
+        */
+        directionsRenderer.setDirections(result);
+        //showSteps(result, allMarkers, map);
+      })
+      .catch((e) => {
+        window.alert("Directions request failed due to " + e);
+      });
+}
+
+
+function showSteps(directionResult, allMarkers, map) {
+    const myRoute = directionResult.routes[0].legs[0];
+  
+    for (let i = 0; i < myRoute.steps.length; i++) {
+      /*
+        const marker = (allMarkers[i] =
+        allMarkers[i] || new google.maps.Marker());
+  
+      marker.setMap(map);
+      marker.setPosition(myRoute.steps[i].start_location);
+      attachInstructionText(
+        marker,
+        myRoute.steps[i].instructions,
+        map
+      );
+      */
+  }
 }
