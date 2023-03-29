@@ -134,9 +134,7 @@ function getSearchFilters() {
 		userMarker.push(placeUserMarker());
 		_globalUserMarker = userMarker;
 		
-		if(userMarker[0] == null){
-			userMarker.pop();
-		}
+		
 		try{
 			getParkingsData(userLocation.lat, userLocation.lng, 'area[name="' + areaParams + '"];', searchRadius, nbMaxResults).then((data) => {
 				if(data.length == 0){
@@ -180,9 +178,6 @@ function getParkingsNearAddress(address){
 	userMarker.push(placeUserMarker());
 	_globalUserMarker = userMarker;
 
-	if(userMarker[0] == null){
-		userMarker.pop();
-	}
 	
 	if(address == ""){
 		return -1;
@@ -350,9 +345,12 @@ function placeMarkers(allMarkers, data) {
                     button.textContent = "Itinéraire";
                     button.title = "Cliquez pour rejoindre le parking.";
                     button.type = "button";
+                    _globalUserMarker[0].then((position)=>{
+                        infoWindow.setContent(infoWindow.getContent() + '<br>' +
+                        '<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+ position.getPosition().lat() +','+ position.getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button>');
                     
-                    await infoWindow.setContent(infoWindow.getContent() + '<br>' +
-                    '<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+_globalUserMarker[0].getPosition().lat() +','+_globalUserMarker[0].getPosition().lng()+','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button>');
+                    });
+
                     addedButton = true;
                 }
 				
@@ -399,7 +397,7 @@ function removeAllMarkers(allMarkers) {
 
 
 function placeUserMarker(){
-	refreshUserLocation().then(() =>{
+	let userMarker = refreshUserLocation().then(() =>{
 		if(userLocation.lat == null || userLocation.lng == null){
 			return null;
 		}
@@ -420,6 +418,7 @@ function placeUserMarker(){
 		marker.setMap(map);
 		return marker;
 	});
+    return userMarker;
 }
 
 function placeMarker(coords, description){		
