@@ -7,6 +7,7 @@
 </head>
 
 <body>
+<p id="erreur"></p>
 <div class="contact">
 
  <form action="informulaire.php" method="get"><!--pour pouvoir envoyer a informulaire-->
@@ -92,4 +93,17 @@
  
   </form>
   </body>
+  <script>
+    if(/[?&]erreur=/.test(location.search))
+    {  
+        let a = window.location.search.split(8).split("+");
+        let erreur = ""
+        for(i of a)
+        {
+            erreur=erreur+i+" ";
+        }
+        document.getElementById("erreur").innerHTML = "Veuiller remplir correctement les champs " + a;
+    }
+
+  </script>
 </html>
