@@ -7,6 +7,10 @@ let _selectedMarker = undefined;
 let _globalDirectionsService = undefined;
 let _globalDirectionsRenderer = undefined;
 
+let userLocation = {lat:null,lng:null};
+let searchRadius = 5;
+let nbMaxResults = 50;
+
 function addOption(selectField, value, name){
 	var opt = document.createElement('option');
 	opt.value = value;
@@ -23,7 +27,6 @@ function initializeForms(){
 		let value = "Paris "+i+"e Arrondissement";
 		addOption(arrondissements, value, value);
 	}
-
 	addOption(departements, "Paris", "75 Paris");
 	addOption(departements, "Seine-et-Marne", "77 Paris Seine-et-Marne");
 	addOption(departements, "Yvelines", "78 Yvelines");
@@ -34,96 +37,132 @@ function initializeForms(){
 	addOption(departements, "Val-d'Oise", "95 Val-d'Oise");
 }
 
-function addEvents(){
-	buttonPos = document.getElementById("getUserLocation");
-	buttonSearchParam = document.getElementById("getSearchParams");
-	
-	buttonSearchParam.addEventListener("click", () => {
-		let allMarkers = [];
-		let userMarker = [];
-		navigator.geolocation.getCurrentPosition((position) => {
-			let lat = position.coords.latitude;
-			let lng = position.coords.longitude;
-			map.setCenter({
-				lat,
-				lng
-			});
-			map.setZoom(13);
 
-            if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
-                userMarker.pop();
-                _globalUserMarker.pop()
-            }
-            userMarker.push(placeUserMarker({lat, lng}));
-            _globalUserMarker = userMarker;
-			
-			let selectElement = document.getElementById("selectSearchParams");
-			let areaParams = 'area[name="' + selectElement.options[selectElement.selectedIndex].value + '"];';
-			let maxElements = document.getElementById("nbMaxSlider").value;
-			try{
-				getParkingsData(lat, lng, areaParams, 1, maxElements).then((data) => {
-					if(data.length == 0){
-						alert("Aucun parking n'a été trouvé dans cette zone");
-						return;
-					}
-					if (allMarkers.length != 0 || allMarkers != undefined){
-						removeAllMarkers(allMarkers);
-					}
-					placeMarkers(allMarkers, data);
-					if (allMarkers.length != 0 || allMarkers != undefined){
-						const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
-						map.setCenter(coordFirstMarker);
-						map.setZoom(15);
-					}
-				});
-			} catch(err){
-				console.error("Data could not be fetched or parsed from Overpass API");
-				alert("Les données n'ont pas pu être récupérées. Vous avez peut-être fait trop de requêtes en peu de temps ou le service est surchargé. Veuillez réessayer ultérieuremnt.")
-			}
-		});
+async function refreshUserLocation(){
+	const posPromise = () => new Promise((resolve, error) => navigator.geolocation.getCurrentPosition(resolve, error));
+
+	try {
+		const pos = await posPromise();
+		userLocation.lat = pos.coords.latitude;
+		userLocation.lng = pos.coords.longitude;
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+function centerMapToUserPos(){
+	refreshUserLocation().then(() =>{
+		if(userLocation.lat != null && userLocation.lng != null){
+			map.setCenter(new google.maps.LatLng(userLocation.lat, userLocation.lng));
+			map.setZoom(15);
+		} else {
+			console.log("position is required but could not be fetched");
+			alert("Votre position est requise");
+		}
 	});
+}
+
+async function searchNearUser(){
+	let allMarkers = [];
+	let userMarker = [];
+	let areaParams = "";
+
+	await refreshUserLocation();
+	if(userLocation.lat == null || userLocation.lng == null){
+		console.log("position is required but could not be fetched");
+		alert("Votre position est requise");
+		return;
+	}
+
+	if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
+		userMarker.pop();
+		_globalUserMarker.pop()
+	}
+	userMarker.push(placeUserMarker());
+	_globalUserMarker = userMarker;
 	
-	buttonPos.addEventListener("click", () => {
-		let allMarkers = [];
-        let userMarker = [];
-		navigator.geolocation.getCurrentPosition((position) => {
-			let lat = position.coords.latitude;
-			let lng = position.coords.longitude;
-			let areaParams = "";
-			map.setCenter({
-				lat,
-				lng
-			});
-			map.setZoom(13);
-			
-			if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker.length != 0 || _globalUserMarker != undefined)){
-                userMarker.pop();
-                _globalUserMarker.pop()
-            }
-            userMarker.push(placeUserMarker({lat, lng}));
-            _globalUserMarker = userMarker;
-			try{
-				getParkingsData(lat, lng, areaParams, document.getElementById("distanceSlider").value, 100).then((data) => {
-					if(data.length == 0){
-						alert("Aucun parking n'a été trouvé dans cette zone");
-						return;
-					}
-					if (allMarkers.length != 0 || allMarkers != undefined){
-						removeAllMarkers(allMarkers);
-					}
-					placeMarkers(allMarkers, data);
-					if (allMarkers.length != 0 || allMarkers != undefined){
-						const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
-						map.setCenter(coordFirstMarker);
-						map.setZoom(15);
-					}
-				});
-			} catch(err){
-				console.error("Data could not be fetched or parsed from Overpass API");
-				alert("Les données n'ont pas pu être récupérées. Vous avez peut-être fait trop de requêtes en peu de temps ou le service est surchargé. Veuillez réessayer ultérieuremnt.")
+	userMarker.push(placeUserMarker());
+	if(userMarker[0] == null){
+		userMarker.pop();
+	}
+
+	try{
+		getParkingsData(userLocation.lat, userLocation.lng, areaParams, searchRadius, nbMaxResults).then((data) => {
+			if(data.length == 0){
+				alert("Aucun parking n'a été trouvé dans cette zone");
+				return;
+			}
+			if (allMarkers.length != 0 || allMarkers != undefined){
+				removeAllMarkers(allMarkers);
+			}
+			placeMarkers(allMarkers, data);
+			if (allMarkers.length != 0 || allMarkers != undefined){
+				const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
+				map.setCenter(coordFirstMarker);
+				map.setZoom(15);
 			}
 		});
-	});
+	} catch(err){
+		console.error("Data could not be fetched or parsed from Overpass API");
+		alert("Les données n'ont pas pu être récupérées. Vous avez peut-être fait trop de requêtes en peu de temps ou le service est surchargé. Veuillez réessayer ultérieuremnt.")
+	}
+}
+
+function getSearchFilters() {
+	let allMarkers = [];
+	let userMarker = [];
+	
+	//let areaParams = 'area[name="' + selectElement.options[selectElement.selectedIndex].value + '"];';
+	let selectElement = document.getElementById("selectSearchParams");
+	let areaParams = selectElement.options[selectElement.selectedIndex].value;
+	let newNbMaxResults = Number(document.getElementById("nbMaxSlider").value);
+	let newSearchRadius = Number(document.getElementById("distanceSlider").value);
+
+	
+	if(newNbMaxResults!=NaN && newNbMaxResults>=1){
+		nbMaxResults = newNbMaxResults;
+	} else {
+		alert("La valeur entrée pour le nombre max de parkings à afficher est incorrecte");
+	}
+	
+	if(newSearchRadius!=NaN && newSearchRadius>=0.5){
+		searchRadius = newSearchRadius;
+	} else {
+		alert("La valeur entrée pour le rayon de recherche est incorrecte");
+	}
+
+	if(areaParams != "null"){
+		if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
+			userMarker.pop();
+			_globalUserMarker.pop()
+		}
+		userMarker.push(placeUserMarker());
+		_globalUserMarker = userMarker;
+		
+		if(userMarker[0] == null){
+			userMarker.pop();
+		}
+		try{
+			getParkingsData(userLocation.lat, userLocation.lng, 'area[name="' + areaParams + '"];', searchRadius, nbMaxResults).then((data) => {
+				if(data.length == 0){
+					alert("Aucun parking n'a été trouvé dans cette zone");
+					return;
+				}
+				if (allMarkers.length != 0 || allMarkers != undefined){
+					removeAllMarkers(allMarkers);
+				}
+				placeMarkers(allMarkers, data);
+				if (allMarkers.length != 0 || allMarkers != undefined){
+					const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
+					map.setCenter(coordFirstMarker);
+					map.setZoom(15);
+				}
+			});
+		} catch(err){
+			console.error("Data could not be fetched or parsed from Overpass API");
+			alert("Les données n'ont pas pu être récupérées. Vous avez peut-être fait trop de requêtes en peu de temps ou le service est surchargé. Veuillez réessayer ultérieuremnt.")
+		}
+	}
 }
 
 async function getCoordFromAddress(address){
@@ -137,45 +176,45 @@ async function getCoordFromAddress(address){
 function getParkingsNearAddress(address){
 	let allMarkers = [];
 	let userMarker = [];
-	navigator.geolocation.getCurrentPosition((position) => {
-		let lat = position.coords.latitude;
-		let lng = position.coords.longitude;
-		let areaParams = "";
-		
-		if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker.length != 0 || _globalUserMarker != undefined)){
-            userMarker.pop();
-            _globalUserMarker.pop()
-        }
-        userMarker.push(placeUserMarker({lat, lng}));
-        _globalUserMarker = userMarker;
-		
-		if(address == ""){
-			return -1;
-		}
-		
-		getCoordFromAddress(address).then((coord) =>{
-			let latAddress = coord.lat;
-			let lngAddress = coord.lng;
+	let areaParams = "";
+	
+	if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
+		userMarker.pop();
+		_globalUserMarker.pop()
+	}
+	userMarker.push(placeUserMarker());
+	_globalUserMarker = userMarker;
 
-			
-			getParkingsData(latAddress, lngAddress, areaParams, document.getElementById("distanceSlider").value, 100).then((data) => {
-				if(data.length == 0){
-					alert("Aucun parking n'a été trouvé dans cette zone");
-					return;
-				}
-				if (allMarkers.length != 0 || allMarkers != undefined){
-					removeAllMarkers(allMarkers);
-				}
-				allMarkers.push(placeMarker(coord, address));
-				placeMarkers(allMarkers, data);
-				const coordFirstMarker = new google.maps.LatLng(coord.lat, coord.lng);
-				map.setCenter(coordFirstMarker);
-				map.setZoom(15);
-				return 0;
-			});
-		}).catch((err) => {
-			return -1;
+	if(userMarker[0] == null){
+		userMarker.pop();
+	}
+	
+	if(address == ""){
+		return -1;
+	}
+	
+	getCoordFromAddress(address).then((coord) =>{
+		let latAddress = coord.lat;
+		let lngAddress = coord.lng;
+
+		
+		getParkingsData(latAddress, lngAddress, areaParams, document.getElementById("distanceSlider").value, 100).then((data) => {
+			if(data.length == 0){
+				alert("Aucun parking n'a été trouvé dans cette zone");
+				return;
+			}
+			if (allMarkers.length != 0 || allMarkers != undefined){
+				removeAllMarkers(allMarkers);
+			}
+			allMarkers.push(placeMarker(coord, address));
+			placeMarkers(allMarkers, data);
+			const coordFirstMarker = new google.maps.LatLng(coord.lat, coord.lng);
+			map.setCenter(coordFirstMarker);
+			map.setZoom(15);
+			return 0;
 		});
+	}).catch((err) => {
+		return -1;
 	});
 }
 
@@ -188,7 +227,7 @@ function initMap() {
 		zoom: 8,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 	});
-    map.addListener('click', () => {
+	map.addListener('click', () => {
         if(_globalAllMarkers != undefined || _globalAllMarkers.length != 0){
             for (let i = 0; i < _globalAllMarkers.length; i++) {
                 if(_globalAllMarkers[i].getMap() == null && _globalAllMarkers[i] != _selectedMarker){
@@ -209,14 +248,6 @@ function initMap() {
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(bottomRightDiv);
 }
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-	infoWindow.setPosition(pos);
-	infoWindow.setContent(browserHasGeolocation ?
-		"Error: The Geolocation service failed." :
-		"Error: Your browser doesn't support geolocation.");
-	infoWindow.open(map);
-}
-
 function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 	if(prevInfoWindow != null){
 		prevInfoWindow.close();
@@ -228,7 +259,6 @@ function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 }
 
 function displaySelectedParking(parking){
-	let row = document.getElementById("selectedParkingTableRowData");
 	let table = document.getElementById("selectedParkingTable");
 
 	table.style.visibility = "visible";
@@ -272,7 +302,7 @@ function displaySelectedParking(parking){
 
 function placeMarkers(allMarkers, data) {
 	data.forEach((parking) => {
-        let addedButton;
+		let addedButton;
 		if (parking.pos.lat != undefined && parking.pos.lng != undefined) {
 			const marker = new google.maps.Marker({
 				position: {
@@ -373,26 +403,28 @@ function removeAllMarkers(allMarkers) {
 }
 
 
-function placeUserMarker(coords){
-    const marker = new google.maps.Marker({
-        position: {
-			lat: coords.lat,
-            lng: coords.lng
-        },
-        map,
-        icon: {
-			path: "M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z",
-            fillColor: "blue",
-            fillOpacity: 1.0,
-            strokeWeight: 0,
-            rotation: 0,
-            scale: 2,
-            anchor: new google.maps.Point(12,12),
-        },
-        title: "Ma position actuelle",
-    });
-    marker.setMap(map);
-    return marker;
+function placeUserMarker(){
+	refreshUserLocation().then(() =>{
+		if(userLocation.lat == null || userLocation.lng == null){
+			return null;
+		}
+		const marker = new google.maps.Marker({
+			position: userLocation,
+			map,
+			icon: {
+				path: "M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z",
+				fillColor: "blue",
+				fillOpacity: 1.0,
+				strokeWeight: 0,
+				rotation: 0,
+				scale: 2,
+				anchor: new google.maps.Point(12,12),
+			},
+			title: "Ma position actuelle",
+		});
+		marker.setMap(map);
+		return marker;
+	});
 }
 
 function placeMarker(coords, description){		
@@ -436,7 +468,7 @@ function toggleMenuVisibility(){
 
 function createLocationButton(map) {
     const controlButton = document.createElement("button");
-  
+
     // Set CSS for the control.
     controlButton.style.backgroundColor = "#fff";
     controlButton.style.border = "2px solid #fff";
@@ -455,28 +487,22 @@ function createLocationButton(map) {
     controlButton.type = "button";
 
     controlButton.addEventListener("click", () => {
-		// Try HTML5 geolocation.
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition((position) => {
-				const pos = {
-					lat: position.coords.latitude,
-					lng: position.coords.longitude,
-				};
-				map.setCenter(pos);
-				map.setZoom(13);
-                if(_globalUserMarker != undefined || _globalUserMarker.length != 0){
+		refreshUserLocation().then(() =>{
+			if(userLocation.lat != null && userLocation.lng != null){
+				map.setCenter(new google.maps.LatLng(userLocation.lat, userLocation.lng));
+				map.setZoom(15);
+
+				if(_globalUserMarker != undefined || _globalUserMarker.length != 0){
                     _globalUserMarker.pop()
                 }
-                _globalUserMarker.push(placeUserMarker(pos));
-			}, () => {
-				handleLocationError(true, infoWindow, map.getCenter());
-			});
-		} else {
-			// Browser doesn't support Geolocation
-			handleLocationError(false, infoWindow, map.getCenter());
-		}
+                _globalUserMarker.push(placeUserMarker());
+			} else {
+				console.log("position is required but could not be fetched");
+				alert("Votre position est requise");
+			}
+		});
 	});
-    return controlButton;
+	return controlButton;
   }
 
 
@@ -503,7 +529,7 @@ function calculateAndDisplayRoute(directionsRenderer, directionsService, origin,
 
 function showSteps(directionResult, allMarkers, map) {
     const myRoute = directionResult.routes[0].legs[0];
-  
+
     for (let i = 0; i < myRoute.steps.length; i++) {
       /*
         const marker = (allMarkers[i] =

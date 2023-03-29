@@ -9,7 +9,7 @@
         <meta charset="UTF-8">
         <title>Inscription</title>
     
-        <link rel="stylesheet" type="text/css" href="CSS/Inscription_Connexion.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/Inscription_Connexion.css">
         <?php include_once("head.php"); ?>
     </head>
 

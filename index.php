@@ -10,16 +10,12 @@ session_start();
 		<script src="./getParkingData.js"></script>
 	</head>
 
-	<body class="light" onload="addEvents(); initializeForms();">
+	<body class="light" onload="initializeForms();">
 		<?php include_once("Header.php"); ?>
 		<div class="content">
 			<?php
 			if($_SERVER["REQUEST_METHOD"] == "POST"){
 				$address = $_POST["search-address-text"];
-
-				/*
-				ToDo : CHECK THE FORMAT !
-				*/
 
 				if(strlen($address) > 200){
 					$address = "";
@@ -50,29 +46,33 @@ session_start();
 			<button class="menuButton" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
 			
 			<div class="sideBar column">
-				<div class="sideBar hidden" id="sideBarContent"><h2>Filtres</h2>
+				<div class="sideBar hidden" id="sideBarContent">
+					<h2>Filtres</h2>
+					<br>
 					<form>
 						<legend>Départements ou arrondissements :</legend>
 						<br>
 						<select id="selectSearchParams">
+							<option disabled selected value="null"></option>
 							<optgroup label="Paris - Arrondissement" id="arrondissementsOptgroup"></optgroup>
 							<optgroup label="Département d'Île-de-France" id="departementsOptgroup"></optgroup>
 						</select>
-						<br><br>
+						<br><br><hr><br>
 						<label name="nbMaxSlider">Nombre maximum de parkings à afficher : </label>
-
+						<br>
 						<input id="nbMaxSlider" name="nbMaxSlider" type="range" oninput="this.nextElementSibling.value = this.value;" value="10" min="1" max="200" step="1">
 						<output>10</output>
-					</form>
-					<button class="menuButton"  id="getSearchParams"><i class="fa-solid fa-magnifying-glass"></i></button>
-					<br><br><hr><br><br>
-					<form>
-						<legend>Recherche en fonction de notre position</legend>
+						<br><br>
 						<label name="distanceSlider">Distance (en km) : </label>
 						<input id="distanceSlider" name="distanceSlider" type="range" oninput="this.nextElementSibling.value = this.value;" value="1" min="0.5" max="10" step="0.5">
 						<output>1</output>
 					</form>
-					<button class="menuButton" id="getUserLocation"><i class="fa-solid fa-magnifying-glass"></i></button>
+					<br>
+					<button class="menuButton" onclick="getSearchFilters()"><i class="fa-solid fa-magnifying-glass"></i> Appliquer mes filtres</button>
+					<!--<button class="menuButton"  id="getSearchParams"><i class="fa-solid fa-magnifying-glass"></i></button>-->
+					<br><br><br><br>
+					<button class="menuButton" onclick="searchNearUser();"><i class="fa-solid fa-magnifying-glass"></i></button>
+
 				</div>
 			</div>
 			<div class="row">
