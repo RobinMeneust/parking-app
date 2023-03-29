@@ -7,6 +7,7 @@
 </head>
 
 <body>
+<p id="p1">Hello World!</p>
 <div class="contact">
 
  <form action="informulaire.php" method="get"><!--pour pouvoir envoyer a informulaire-->
@@ -92,4 +93,26 @@
  
   </form>
   </body>
+  <script>
+    document.getElementById("p1").innerHTML= (/[&]_/.test(window.location.search));
+    
+    if(/[?&]erreur/.test(window.location.search))
+    {  
+        if(/[&]_/.test(window.location.search))
+        { 
+            let a = window.location.search.splice(8).split("_");
+            let erreur = ""
+            for(i of a)
+            {
+                erreur=erreur+i+" ";
+            }
+        }
+        else
+        {
+            let a = window.location.search.splice(8);
+        }
+        document.getElementById("p1").innerHTML= "Veuiller remplir correctement les champs " + a;
+    }
+
+  </script>
 </html>
