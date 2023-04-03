@@ -295,6 +295,17 @@ hr {
 	cursor:pointer;
 }
 
+.rectangular {
+	border-radius:0;
+	width:100px;
+	height:40px;
+}
+
+.rectangular:hover {
+	width:102px;
+	height:42px;
+}
+
 #sideBarContent{
     padding: 50px 15px 15px 15px;
 	width: 250px;

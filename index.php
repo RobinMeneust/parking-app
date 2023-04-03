@@ -68,11 +68,7 @@ session_start();
 						<output>1</output>
 					</form>
 					<br>
-					<button class="menuButton" onclick="getSearchFilters()"><i class="fa-solid fa-magnifying-glass"></i> Appliquer mes filtres</button>
-					<!--<button class="menuButton"  id="getSearchParams"><i class="fa-solid fa-magnifying-glass"></i></button>-->
-					<br><br><br><br>
-					<button class="menuButton" onclick="searchNearUser();"><i class="fa-solid fa-magnifying-glass"></i></button>
-
+					<button class="menuButton rectangular" onclick="getSearchFilters()">Appliquer mes filtres</button>
 				</div>
 			</div>
 			<div class="row">

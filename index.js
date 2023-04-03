@@ -8,7 +8,7 @@ let _globalDirectionsService = undefined;
 let _globalDirectionsRenderer = undefined;
 
 let userLocation = {lat:null,lng:null};
-let searchRadius = 5;
+let searchRadius = 1;
 let nbMaxResults = 50;
 
 function addOption(selectField, value, name){
@@ -232,10 +232,15 @@ function initMap() {
     _globalDirectionsRenderer = directionsRenderer;
 
     const bottomRightDiv = document.createElement("div");
-    const locationButton = createLocationButton(map);
+	const topCenterDiv = document.createElement("div");
+    const locationButton = createMapButton(addLocationToMap, "Localisez-moi", "Cliquez pour recentrer la carte sur votre position");
+	const searchNearPosButton = createMapButton(searchNearUser, "Rechercher des parkings", "Cliquez pour lancer la recherche à partir de votre position");
 
     bottomRightDiv.appendChild(locationButton);
+    topCenterDiv.appendChild(searchNearPosButton);
+
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(bottomRightDiv);
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(topCenterDiv);
 }
 
 function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
@@ -460,7 +465,24 @@ function toggleMenuVisibility(){
 	element.classList.toggle("hidden");
 }
 
-function createLocationButton(map) {
+function addLocationToMap(){
+	refreshUserLocation().then(() =>{
+		if(userLocation.lat != null && userLocation.lng != null){
+			map.setCenter(new google.maps.LatLng(userLocation.lat, userLocation.lng));
+			map.setZoom(15);
+
+			if(_globalUserMarker != undefined || _globalUserMarker.length != 0){
+				_globalUserMarker.pop();
+			}
+			_globalUserMarker.push(placeUserMarker());
+		} else {
+			console.log("position is required but could not be fetched");
+			alert("Votre position est requise");
+		}
+	});
+}
+
+function createMapButton(action, textContent, title, ) {
     const controlButton = document.createElement("button");
 
     // Set CSS for the control.
@@ -476,26 +498,11 @@ function createLocationButton(map) {
     controlButton.style.margin = "8px 0 22px";
     controlButton.style.padding = "0 5px";
     controlButton.style.textAlign = "center";
-    controlButton.textContent = "Localisez-moi";
-    controlButton.title = "Cliquez pour recentrer la carte sur votre position";
+    controlButton.textContent = textContent;
+    controlButton.title = title;
     controlButton.type = "button";
-
-    controlButton.addEventListener("click", () => {
-		refreshUserLocation().then(() =>{
-			if(userLocation.lat != null && userLocation.lng != null){
-				map.setCenter(new google.maps.LatLng(userLocation.lat, userLocation.lng));
-				map.setZoom(15);
-
-				if(_globalUserMarker != undefined || _globalUserMarker.length != 0){
-                    _globalUserMarker.pop();
-                }
-                _globalUserMarker.push(placeUserMarker());
-			} else {
-				console.log("position is required but could not be fetched");
-				alert("Votre position est requise");
-			}
-		});
-	});
+    controlButton.addEventListener("click", action);
+	
 	return controlButton;
   }
 
