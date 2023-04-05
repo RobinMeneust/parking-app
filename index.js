@@ -256,6 +256,16 @@ function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 	});
 }
 
+function zoomIn(element){
+	element.style.width = "120px";
+	element.setAttribute("onclick","zoomOut(this)");
+}
+
+function zoomOut(element){
+	element.style.width = "45px";
+	element.setAttribute("onclick","zoomIn(this)");
+}
+
 function displaySelectedParking(parking){
 	let table = document.getElementById("selectedParkingTable");
 
@@ -269,19 +279,35 @@ function displaySelectedParking(parking){
 	nbSlotsTd.innerHTML = "Calcul en cours...";
 
 	addressTd.innerHTML = parking.address;
-	if(parking.opening_hours == ""){
+	if(parking.openingHours == ""){
 		openingHoursTd.innerHTML = "non spécifié";
 	} else{
-		openingHoursTd.innerHTML = parking.opening_hours;
+		openingHoursTd.innerHTML = parking.openingHours;
 	}
 	
-	if(parking.fee == "no"){
+	if(parking.fee == 0){
 		paymentTd.innerHTML = "gratuit"
-	} else if(parking.fee == "yes"){
-		paymentTd.innerHTML = "<ul><li>Espèces : "+parking.paymentMethod.cash+"</li><li>Cartes bancaires : "+parking.paymentMethod.card+"</li></ul>";
+	} else if(parking.fee == 1){
+		paymentTd.innerHTML = "<b>Payant : </b><br>Mode de paiement : <br>";
+		let imgCash = "error";
+		let imgCard = "error";
+		switch(parking.paymentMethod.cash){
+			case 0:imgCash = "cash_no";break;
+			case 1:imgCash = "cash_yes";break;
+			default:imgCash = "cash_unknown";
+		}
+		switch(parking.paymentMethod.card){
+			case 0:imgCard = "card_no";break;
+			case 1:imgCard = "card_yes";break;
+			default:imgCard = "card_unknown";
+		}
+		paymentTd.innerHTML += "<img id=\"icon_cash\" onclick=\"zoomIn(this)\" src=\"assets/img/"+imgCash+".png\" alt=\""+imgCash+"\"><br>";
+		paymentTd.innerHTML += "<img id=\"icon_card\" onclick=\"zoomIn(this)\" src=\"assets/img/"+imgCard+".png\" alt=\""+imgCard+"\">";	
 	} else{
 		paymentTd.innerHTML = "non spécifié";
 	}
+
+
 
 	if(parking.nbFreeSlots == -1){
 		try{

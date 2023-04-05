@@ -26,7 +26,6 @@ session_start();
 			<script>
 				let isAddressSet = "<?php echo isSet($address) ?>";
 				if(isAddressSet){
-					console.log("if OK");
 					let address = "<?php echo $address ?>";
 					if(address == ""){
 						console.log("chaîne vide ou trop de caractères");

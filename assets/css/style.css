@@ -333,6 +333,10 @@ hr {
 	padding: 5px;
 }
 
+#icon_cash, #icon_card{
+	width:45px;
+	transition : width linear 0.1s;
+}
 
 @media screen and (max-width: 768px) {
     .content_footer {

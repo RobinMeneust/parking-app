@@ -38,44 +38,49 @@ function getCapacity(data, surface){
 
 function getFee(data){
 	if(data.hasOwnProperty('fee')){
-		return data.fee;
-	} else{
-		return ""
+		if(data.fee == "yes"){
+			return 1;
+		} else if(data.fee == "no" || data.fee == "donation"){
+			return 0;
+		}
+		return -1;
 	}
 }
 
 function getPaymentMethod(data){
-	let payment = {cash:"", card:""};
+	let payment = {cash:-1, card:-1};
+
 	if(data.hasOwnProperty('payment:cash')){
 		if(data["payment:cash"] == "yes" || data["payment:cash"] == "only"){
-			payment.cash = "accepté";
+			payment.cash = 1;
 		} else if(data["payment:cash"] == "no"){
-			payment.cash = "refusé";
+			payment.cash = 0;
 		}
 	}
 	if(data.hasOwnProperty('payment:coins')){
 		if(data["payment:coins"] == "yes" || data["payment:cash"] == "only"){
-			payment.cash = "accepté";
-		} else if(payment.cash == "" && data["payment:coins"] == "no"){
-			payment.cash = "refusé";
+			payment.cash = 1;
+		} else if(payment.cash == -1 && data["payment:coins"] == "no"){
+			payment.cash = 0;
 		}
 	}
 
 	if(data.hasOwnProperty('payment:credit_card')){
 		if(data["payment:credit_card"] == "yes" || data["payment:credit_card"] == "only"){
-			payment.card = "accepté";
+			payment.card = 1;
 		} else if(data["payment:credit_card"] == "no"){
-			payment.card = "refusé";
+			payment.card = 0;
 		}
 	}
 	if(data.hasOwnProperty('payment:debit_card')){
 		if(data["payment:debit_card"] == "yes" || data["payment:credit_card"] == "only"){
-			payment.card = "accepté";
-		} else if(payment.card == "" && data["payment:debit_card"] == "no"){
-			payment.card = "refusé";
+			payment.card = 1;
+		} else if(payment.card == -1 && data["payment:debit_card"] == "no"){
+			payment.card = 0;
 		}
 	}
-	return payment;
+
+	return payment.card;
 }
 
 async function getAddressFromPos(pos){
@@ -136,8 +141,8 @@ async function getParkingsData(latitude, longitude, areaParams, maxDistance, max
 				address:"",
 				distance:0,
 				pos:{lat:0.0,lng:0.0},
-				paymentMethod:{cash:"", card:""},
-				opening_hours:""
+				paymentMethod:{card:-1,cash:-1},
+				openingHours:"non spécifié"
 			};
 			
 			if(out.elements[i].type != "node"){
@@ -154,16 +159,23 @@ async function getParkingsData(latitude, longitude, areaParams, maxDistance, max
 			
 			if(out.elements[i].hasOwnProperty("tags")){
 				parking.paymentMethod = getPaymentMethod(out.elements[i].tags);
-				if(parking.paymentMethod.card == "yes" || parking.paymentMethod.cash == "yes"){
-					parking.fee = "yes";
+				if(parking.fee == -1){
+					if(parking.paymentMethod == 1 || parking.paymentMethod == 1){
+						parking.fee = 1;
+					} else if(parking.paymentMethod == 0 && parking.paymentMethod == 0){
+						parking.fee = 0;
+					}
 				}
+				
 				parking.capacity = getCapacity(out.elements[i].tags, parking.surface);
 				parking.distance = distMeters(parking.pos, searchPos);
 				if(parking.capacity>0){
 					data.push(parking);
 				}
 				if(out.elements[i].tags.hasOwnProperty("opening_hours")){
-					parking.opening_hours = out.elements[i].tags.opening_hours;
+					parking.openingHours = out.elements[i].tags.opening_hours;
+				} else{
+					parking.openingHours = "non spécifié";
 				}
 			}
 		}
@@ -276,10 +288,10 @@ function isHolidays(date){
 	return false;
 }
 
-function getWeight(population, currentDate, holidays_ratio, opening_hours, importance){
+function getWeight(population, currentDate, holidays_ratio, openingHours, importance){
 	let weight = 1;
 				
-	if(opening_hours[getTimePeriod(currentDate.hour)] == false){
+	if(openingHours[getTimePeriod(currentDate.hour)] == false){
 		weight+=0.1;
 	}
 
