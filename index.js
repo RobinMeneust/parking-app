@@ -512,7 +512,8 @@ function calculateAndDisplayRoute(directionsRenderer, directionsService, origin,
       .route({
         origin: origin,
         destination: destination,
-        travelMode: google.maps.TravelMode.DRIVING,
+        travelMode: 'DRIVING',
+        provideRouteAlternatives: true,
       })
       .then((result) => {
         /*
