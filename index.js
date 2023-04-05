@@ -87,8 +87,9 @@ async function searchNearUser(){
 				alert("Aucun parking n'a été trouvé dans cette zone");
 				return;
 			}
-			if (allMarkers.length != 0 || allMarkers != undefined){
+			if ((allMarkers.length != 0 || allMarkers != undefined) && (_globalAllMarkers.length != 0)|| _globalAllMarkers != undefined){
 				removeAllMarkers(allMarkers);
+                removeAllMarkers(_globalAllMarkers);
 			}
 			placeMarkers(allMarkers, data);
 			if (allMarkers.length != 0 || allMarkers != undefined){
@@ -141,8 +142,9 @@ function getSearchFilters() {
 					alert("Aucun parking n'a été trouvé dans cette zone");
 					return;
 				}
-				if (allMarkers.length != 0 || allMarkers != undefined){
+				if ((allMarkers.length != 0 || allMarkers != undefined) && (_globalAllMarkers.length != 0 || _globalAllMarkers != undefined)){
 					removeAllMarkers(allMarkers);
+                    removeAllMarkers(_globalAllMarkers);
 				}
 				placeMarkers(allMarkers, data);
 				if (allMarkers.length != 0 || allMarkers != undefined){
@@ -193,8 +195,9 @@ function getParkingsNearAddress(address){
 				alert("Aucun parking n'a été trouvé dans cette zone");
 				return;
 			}
-			if (allMarkers.length != 0 || allMarkers != undefined){
+			if ((allMarkers.length != 0 || allMarkers != undefined)&&(_globalAllMarkers.length != 0 || _globalAllMarkers != undefined)){
 				removeAllMarkers(allMarkers);
+                removeAllMarkers(_globalAllMarkers);
 			}
 			allMarkers.push(placeMarker(coord, address));
 			placeMarkers(allMarkers, data);
@@ -226,7 +229,7 @@ function initMap() {
             }
         }
     });
-    const directionsService = new google.maps.DirectionsService();
+    const directionsService = new google.maps.DirectionsService({provideRouteAlternatives: true});
     _globalDirectionsService = directionsService;
     const directionsRenderer = new google.maps.DirectionsRenderer({map: null, markerOptions:{visible:false,}});
     _globalDirectionsRenderer = directionsRenderer;
@@ -368,6 +371,7 @@ function placeMarkers(allMarkers, data) {
                     if(allMarkers[i].getPosition() != marker.getPosition()){
                         if(allMarkers[i].getMap() == null){
                             allMarkers[i].setMap(map);
+                            infoWindow.close();
                         }else{
                             openInfoWindow(infoWindow, prevInfoWindow, marker, map);
                             allMarkers[i].setMap(null);
@@ -533,8 +537,7 @@ function calculateAndDisplayRoute(directionsRenderer, directionsService, origin,
       .route({
         origin: origin,
         destination: destination,
-        travelMode: 'DRIVING',
-        provideRouteAlternatives: true,
+        travelMode: google.maps.TravelMode.DRIVING,
       })
       .then((result) => {
         /*
