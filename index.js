@@ -379,6 +379,23 @@ function placeMarkers(allMarkers, data) {
                 }
             });
 
+            infoWindow.addListener('closeclick', ()=>{
+                _selectedMarker = marker;
+                for (let i = 0; i < allMarkers.length; i++) {
+                    if(allMarkers[i].getPosition() != marker.getPosition()){
+                        if(allMarkers[i].getMap() == null){
+                            allMarkers[i].setMap(map);
+                        }else{
+                            openInfoWindow(infoWindow, prevInfoWindow, marker, map);
+                            allMarkers[i].setMap(null);
+                        }
+                    }
+                }
+                if(_globalDirectionsRenderer.getMap() == map){
+                    _globalDirectionsRenderer.setMap(null);
+                }
+            });
+
 
 			allMarkers.push(marker);
             _globalAllMarkers = allMarkers;
