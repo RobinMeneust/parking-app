@@ -40,7 +40,6 @@ function initializeForms(){
 
 async function refreshUserLocation(){
 	const posPromise = () => new Promise((resolve, error) => navigator.geolocation.getCurrentPosition(resolve, error));
-
 	try {
 		const pos = await posPromise();
 		userLocation.lat = pos.coords.latitude;
@@ -78,11 +77,14 @@ async function searchNearUser(){
         userMarker.pop();
 		_globalUserMarker.pop()
 	}
+
 	userMarker.push(placeUserMarker());
-	_globalUserMarker = userMarker;
+	if(userMarker != null){
+		_globalUserMarker = userMarker;
+	}
 
 	try{
-		getParkingsData(userLocation.lat, userLocation.lng, areaParams, searchRadius, nbMaxResults).then((data) => {
+		getParkingsData(userLocation, userLocation, areaParams, searchRadius, nbMaxResults).then((data) => {
 			if(data.length == 0){
 				alert("Aucun parking n'a été trouvé dans cette zone");
 				return;
@@ -104,7 +106,7 @@ async function searchNearUser(){
 	}
 }
 
-function getSearchFilters() {
+async function getSearchFilters() {
 	let allMarkers = [];
 	let userMarker = [];
 	
@@ -132,12 +134,16 @@ function getSearchFilters() {
 			userMarker.pop();
 			_globalUserMarker.pop()
 		}
+
+		await refreshUserLocation();
+
 		userMarker.push(placeUserMarker());
-		_globalUserMarker = userMarker;
-		
+		if(userMarker != null){
+			_globalUserMarker = userMarker;
+		}		
 		
 		try{
-			getParkingsData(userLocation.lat, userLocation.lng, 'area[name="' + areaParams + '"];', searchRadius, nbMaxResults).then((data) => {
+			getParkingsData(userLocation, userLocation, 'area[name="' + areaParams + '"];', searchRadius, nbMaxResults).then((data) => {
 				if(data.length == 0){
 					alert("Aucun parking n'a été trouvé dans cette zone");
 					return;
@@ -168,36 +174,36 @@ async function getCoordFromAddress(address){
 	}).catch(error => { throw error });
 }
 
-function getParkingsNearAddress(address){
+async function getParkingsNearAddress(address){
 	let allMarkers = [];
 	let userMarker = [];
 	let areaParams = "";
-	
+
 	if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
 		userMarker.pop();
 		_globalUserMarker.pop()
 	}
-	userMarker.push(placeUserMarker());
-	_globalUserMarker = userMarker;
+	
+	await refreshUserLocation();
 
+	userMarker.push(placeUserMarker());
+	if(userMarker != null){
+		_globalUserMarker = userMarker;
+	}
 	
 	if(address == ""){
 		return -1;
 	}
 	
 	getCoordFromAddress(address).then((coord) =>{
-		let latAddress = coord.lat;
-		let lngAddress = coord.lng;
-
-		
-		getParkingsData(latAddress, lngAddress, areaParams, document.getElementById("distanceSlider").value, 100).then((data) => {
+		getParkingsData(coord, userLocation, areaParams, document.getElementById("distanceSlider").value, 100).then((data) => {
 			if(data.length == 0){
 				alert("Aucun parking n'a été trouvé dans cette zone");
 				return;
 			}
 			if ((allMarkers.length != 0 || allMarkers != undefined)&&(_globalAllMarkers.length != 0 || _globalAllMarkers != undefined)){
 				removeAllMarkers(allMarkers);
-                removeAllMarkers(_globalAllMarkers);
+				removeAllMarkers(_globalAllMarkers);
 			}
 			allMarkers.push(placeMarker(coord, address));
 			placeMarkers(allMarkers, data);
@@ -288,7 +294,7 @@ function displaySelectedParking(parking){
 	if(parking.fee == 0){
 		paymentTd.innerHTML = "gratuit"
 	} else if(parking.fee == 1){
-		paymentTd.innerHTML = "<b>Payant : </b><br>Mode de paiement : <br>";
+		paymentTd.innerHTML = "<b>Payant : </b><br>Modes de paiement : <br>";
 		let imgCash = "error";
 		let imgCard = "error";
 		switch(parking.paymentMethod.cash){
@@ -327,6 +333,12 @@ function displaySelectedParking(parking){
 function placeMarkers(allMarkers, data) {
 	data.forEach((parking) => {
 		let addedButton;
+		let distance = parking.distance;
+		if(distance<0){
+			distance = "";
+		} else{
+			distance = distance.toFixed(0).toString() + " m";
+		}
 		if (parking.pos.lat != undefined && parking.pos.lng != undefined) {
 			const marker = new google.maps.Marker({
 				position: {
@@ -334,11 +346,11 @@ function placeMarkers(allMarkers, data) {
 					lng: parking.pos.lng
 				},
 				map,
-				title: parking.distance.toFixed(0).toString()+" m",
+				title: distance,
 			});
 			var infoWindow = new google.maps.InfoWindow({
 				content: "",
-				ariaLabel: parking.distance.toFixed(0).toString()+" m",
+				ariaLabel: distance,
 			});
 			marker.setMap(map);
 			marker.addListener("click", async function(){
@@ -379,13 +391,16 @@ function placeMarkers(allMarkers, data) {
                     button.textContent = "Itinéraire";
                     button.title = "Cliquez pour rejoindre le parking.";
                     button.type = "button";
-                    _globalUserMarker[0].then((position)=>{
-                        infoWindow.setContent(infoWindow.getContent() + '<br>' +
-                        '<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+ position.getPosition().lat() +','+ position.getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button>');
-                    
-                    });
-
-                    addedButton = true;
+					
+					if(_globalUserMarker[0] == null){
+						infoWindow.setContent(infoWindow.getContent() + '<br>' +
+						'<span style="background-color:#fff; color:red; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;">Position requise pour l\'itinéraire</span>');
+						addedButton = true;
+					} else{
+						infoWindow.setContent(infoWindow.getContent() + '<br>' +
+						'<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button>');
+						addedButton = true;
+					}
                 }
 				
 				displaySelectedParking(parking);
@@ -453,28 +468,25 @@ function removeAllMarkers(allMarkers) {
 
 
 function placeUserMarker(){
-	let userMarker = refreshUserLocation().then(() =>{
-		if(userLocation.lat == null || userLocation.lng == null){
-			return null;
-		}
-		const marker = new google.maps.Marker({
-			position: userLocation,
-			map,
-			icon: {
-				path: "M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z",
-				fillColor: "blue",
-				fillOpacity: 1.0,
-				strokeWeight: 0,
-				rotation: 0,
-				scale: 2,
-				anchor: new google.maps.Point(12,12),
-			},
-			title: "Ma position actuelle",
-		});
-		marker.setMap(map);
-		return marker;
+	if(userLocation.lat == null || userLocation.lng == null){
+		return null;
+	}
+	const marker = new google.maps.Marker({
+		position: userLocation,
+		map,
+		icon: {
+			path: "M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z",
+			fillColor: "blue",
+			fillOpacity: 1.0,
+			strokeWeight: 0,
+			rotation: 0,
+			scale: 2,
+			anchor: new google.maps.Point(12,12),
+		},
+		title: "Ma position actuelle",
 	});
-    return userMarker;
+	marker.setMap(map);
+    return marker;
 }
 
 function placeMarker(coords, description){		

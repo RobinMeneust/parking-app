@@ -99,12 +99,11 @@ function getSurface(x0,x1){
 	return latLength * lngLength;
 }
 
-async function getParkingsData(latitude, longitude, areaParams, maxDistance, maxElements){
+async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxElements){
 	if(maxElements<1){
 		maxElements = 10;
 	}
-	//let searchPos = {lat:49.023079,lng:2.047221};
-	let searchPos = {lat:latitude,lng:longitude};
+	
 	let searchRadius = maxDistance * 1000; // in meters
 
 	if(searchRadius<0.5){
@@ -114,7 +113,7 @@ async function getParkingsData(latitude, longitude, areaParams, maxDistance, max
 
 	let url ='';
 	if(areaParams==""){
-		// default query
+		// default query: search near a point (user or address)
 		url = 'https://overpass-api.de/api/interpreter?data=[out:json];(way[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+');relation[amenity=parking](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+');node[amenity=parking][capacity](around:'+searchRadius+','+searchPos.lat+',' + searchPos.lng+'););out bb '+maxElements+';';
 	}
 	else{
@@ -137,24 +136,30 @@ async function getParkingsData(latitude, longitude, areaParams, maxDistance, max
 				capacity:0,
 				nbFreeSlots:-1,
 				fee:getFee(out.elements[i].tags), 
-				surface:0, 
 				address:"",
-				distance:0,
+				distance:-1,
 				pos:{lat:0.0,lng:0.0},
 				paymentMethod:{card:-1,cash:-1},
 				openingHours:"non spécifié"
 			};
+
+			let surface = 0;
 			
 			if(out.elements[i].type != "node"){
+				// We consider that its position is at the the center of its area
 				parking.pos.lat = (out.elements[i].bounds.maxlat + out.elements[i].bounds.minlat) / 2;
 				parking.pos.lng = (out.elements[i].bounds.maxlon + out.elements[i].bounds.minlon) / 2;
 
 				let x0 = {lat:out.elements[i].bounds.minlat, lng:out.elements[i].bounds.minlon};
 				let x1 = {lat:out.elements[i].bounds.maxlat, lng:out.elements[i].bounds.maxlon};
-				parking.surface = getSurface(x0,x1);
+				surface = getSurface(x0,x1);
 			} else{
 				parking.pos.lat = out.elements[i].lat;
 				parking.pos.lng = out.elements[i].lon;
+			}
+
+			if(parking.pos.lat<-90 || parking.pos.lat>90 || parking.pos.lng<-180 || parking.pos.lng>180){
+				continue; // skip this parking since it's nto valid
 			}
 			
 			if(out.elements[i].hasOwnProperty("tags")){
@@ -167,8 +172,12 @@ async function getParkingsData(latitude, longitude, areaParams, maxDistance, max
 					}
 				}
 				
-				parking.capacity = getCapacity(out.elements[i].tags, parking.surface);
-				parking.distance = distMeters(parking.pos, searchPos);
+				parking.capacity = getCapacity(out.elements[i].tags, surface);
+
+				if(userPos.lat != null && userPos.lng != null){
+					parking.distance = distMeters(parking.pos, userPos);
+				}
+				// if capacity is invalid then we skip the parking
 				if(parking.capacity>0){
 					data.push(parking);
 				}
@@ -186,7 +195,7 @@ async function getParkingsData(latitude, longitude, areaParams, maxDistance, max
 	}
 }
 
-// Used to get predict the number of free slots
+// Used to predict the number of free slots
 async function fetchNearbyElements(pos, params, weightValue){
 	url = 'https://overpass-api.de/api/interpreter?data=[out:json];(node'+params+'(around:500,'+pos.lat+','+pos.lng+');way'+params+'(around:500,'+pos.lat+','+pos.lng+');relation'+params+'(around:500,'+pos.lat+','+pos.lng+'););out count;';
 	return fetch(url).then((res) => res.json()).then((out) => {
