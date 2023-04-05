@@ -228,7 +228,7 @@ function initMap() {
     });
     const directionsService = new google.maps.DirectionsService();
     _globalDirectionsService = directionsService;
-    const directionsRenderer = new google.maps.DirectionsRenderer({map: map});
+    const directionsRenderer = new google.maps.DirectionsRenderer({map: null, markerOptions:{visible:false,}});
     _globalDirectionsRenderer = directionsRenderer;
 
     const bottomRightDiv = document.createElement("div");
@@ -374,6 +374,9 @@ function placeMarkers(allMarkers, data) {
                         }
                     }
                 }
+                if(_globalDirectionsRenderer.getMap() == map){
+                    _globalDirectionsRenderer.setMap(null);
+                }
             });
 
 
@@ -390,6 +393,7 @@ function placeMarkers(allMarkers, data) {
 const goTo = function (latOrigin, lngOrigin, latDestination, lngDestination) {
     const origin = new google.maps.LatLng(latOrigin, lngOrigin);
     const destination = new google.maps.LatLng(latDestination, lngDestination);
+    _globalDirectionsRenderer.setMap(map);
 
     calculateAndDisplayRoute(_globalDirectionsRenderer, _globalDirectionsService, origin, destination);
 };
