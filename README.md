@@ -11,12 +11,16 @@ A web app that searches for nearby parking lots (in France)
 
 ## Installation
 
+### How to install Docker
 
-### Docker
+- Red Hat et dérivés: `sudo yum install docker `
+- Debian et dérivés: `sudo apt install docker.io`
+- A partir du script d'installation: `curl −s https://get.docker.com/ | sudo sh`
 
-### Docker Compose
+### How to install Docker Compose
+`sudo apt install docker-compose`
 
-### Build containers
+### How to build the containers
 
 #### Steps
 
