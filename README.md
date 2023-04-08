@@ -38,9 +38,8 @@ Run the following command in the root of this project (parking-app/): `docker-co
 	</li>
 	<li>
 		If you can run <code>docker-compose up -d</code> but you get the error :<br>
-		<code style="color:red">Error starting userland proxy: listen tcp4 0.0.0.0:3306: bind: address already in use
-		</code><br>
-		Your the port used by the container may already be used so:
+		<code style="color:red">Error starting userland proxy: listen tcp4 0.0.0.0:3306: bind: address already in use</code><br>
+		The port used by the container may already be used so:
 		<ol>
 			<li>Open parking-app/docker-compose.yml</li>
 			<li>
