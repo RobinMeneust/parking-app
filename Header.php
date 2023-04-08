@@ -15,6 +15,6 @@ if(session_status() != PHP_SESSION_ACTIVE){
     </form>
   </div>
   <div class="account">
-    <a href="<?php echo (isset($_SESSION['VAR_profil']["connecte"]) && $_SESSION["VAR_profil"]["connecte"] == 1) ? "Profil.php" : "Inscription_Connexion.php"; ?>"><?php echo (isset($_SESSION['VAR_profil']["connecte"]) && $_SESSION["VAR_profil"]["connecte"] == 1) ? "Profil" : "Se connecter"; ?></a>
+    <a href="<?php echo (isset($_SESSION['VAR_profil']["connecte"]) && $_SESSION["VAR_profil"]["connecte"] == 1) ? "Profile.php" : "Inscription_Connexion.php"; ?>"><?php echo (isset($_SESSION['VAR_profil']["connecte"]) && $_SESSION["VAR_profil"]["connecte"] == 1) ? "Profil" : "Se connecter"; ?></a>
   </div>
 </header>

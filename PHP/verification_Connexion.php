@@ -45,7 +45,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 				$_SESSION["VAR_profil"] = $VAR_profil;
 				mysqli_free_result($resultSQL);
 				// Redirection vers la page d'accueil
-				header('location:../index.php?message=Connecté'); //Remplacé index par profil.php
+				header('location:../index.php?message=Connecté'); //Remplacé index par Profile.php
 				exit;
 			}
 		}

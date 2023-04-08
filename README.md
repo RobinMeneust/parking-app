@@ -67,8 +67,10 @@ Go to http://localhost:8000/ in your web browser
 1. Run <code>docker ps</code>
 2. Get the CONTAINER ID (1st column) of the mysql IMAGE
 3. Replace CONTAINER_ID with what you got in (2.), in <code>docker exec -ti CONTAINER_ID bash</code> and run it
-4. Enter <code>use usersdata;</code>
-5. Enter the queries you want to do
+4. Enter <code>mysql -p</code>
+5. Enter the password that was defined in the environment variable MYSQL_ROOT_PASSWORD in docker-compose.yml
+5. Enter <code>use usersdata;</code>
+6. Enter the queries you want to do
 
 ## Authors
 
