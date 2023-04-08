@@ -55,7 +55,7 @@ function centerMapToUserPos(){
 			map.setCenter(new google.maps.LatLng(userLocation.lat, userLocation.lng));
 			map.setZoom(15);
 		} else {
-			console.log("position is required but could not be fetched");
+			console.error("position is required but could not be fetched");
 			alert("Votre position est requise");
 		}
 	});
@@ -68,7 +68,7 @@ async function searchNearUser(){
 
 	await refreshUserLocation();
 	if(userLocation.lat == null || userLocation.lng == null){
-		console.log("position is required but could not be fetched");
+		console.error("position is required but could not be fetched");
 		alert("Votre position est requise");
 		return;
 	}
@@ -539,7 +539,7 @@ function addLocationToMap(){
 			}
 			_globalUserMarker.push(placeUserMarker());
 		} else {
-			console.log("position is required but could not be fetched");
+			console.error("position is required but could not be fetched");
 			alert("Votre position est requise");
 		}
 	});

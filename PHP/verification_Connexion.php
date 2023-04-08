@@ -10,7 +10,11 @@ if(!isset($_POST['email']) || empty($_POST['email']) || !isset($_POST['password'
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 
 	// Connexion à la base de données MySQL
-	$link = mysqli_connect('localhost', 'root', 'root', 'usersdata');
+	$host = 'db';
+	$user = 'MYSQL_USER';
+	$pass = 'MYSQL_ROOT_PASSWORD';
+	$database = 'usersdata';
+	$link = mysqli_connect($host,'root', $pass, $database);
 
 	// Vérification de la connexion
 	if (!$link) {

@@ -1,13 +1,16 @@
 <?php
-
     session_start();
     $VAR_profil = Array();
 
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 
         // Connexion à la base de données MySQL
-        $link = mysqli_connect('localhost', 'root', 'root', 'usersdata');
-
+		$host = 'db';
+		$user = 'MYSQL_USER';
+		$pass = 'MYSQL_ROOT_PASSWORD';
+		$database = 'usersdata';
+		$link = mysqli_connect($host,'root', $pass, $database);
+		
         // Vérification de la connexion
         if (!$link) {
             die("Erreur de connexion à la base de données : " . mysqli_connect_error());
