@@ -99,7 +99,17 @@ function getSurface(x0,x1){
 	return latLength * lngLength;
 }
 
+function getParkingName(data){
+	if(data.hasOwnProperty('name')){
+		return data.name;
+	} else{
+		return "";
+	}
+}
+
 async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxElements){
+	let msgBox = document.getElementById('searchMsgBox');
+
 	if(maxElements<1){
 		maxElements = 10;
 	}
@@ -124,6 +134,7 @@ async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxE
 	let data = [];
 
 	try{
+		msgBox.innerHTML="Fetching data..."; // Used to display in a span a message to the user
 		const response = await fetch(url)
 		const out = await response.json();
 		let nbParkings = out.elements.length;
@@ -131,12 +142,15 @@ async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxE
 			nbParkings--; // to ignore the "area" element at the end of the json
 		}
 
+		msgBox.innerHTML="Analyzing...";
+
 		for(let i=0; i<nbParkings; i++){
 			let parking = {
 				capacity:0,
 				nbFreeSlots:-1,
 				fee:getFee(out.elements[i].tags), 
 				address:"",
+				name:"",
 				distance:-1,
 				pos:{lat:0.0,lng:0.0},
 				paymentMethod:{card:-1,cash:-1},
@@ -173,6 +187,8 @@ async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxE
 				}
 				
 				parking.capacity = getCapacity(out.elements[i].tags, surface);
+				
+				parking.name = getParkingName(out.elements[i].tags);
 
 				if(userPos.lat != null && userPos.lng != null){
 					parking.distance = distMeters(parking.pos, userPos);
@@ -186,11 +202,14 @@ async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxE
 				} else{
 					parking.openingHours = "non spécifié";
 				}
+
 			}
 		}
+		msgBox.innerHTML="";
 		return data;
 	}
 	catch(error){
+		msgBox.innerHTML="";
 		throw error;
 	}
 }

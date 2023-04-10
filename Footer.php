@@ -3,7 +3,7 @@
         <div class="content_footer">
             <div class="profil">
                 <div class="logo_area">
-                    <img src="./assets/img/logofinal.png" alt="">
+                    <img src="./assets/img/logo.png" alt="">
                     <span class="logo_name">Park'O Top</span>
                     <button class="dark-mode" id="moon"><i class="fa-solid fa-moon"></i></button>
                     <button class="light-mode" id="sun hide"><i class="fa-solid fa-sun"></i></button>

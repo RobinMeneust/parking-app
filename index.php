@@ -23,22 +23,21 @@ session_start();
 			}
 			?>
 
-			<script>
-				let isAddressSet = "<?php echo isSet($address) ?>";
-				if(isAddressSet){
-					let address = "<?php echo $address ?>";
-					if(address == ""){
-						console.log("chaîne vide ou trop de caractères");
-					} else{
-						let success = getParkingsNearAddress(address);
-
-						if(success == -1){
-							alert("Aucun parking n'a été trouvé : Vérifier si l'addresse est correcte. Il est aussi possible que vous ayez fait trop de requêtes")
-						}
-					}
-				}
-			
-			</script>
+<?php 
+				if(isSet($address)){
+					echo '<script>'."\n";
+					echo 'let address = "'.$address.'";'."\n";
+					echo 'if(address == ""){'."\n";
+					echo '	console.log("chaîne vide ou trop de caractères");'."\n";
+					echo '} else{'."\n";
+					echo '	let success = getParkingsNearAddress(address);'."\n";
+					echo '	if(success == -1){'."\n";
+					echo '		alert("Aucun parking n\'a été trouvé : Vérifier si l\'addresse est correcte. Il est aussi possible que vous ayez fait trop de requêtes")'."\n";
+					echo '	}'."\n";
+					echo '}'."\n";
+					echo '</script>'."\n";
+				} 
+?>
 
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M&callback=initMap&v=weekly"	defer></script>
 			<br>
@@ -75,6 +74,7 @@ session_start();
 				<div class="column" id="searchDetailsSideBar">
 					<h2>Détail du parking sélectionné</h2>
 					<table id="selectedParkingTable">
+						<span id="searchMsgBox"></span>
 						<tr>
 							<th>Adresse</th>
 							<th>Nombre de places disponibles</th>

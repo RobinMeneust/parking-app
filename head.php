@@ -9,6 +9,6 @@
 <!-- Styling css file -->
 <link rel="stylesheet" href="./assets/css/style.css" />
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-
 <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
+
+<link rel="icon" type="image/x-icon" href="/assets/img/logo.png">

@@ -338,6 +338,11 @@ hr {
 	transition : width linear 0.1s;
 }
 
+#searchMsgBox{
+	color: rgb(56, 24, 201);
+	font-weight: bold;
+}
+
 @media screen and (max-width: 768px) {
     .content_footer {
         flex-wrap: wrap;
