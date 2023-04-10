@@ -5,7 +5,7 @@ let _globalAllMarkers = [];
 let _globalUserMarker = [];
 let _selectedMarker = undefined;
 let _globalDirectionsService = undefined;
-let _globalDirectionsRenderer = undefined;
+let _globalDirectionsRenderer = [];
 
 let userLocation = {lat:null,lng:null};
 let searchRadius = 1;
@@ -235,11 +235,9 @@ function initMap() {
             }
         }
     });
-    const directionsService = new google.maps.DirectionsService({provideRouteAlternatives: true});
+    const directionsService = new google.maps.DirectionsService();
     _globalDirectionsService = directionsService;
-    const directionsRenderer = new google.maps.DirectionsRenderer({map: null, markerOptions:{visible:false,}});
-    _globalDirectionsRenderer = directionsRenderer;
-
+    
     const bottomRightDiv = document.createElement("div");
 	const topCenterDiv = document.createElement("div");
     const locationButton = createMapButton(addLocationToMap, "Localisez-moi", "Cliquez pour recentrer la carte sur votre position");
@@ -375,7 +373,6 @@ function placeMarkers(allMarkers, data) {
 
                 if(addedButton != true){
                     const button = document.createElement("button");
-                    // Set CSS for the control.
                     button.style.backgroundColor = "#fff";
                     button.style.border = "2px solid #fff";
                     button.style.borderRadius = "3px";
@@ -419,8 +416,12 @@ function placeMarkers(allMarkers, data) {
                         }
                     }
                 }
-                if(_globalDirectionsRenderer.getMap() == map){
-                    _globalDirectionsRenderer.setMap(null);
+                if(_globalDirectionsRenderer.length != 0 || _globalDirectionsRenderer != undefined){
+                    _globalDirectionsRenderer.forEach((renderer) =>{
+                        if(renderer.getMap() == map){
+                            renderer.setMap(null);
+                        }
+                    });
                 }
             });
 
@@ -436,8 +437,12 @@ function placeMarkers(allMarkers, data) {
                         }
                     }
                 }
-                if(_globalDirectionsRenderer.getMap() == map){
-                    _globalDirectionsRenderer.setMap(null);
+                if(_globalDirectionsRenderer.length != 0 || _globalDirectionsRenderer != undefined){
+                    _globalDirectionsRenderer.forEach((renderer) =>{
+                        if(renderer.getMap() == map){
+                            renderer.setMap(null);
+                        }
+                    });
                 }
             });
 
@@ -455,9 +460,7 @@ function placeMarkers(allMarkers, data) {
 const goTo = function (latOrigin, lngOrigin, latDestination, lngDestination) {
     const origin = new google.maps.LatLng(latOrigin, lngOrigin);
     const destination = new google.maps.LatLng(latDestination, lngDestination);
-    _globalDirectionsRenderer.setMap(map);
-
-    calculateAndDisplayRoute(_globalDirectionsRenderer, _globalDirectionsService, origin, destination);
+    calculateAndDisplayRoute(_globalDirectionsService, origin, destination);
 };
 
 function removeAllMarkers(allMarkers) {
@@ -570,19 +573,33 @@ function createMapButton(action, textContent, title, ) {
   }
 
 
-function calculateAndDisplayRoute(directionsRenderer, directionsService, origin, destination/*, allMarkers, map*/) {
+function calculateAndDisplayRoute(directionsService, origin, destination/*, allMarkers, map*/) {
+    let color;
+    removeAllDirectionsRenderer();
     directionsService
       .route({
         origin: origin,
         destination: destination,
         travelMode: google.maps.TravelMode.DRIVING,
+        provideRouteAlternatives: true,
       })
       .then((result) => {
+        for(let i = 0; i < 2; i++){
+            if(i%2==0){
+                color = '#00458E';
+            }else{
+                color = '#ED1C24';
+            }
+            let directionsRenderer = new google.maps.DirectionsRenderer({markerOptions:{visible:false}, polylineOptions:{strokeColor: color, strokeWeight: 10}});
+            directionsRenderer.setMap(map);
+            directionsRenderer.setDirections(result);
+            directionsRenderer.setRouteIndex(i);
+            _globalDirectionsRenderer.push(directionsRenderer);
+        }
         /*
         document.getElementById("warnings-panel").innerHTML =
           "<b>" + result.routes[0].warnings + "</b>";
         */
-        directionsRenderer.setDirections(result);
         //showSteps(result, allMarkers, map);
       })
       .catch((e) => {
@@ -608,4 +625,12 @@ function showSteps(directionResult, allMarkers, map) {
       );
       */
   }
+}
+
+function removeAllDirectionsRenderer(){
+    for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
+        _globalDirectionsRenderer[i].setMap(null);
+        _globalDirectionsRenderer.pop();
+    }
+    _globalDirectionsRenderer = [];
 }
