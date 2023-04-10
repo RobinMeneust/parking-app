@@ -1,4 +1,4 @@
-# parking-app
+# PARK'O TOP
 
 ## About
 
@@ -11,18 +11,22 @@ A web app that searches for nearby parking lots (in France)
 
 ## Installation
 
-### How to install Docker
+### How to install Docker & Docker Compose
+
+#### Linux
 
 - Red Hat et dérivés: `sudo yum install docker `
 - Debian et dérivés: `sudo apt install docker.io`
-- A partir du script d'installation: `curl −s https://get.docker.com/ | sudo sh`
+- From the installation script: `curl −s https://get.docker.com/ | sudo sh`
+- Install Docker Compose: `sudo apt install docker-compose`
 
-### How to install Docker Compose
-`sudo apt install docker-compose`
+#### Windows
+
+- Download & install: https://docs.docker.com/desktop/install/windows-install/
+- Run `wsl --update`
 
 ### How to build the containers
 
-#### Steps
 
 Run the following command in the root of this project (parking-app/): `docker-compose up -d`
 
@@ -36,8 +40,8 @@ Run the following command in the root of this project (parking-app/): `docker-co
 			<li><code>sudo groupadd docker</code></li>
 			<li><code>sudo gpasswd -a $USER docker</code></li>
 			<li><code>sudo service docker restart</code></li>
-			<li>Restart your computer</li>
-			<li><code>docker-compose up -d</code></li>
+			<li><code>sudo chown $USER /var/run/docker.sock</code></li>
+			<li>If docker-compose still doesn't work then try restarting your computer</li>
 		</ol>
 	</li>
 	<li>
@@ -68,9 +72,9 @@ Go to http://localhost:8000/ in your web browser
 2. Get the CONTAINER ID (1st column) of the mysql IMAGE
 3. Replace CONTAINER_ID with what you got in (2.), in <code>docker exec -ti CONTAINER_ID bash</code> and run it
 4. Enter <code>mysql -p</code>
-5. Enter the password that was defined in the environment variable MYSQL_ROOT_PASSWORD in docker-compose.yml
-5. Enter <code>use usersdata;</code>
-6. Enter the queries you want to do
+6. Enter the password that was defined in the environment variable MYSQL_ROOT_PASSWORD in docker-compose.yml
+7. Enter <code>use usersdata;</code>
+8. Enter the queries you want to do
 
 ## Authors
 
