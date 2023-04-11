@@ -41,7 +41,7 @@ session_start();
 
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M&callback=initMap&v=weekly"	defer></script>
 			<br>
-			<button class="menuButton" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
+			<button class="menuButton" style="position:absolute;" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
 			
 			<div class="sideBar column">
 				<div class="sideBar hidden" id="sideBarContent">
@@ -66,7 +66,7 @@ session_start();
 						<output>1</output>
 					</form>
 					<br>
-					<button class="menuButton rectangular" onclick="getSearchFilters()">Appliquer mes filtres</button>
+					<button class="menuButton rectangular" style="position:absolute;" onclick="getSearchFilters()">Appliquer mes filtres</button>
 				</div>
 			</div>
 			<div class="row">

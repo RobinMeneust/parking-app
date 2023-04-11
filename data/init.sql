@@ -13,11 +13,10 @@ CREATE TABLE IF NOT EXISTS Addresses(
 );
 
 CREATE TABLE IF NOT EXISTS Users (
-	idUser INT PRIMARY KEY,
+	mail VARCHAR(100) PRIMARY KEY,
     lastName VARCHAR(100),
     firstName VARCHAR(100),
     passwd VARCHAR(100) NOT NULL,
-    mail VARCHAR(100) UNIQUE NOT NULL,
     agreement BOOLEAN,
 	idAddress INT,
 	FOREIGN KEY (idAddress) REFERENCES Addresses(idAddress)
@@ -31,12 +30,12 @@ CREATE TABLE IF NOT EXISTS Parking(
 );
 
 CREATE TABLE IF NOT EXISTS ParkingVisite(
-	idUser INT,
+	idVisite INT PRIMARY KEY,
+	idUser VARCHAR(100),
 	idParking INT,
 	dateVisited DATE,
 	expenses DECIMAL(5,2),
-	PRIMARY KEY (idUser, idParking),
-	FOREIGN KEY (idUser) REFERENCES Users(idUser),
+	FOREIGN KEY (idUser) REFERENCES Users(mail),
 	FOREIGN KEY (idParking) REFERENCES Parking(idParking)
 );
 
@@ -46,14 +45,14 @@ CREATE TABLE IF NOT EXISTS ParkingVisite(
 INSERT INTO Addresses VALUES(0,'12 bis','rue du test', 'VilleTest', 'France', '99999', 0.0, 0.0);
 INSERT INTO Addresses VALUES(1,'145','avenue test', 'VilleJS', 'France', '00000', 1.0, -1.0);
 
-INSERT INTO Users VALUES(0, 'Meneust', 'Robin', '023gf46dfs41fgf54f_#(à)', "adresseDeTest@test.fr", TRUE, 0);
+INSERT INTO Users VALUES("adresseDeTest@test.fr", 'Meneust', 'Robin', '023gf46dfs41fgf54f_#(à)', TRUE, 0);
 
 INSERT INTO Parking VALUES(0, 0, 'Parking du port');
 INSERT INTO Parking VALUES(1, 0, 'Parking souterrain');
 INSERT INTO Parking VALUES(2, 1, NULL);
 
-INSERT INTO ParkingVisite VALUES(0, 0, '2023-04-10', 7.0);
-INSERT INTO ParkingVisite VALUES(0, 0, '2018-09-24', 7.0);
-INSERT INTO ParkingVisite VALUES(0, 0, '2018-09-25', 7.0);
-INSERT INTO ParkingVisite VALUES(0, 1, '2019-09-24', 0.0);
-INSERT INTO ParkingVisite VALUES(0, 2, '2023-04-01', 5.0);
+INSERT INTO ParkingVisite VALUES(0,"adresseDeTest@test.fr", 0, '2023-04-10', 7.0);
+INSERT INTO ParkingVisite VALUES(1,"adresseDeTest@test.fr", 0, '2018-09-24', 7.0);
+INSERT INTO ParkingVisite VALUES(2,"adresseDeTest@test.fr", 0, '2018-09-25', 7.0);
+INSERT INTO ParkingVisite VALUES(3,"adresseDeTest@test.fr", 1, '2019-09-24', 0.0);
+INSERT INTO ParkingVisite VALUES(4,"adresseDeTest@test.fr", 2, '2023-04-01', 5.0);

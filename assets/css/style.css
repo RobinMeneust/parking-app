@@ -278,7 +278,6 @@ hr {
     background-color: rgba(0, 0, 0, 0);
     width: 30px;
     height: 30px;
-    position: absolute;
     margin-top: 5px;
     margin-left: 5px;
     z-index: 3;
@@ -295,15 +294,35 @@ hr {
 	cursor:pointer;
 }
 
+.horizontalMenu {
+	background-color: #22202f;
+	height: 65px;
+	border-radius: 15px;
+	width: 350px;
+	margin:auto;
+	text-align:center;
+}
+
+.horizontalMenu .menuButton{
+	width: 50px;
+    height: 50px;
+	margin: 10px;
+}
+
+.horizontalMenu .menuButton:hover{
+	width: 53px;
+    height: 53px;
+}
+
 .rectangular {
 	border-radius:0;
-	width:100px;
-	height:40px;
+	width:125px !important;
+	height:40px !important;
 }
 
 .rectangular:hover {
-	width:102px;
-	height:42px;
+	width:127px !important;
+	height:42px !important;
 }
 
 #sideBarContent{
@@ -341,6 +360,11 @@ hr {
 #searchMsgBox{
 	color: rgb(56, 24, 201);
 	font-weight: bold;
+}
+
+.graphsContainer{
+	width: 800px;
+	margin: auto;
 }
 
 @media screen and (max-width: 768px) {
