@@ -14,7 +14,7 @@ session_start();
 	<div class="content">
 		<div class="horizontalMenu">
 			<input id="yearGraph" name="yearGraph" style="text-align:center;" class="menuButton rectangular" type="number" value="2023" min="1900">
-			<button style="text-align:center;" class="menuButton rectangular" onlick="refreshDate();">Valider</button>
+			<button id="refreshDate" style="text-align:center;" class="menuButton rectangular">Valider</button>
 		</div>
 		<div class="graphsContainer">
 			<canvas id="visits"></canvas>
@@ -25,6 +25,8 @@ session_start();
 	<script>
 		let months=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
 		let year = "2023";
+		let button = document.getElementById('refreshDate');
+		button.addEventListener("click",function(){refreshDate();});
 
 		function createVisitsGraph(visitsValues){
 			var visits = new Chart("visits", {
@@ -89,7 +91,7 @@ session_start();
 		function sendQuery(url){
 			let result = [0,0,0,0,0,0,0,0,0,0,0,0];
 			// example : [{"d":"4","n":"12.00"}]
-			fetch(url).then(function(response) {
+			return fetch(url).then(function(response) {
 				if(response.status >= 200 && response.status < 300) {
 					return response.json();
 				}
@@ -102,9 +104,9 @@ session_start();
 					for(let i=0; i<response.length; i++){
 						result[parseInt(response[i]["d"])] = parseInt(response[i]["n"]);
 					}
+					return result;
 				}
-			})
-			return result;
+			});
 		}
 
 		function getExpensesValues(){
@@ -117,13 +119,28 @@ session_start();
 
 		function refreshDate(){
 			year = document.getElementById('yearGraph').value;
+			getExpensesValues().then((result) =>{
+				let expensesValues = result;
+				createExpensesGraph(expensesValues);
+			});
+
+			getVisitsValues().then((result) =>{
+				let visitsValues = result;
+				createVisitsGraph(visitsValues);
+			});
 		}
 
-		let expensesValues = getExpensesValues();
-		let visitsValues = getVisitsValues();
-			
-		createVisitsGraph(visitsValues);
-		createExpensesGraph(expensesValues);
+		getExpensesValues().then((result) =>{
+			let expensesValues = result;
+			createExpensesGraph(expensesValues);
+		});
+
+		getVisitsValues().then((result) =>{
+			let visitsValues = result;
+			console.log(visitsValues);
+			createVisitsGraph(visitsValues);
+		});
+
 
 		/*
 		To predict the next expenses:

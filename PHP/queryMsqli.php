@@ -4,7 +4,7 @@ session_start();
 if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"]) && isset($_GET["y"])){
 
 	if(!isset($_SESSION["VAR_profil"]["email"])){
-		echo "0";
+		echo "";
 		exit;
 	}
 

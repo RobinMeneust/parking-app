@@ -84,7 +84,7 @@ function getPaymentMethod(data){
 }
 
 async function getAddressFromPos(pos){
-	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470")
+	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470");
 	const json = await response.json();
 	return json.results[0].formatted;
 }
