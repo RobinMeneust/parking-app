@@ -1,6 +1,7 @@
 <?php session_start(); 
-
-//var_dump($_SESSION);
+if(!isset($_SESSION['VAR_profil'])){
+	header('location:../Inscription_Connexion.php?message=Veuillez vous connecter');
+}
 ?>
 
 <!DOCTYPE html>
