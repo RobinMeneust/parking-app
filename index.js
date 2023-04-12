@@ -457,16 +457,44 @@ function placeMarkers(allMarkers, data) {
 	return 0;
 }
 
-const goTo = function (latOrigin, lngOrigin, latDestination, lngDestination) {
+const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestination) {
     const origin = new google.maps.LatLng(latOrigin, lngOrigin);
     const destination = new google.maps.LatLng(latDestination, lngDestination);
     calculateAndDisplayRoute(_globalDirectionsService, origin, destination);
+
+
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("X-Goog-Api-Key", "AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M");
+    headers.append("X-Goog-FieldMask", "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline");
+
+    let myRequest = { method: 'POST',
+    headers: headers,
+    body: JSON.stringify({origin:{location:{latLng:{latitude: latOrigin,longitude: lngOrigin}}},destination:{location:{latLng:{latitude: latDestination,longitude: lngDestination}}},travelMode: "DRIVE",computeAlternativeRoutes: true,languageCode: "en-US",units: "METRIC"}),
+    };
+    
+    console.log(myRequest);
+    const response = await fetch("https://routes.googleapis.com/directions/v2:computeRoutes", myRequest);
+    const jsonResponse = response.json();
+    jsonResponse.then((out) => {
+        for (let i = 0; i < 2; i++) {
+            convertSeconds(out.routes[i].duration);
+        }
+    });
+
 };
+
+function convertSeconds(seconds){
+    const date = new Date(parseInt(seconds) * 1000).toISOString().substring(11, 16)
+    console.log(date);
+}
 
 function removeAllMarkers(allMarkers) {
 	allMarkers.forEach((marker) => {
 		marker.setMap(null);
 	});
+
+    allMarkers = [];
 }
 
 
@@ -634,3 +662,12 @@ function removeAllDirectionsRenderer(){
     }
     _globalDirectionsRenderer = [];
 }
+
+
+function computeTravelTime(){
+
+}
+
+/*
+curl -L -X GET 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=49.023079%2C2.047221&destinations=48.8566%2C2.3522&units=metric&key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M'
+*/
