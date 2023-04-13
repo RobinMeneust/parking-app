@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 // Vérifier que les champs ne sont pas vides. 
 if(!isset($_POST['email']) || empty($_POST['email']) || !isset($_POST['password']) || empty($_POST['password']) ){
 	// Redirection vers connexion.php
@@ -14,6 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 	$user = 'MYSQL_USER';
 	$pass = 'MYSQL_ROOT_PASSWORD';
 	$database = 'usersdata';
+
 	$link = mysqli_connect($host,'root', $pass, $database);
 
 	// Vérification de la connexion
@@ -23,24 +24,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 
 	// Si tout est correcte création de variables simplifiées et sécurisées.
 	$identifiant = $_POST['email'];
-	$password = $_POST['password'];	
+	$passwd = $_POST['passwd'];	
 
 	// verification Identifiant et mdp
 
-	if($resultSQL = mysqli_query($link,"SELECT nom, prenom, mdp, mail, adresse, code_postal, agreement FROM users;")) {
+	if($resultSQL = mysqli_query($link,"SELECT lastName, firstName, passwd, email FROM Users;")) {
 		while($tab = mysqli_fetch_assoc($resultSQL)){
-			if($identifiant == $tab["mail"] &&  password_verify($password, $tab["mdp"])) {
-				session_start();
+			if($identifiant == $tab["email"] &&  password_verify($passwd, $tab["passwd"])) {
 				$VAR_profil = Array();
 				// Remplir les informations de la session
-				$VAR_profil['nom'] = $tab["nom"];
-				$VAR_profil['prenom'] = $tab["prenom"];
-				$VAR_profil['password'] = $tab["mdp"];
-				$VAR_profil['email'] = $tab["mail"];
-				$VAR_profil['adresse'] = $tab["adresse"];
-				$VAR_profil['code_postal'] = $tab["code_postal"];
-				$VAR_profil['valid_conditions'] = $tab["agreement"];
-				$VAR_profil['connecte'] = 1;
+				$VAR_profil['lastName'] = $tab["lastName"];
+				$VAR_profil['firstName'] = $tab["firstName"];
+				$VAR_profil['passwd'] = $tab["passwd"];
+				$VAR_profil['email'] = $tab["email"];
 
 				$_SESSION["VAR_profil"] = $VAR_profil;
 				mysqli_free_result($resultSQL);
