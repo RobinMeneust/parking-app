@@ -15,8 +15,8 @@ A web app that searches for nearby parking lots (in France)
 
 #### Linux
 
-- Red Hat et dérivés: `sudo yum install docker `
-- Debian et dérivés: `sudo apt install docker.io`
+- Red Hat & derivatives : `sudo yum install docker `
+- Debian & derivatives : `sudo apt install docker.io`
 - From the installation script: `curl −s https://get.docker.com/ | sudo sh`
 - Install Docker Compose: `sudo apt install docker-compose`
 
