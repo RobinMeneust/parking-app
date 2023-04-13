@@ -1,3 +1,5 @@
+const NUMBER_ROUTES = 2;
+
 let map, infoWindow, buttonPos, buttonSearchParam;
 window.initMap = initMap;
 let prevInfoWindow = null;
@@ -6,6 +8,7 @@ let _globalUserMarker = [];
 let _selectedMarker = undefined;
 let _globalDirectionsService = undefined;
 let _globalDirectionsRenderer = [];
+let _globalRouteDuration = [];
 
 let userLocation = {lat:null,lng:null};
 let searchRadius = 1;
@@ -460,8 +463,8 @@ function placeMarkers(allMarkers, data) {
 const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestination) {
     const origin = new google.maps.LatLng(latOrigin, lngOrigin);
     const destination = new google.maps.LatLng(latDestination, lngDestination);
-    calculateAndDisplayRoute(_globalDirectionsService, origin, destination);
 
+    _globalRouteDuration = [];
 
     let headers = new Headers();
     headers.append("Content-Type", "application/json");
@@ -472,21 +475,25 @@ const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestinatio
     headers: headers,
     body: JSON.stringify({origin:{location:{latLng:{latitude: latOrigin,longitude: lngOrigin}}},destination:{location:{latLng:{latitude: latDestination,longitude: lngDestination}}},travelMode: "DRIVE",computeAlternativeRoutes: true,languageCode: "en-US",units: "METRIC"}),
     };
-    
-    console.log(myRequest);
+
     const response = await fetch("https://routes.googleapis.com/directions/v2:computeRoutes", myRequest);
     const jsonResponse = response.json();
     jsonResponse.then((out) => {
-        for (let i = 0; i < 2; i++) {
-            convertSeconds(out.routes[i].duration);
+        if(out.routes.length > 1 ){
+            for (let i = 0; i < NUMBER_ROUTES; i++) {
+                convertSeconds(out.routes[i].duration);
+            }
+        }else{
+            convertSeconds(out.routes[0].duration);
         }
     });
 
+    calculateAndDisplayRoute(_globalDirectionsService, origin, destination);
 };
 
 function convertSeconds(seconds){
-    const date = new Date(parseInt(seconds) * 1000).toISOString().substring(11, 16)
-    console.log(date);
+    const date = new Date(parseInt(seconds) * 1000).toISOString().substring(11, 16);
+    _globalRouteDuration.push(date);
 }
 
 function removeAllMarkers(allMarkers) {
@@ -598,7 +605,7 @@ function createMapButton(action, textContent, title, ) {
     controlButton.addEventListener("click", action);
 	
 	return controlButton;
-  }
+}
 
 
 function calculateAndDisplayRoute(directionsService, origin, destination/*, allMarkers, map*/) {
@@ -612,7 +619,7 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
         provideRouteAlternatives: true,
       })
       .then((result) => {
-        for(let i = 0; i < 2; i++){
+        for(let i = 0; i < NUMBER_ROUTES; i++){
             if(i%2==0){
                 color = '#00458E';
             }else{
@@ -624,6 +631,7 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
             directionsRenderer.setRouteIndex(i);
             _globalDirectionsRenderer.push(directionsRenderer);
         }
+        console.log(_globalRouteDuration);
         /*
         document.getElementById("warnings-panel").innerHTML =
           "<b>" + result.routes[0].warnings + "</b>";
@@ -663,10 +671,6 @@ function removeAllDirectionsRenderer(){
     _globalDirectionsRenderer = [];
 }
 
-
-function computeTravelTime(){
-
-}
 
 /*
 curl -L -X GET 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=49.023079%2C2.047221&destinations=48.8566%2C2.3522&units=metric&key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M'
