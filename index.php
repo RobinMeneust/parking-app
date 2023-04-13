@@ -6,8 +6,11 @@ session_start();
 <html>
 	<head>
 		<?php include_once("head.php"); ?>
-		<script src="./index.js"></script>
-		<script src="./getParkingData.js"></script>
+		<script src="./JS/index.js"></script>
+		<script src="./JS/global.js"></script>
+		<script src="./JS/map.js"></script>
+		<script src="./JS/getParkingData.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M&callback=initMap&v=weekly"	defer></script>
 	</head>
 
 	<body class="light" onload="initializeForms();">
@@ -21,25 +24,21 @@ session_start();
 					$address = "";
 				}
 			}
+
+			if(isSet($address)){
+				echo '<script>'."\n";
+				echo 'let address = "'.$address.'";'."\n";
+				echo 'if(address == ""){'."\n";
+				echo '	console.log("chaîne vide ou trop de caractères");'."\n";
+				echo '} else{'."\n";
+				echo '	let success = getParkingsNearAddress(address);'."\n";
+				echo '	if(success == -1){'."\n";
+				echo '		alert("Aucun parking n\'a été trouvé : Vérifier si l\'addresse est correcte. Il est aussi possible que vous ayez fait trop de requêtes")'."\n";
+				echo '	}'."\n";
+				echo '}'."\n";
+				echo '</script>'."\n";
+			} 
 			?>
-
-<?php 
-				if(isSet($address)){
-					echo '<script>'."\n";
-					echo 'let address = "'.$address.'";'."\n";
-					echo 'if(address == ""){'."\n";
-					echo '	console.log("chaîne vide ou trop de caractères");'."\n";
-					echo '} else{'."\n";
-					echo '	let success = getParkingsNearAddress(address);'."\n";
-					echo '	if(success == -1){'."\n";
-					echo '		alert("Aucun parking n\'a été trouvé : Vérifier si l\'addresse est correcte. Il est aussi possible que vous ayez fait trop de requêtes")'."\n";
-					echo '	}'."\n";
-					echo '}'."\n";
-					echo '</script>'."\n";
-				} 
-?>
-
-			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M&callback=initMap&v=weekly"	defer></script>
 			<br>
 			<button class="menuButton" style="position:absolute;" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
 			
