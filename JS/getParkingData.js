@@ -86,7 +86,30 @@ function getPaymentMethod(data){
 async function getAddressFromPos(pos){
 	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470");
 	const json = await response.json();
-	return json.results[0].formatted;
+
+	let street = "";
+	if(json.results[0].components.hasOwnProperty("street")){
+		street = json.results[0].components.street;
+	} else{
+		street = json.results[0].components.road;
+	}
+
+	let city = "";
+	if(json.results[0].components.hasOwnProperty("city")){
+		city = json.results[0].components.city;
+	} else{
+		city = json.results[0].components.town;
+	}
+
+	let address = {
+		houseNumber:json.results[0].components.house_number,
+		street:street,
+		city:city,
+		postalCode:json.results[0].components.postcode,
+		country:json.results[0].components.country,
+		formatted:json.results[0].formatted
+	};
+	return address;
 }
 
 function getSurface(x0,x1){
@@ -149,7 +172,7 @@ async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxE
 				capacity:0,
 				nbFreeSlots:-1,
 				fee:getFee(out.elements[i].tags), 
-				address:"",
+				address:null,
 				name:"",
 				distance:-1,
 				pos:{lat:0.0,lng:0.0},

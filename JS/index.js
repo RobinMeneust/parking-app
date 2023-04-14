@@ -17,6 +17,11 @@ function initializeForms(){
 	addOption(departements, "Val-d'Oise", "95 Val-d'Oise");
 }
 
+async function setCurrentParkingInSession(parking){
+	let url  = "./PHP/setCurrentParkingSession.php?lat="+parking.pos.lat+"&lng="+parking.pos.lng+"&name="+parking.name+"&nb="+parking.address.houseNumber+"&street="+parking.address.street+"&city="+parking.address.city+"&country="+parking.address.country+"&postal="+parking.address.postalCode;
+	await fetch(url);
+}
+
 function displaySelectedParking(parking){
 	let table = document.getElementById("selectedParkingTable");
 
@@ -29,7 +34,7 @@ function displaySelectedParking(parking){
 
 	nbSlotsTd.innerHTML = "Calcul en cours...";
 
-	addressTd.innerHTML = parking.address;
+	addressTd.innerHTML = parking.address.formatted;
 	if(parking.openingHours == ""){
 		openingHoursTd.innerHTML = "non spécifié";
 	} else{

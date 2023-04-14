@@ -10,7 +10,7 @@ if(!isset($_SESSION['VAR_profil'])){
 <head>
 	<?php include_once("head.php"); ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-	<script src="JS/UserGraphs.js"></script>
+	<script src="JS/userGraphs.js"></script>
 </head>
 
 <body class="light" onload="initialize()">

@@ -1,0 +1,121 @@
+let currentParking = null;
+
+function getUserId(){
+	let url  = "./PHP/queryMsqliGet.php?d=idUser";
+	return fetch(url).then(function(response) {
+        if(response.status >= 200 && response.status < 300) {
+            return response.text();
+        }
+        throw new Error(response.statusText);
+    })
+    .then(function(response) {
+        if(response == "0"){
+            alert("Vous n'êtes pas connecté");
+        } else{
+            return parseInt(response);
+        }
+    });
+}
+/*
+houseNumber "h"
+street = "s"
+city = "i"
+country = "o"
+postalCode = "p"
+lat = "a"
+lng = "n"
+*/
+async function addOrGetAddress(houseNumber, street, city, country, postalCode, lat, lng){
+	let url  = "./PHP/addAddress.php?h="+houseNumber+"&s="+street+"&i="+city+"&o="+country+"&p="+postalCode+"&a="+lat+"&n="+lng;
+	return fetch(url).then(function(response) {
+        if(response.status >= 200 && response.status < 300) {
+            return response.text();
+        }
+        throw new Error(response.statusText);
+    })
+    .then(function(response) {
+        if(response !=""){
+            return parseInt(response);
+        }
+    });
+}
+
+/*
+idAddress = "i"/
+name = "n"
+*/
+
+async function addOrGetParking(idAddress, parkingName){
+	let url  = "./PHP/addParking.php?i="+idAddress+"&n="+parkingName;
+	return fetch(url).then(function(response) {
+		if(response.status >= 200 && response.status < 300) {
+			return response.text();
+        }
+        throw new Error(response.statusText);
+    })
+	.then(function(response) {
+        if(response !=""){
+            return parseInt(response);
+        } else {
+			throw Error("Parking id could not be fetched");
+		}
+    });
+}
+
+/*
+idUser = "u"
+idParking = "p"
+dateVisited = "d"
+expenses = "e"
+*/
+
+async function addParkingVisite(idUser, idParking, dateVisited, expenses){
+	let url  = "./PHP/addParkingVisite.php?u="+idUser+"&p="+idParking+"&d="+dateVisited+"&e="+expenses;
+	return fetch(url).then(function(response) {
+        if(response.status >= 200 && response.status < 300) {
+            return response.text();
+        }
+        throw new Error(response.statusText);
+    })
+    .then(function(response) {
+        if(response == ""){
+            return true;
+        } else{
+			return false;
+		}
+    });
+}
+
+async function getCurrentParkingFromSession(){
+	let url  = "./PHP/getCurrentParkingSession.php";
+	let response = await fetch(url);
+	let json = await response.json();
+	currentParking = json;
+}
+
+async function addToHistory(){
+	document.getElementById('infoBox').innerText = "";
+
+	let expenses = document.getElementById('expenses').value;
+	let dateVisited = new Date().toJSON().slice(0,10);
+	let name = document.getElementById('name').value;
+	let houseNumber = document.getElementById('houseNumber').value;
+	let street = document.getElementById('street').value;
+	let city = document.getElementById('city').value;
+	let country = document.getElementById('country').value;
+	let postalCode = document.getElementById('postalCode').value;
+
+	try{
+		let idUser = await getUserId();
+		let idAddress = await addOrGetAddress(houseNumber, street, city, country, postalCode, currentParking.pos.lat, currentParking.pos.lng);
+		let idParking = await addOrGetParking(idAddress, name);
+		
+		if(addParkingVisite(idUser, idParking, dateVisited, expenses)){
+			document.getElementById('infoBox').innerText = "Le parking a bien été ajouté à votre historique";
+		} else{
+			alert("Une erreur est survenue, l'opération n'a pas été enregistrée");
+		}
+	} catch(err){
+		console.error(err);
+	}
+}

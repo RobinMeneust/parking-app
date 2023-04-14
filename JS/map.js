@@ -268,7 +268,7 @@ function placeMarkers(allMarkers, data) {
 					try{
 						promise[0] = getAddressFromPos(parking.pos).then((address) => {
 							parking.address = address;
-							infoWindow.setContent(address);
+							infoWindow.setContent(address.formatted);
 						});
 					} catch(err){
 						console.error("Data could not be fetched or parsed from Opencagedata API");
@@ -310,7 +310,7 @@ function placeMarkers(allMarkers, data) {
 						addedButton = true;
 					}
                 }
-				
+				setCurrentParkingInSession(parking);
 				displaySelectedParking(parking);
 			});
             

@@ -79,7 +79,7 @@ function createExpensesGraph(expensesValues){
     });
 }
 
-function sendQuery(url){
+async function sendQueryGraph(url){
     let result = [0,0,0,0,0,0,0,0,0,0,0,0];
     // example : [{"d":"4","n":"12.00"}]
     return fetch(url).then(function(response) {
@@ -101,11 +101,11 @@ function sendQuery(url){
 }
 
 function getExpensesValues(){
-    return sendQuery('./PHP/queryMsqli.php?d=expenses&y='+year);
+    return sendQueryGraph('./PHP/queryMsqliGet.php?d=expenses&y='+year);
 }
 
 function getVisitsValues(){
-    return sendQuery('./PHP/queryMsqli.php?d=visits&y='+year);
+    return sendQueryGraph('./PHP/queryMsqliGet.php?d=visits&y='+year);
 }
 
 function refreshDate(){
