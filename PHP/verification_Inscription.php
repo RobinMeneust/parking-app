@@ -45,7 +45,7 @@
         }
 		$VAR_profil["email"] = $_SESSION["email"];
         
-        if(isset($_POST["code_postal"]) && !empty($_POST["postalCode"])){
+        if(isset($_POST["postalCode"]) && !empty($_POST["postalCode"])){
 			if(preg_match("/^[0-9][0-9]*$/", $_POST["postalCode"])) {
 				$_SESSION["postalCode"] = $_POST["postalCode"];
 			} else {
@@ -83,7 +83,7 @@
         } 
         // Ajout donnée dans la base donnée
 
-        $sql = "INSERT INTO Users VALUES (NULL,'".$_SESSION['VAR_profil']['email']."', '".$_SESSION['VAR_profil']['lastName']."', '".$_SESSION['VAR_profil']['firstName']."', '".$_SESSION['VAR_profil']['passwd']."')";
+        $sql = "INSERT INTO Users (email,lastName, firstName, passwd)  VALUES ('".$_SESSION['VAR_profil']['email']."', '".$_SESSION['VAR_profil']['lastName']."', '".$_SESSION['VAR_profil']['firstName']."', '".$_SESSION['VAR_profil']['passwd']."')";
         if(mysqli_query($link, $sql)) {
 			mysqli_close($link);
             header('location:../index.php?message=Connecté');
@@ -93,13 +93,3 @@
         }  
     } echo 'not connected';
 ?>
-
-
-
-
-
-
-
-
-
-

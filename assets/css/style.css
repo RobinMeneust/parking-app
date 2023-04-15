@@ -367,6 +367,15 @@ hr {
 	margin: auto;
 }
 
+#connecte {
+    width: 20%;
+    margin: auto;
+    color: black;
+    border: 1px solid green;
+    background-color: greenyellow;
+    text-align: center;
+}
+
 @media screen and (max-width: 768px) {
     .content_footer {
         flex-wrap: wrap;

@@ -15,6 +15,12 @@ session_start();
 
 	<body class="light" onload="initializeForms();">
 		<?php include_once("Header.php"); ?>
+		<?php 
+			if (isset($_GET["message"]) && !empty($_GET["message"]) ) {
+				$error_msg = htmlspecialchars($_GET["message"]);
+				include("PHP/error_msg.php");
+			}
+		?>
 		<div class="content">
 			<?php
 			if($_SERVER["REQUEST_METHOD"] == "POST"){

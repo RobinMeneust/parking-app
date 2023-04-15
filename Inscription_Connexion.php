@@ -10,157 +10,118 @@
         <title>Inscription</title>
     
         <link rel="stylesheet" type="text/css" href="assets/css/Inscription_Connexion.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
         <?php include_once("head.php"); ?>
     </head>
 
     <body>
+    <!-- include header there : <?php //include('Header.php'); ?> -->
         <?php include_once("Header.php"); ?>
-        <section>
-            <div class="Form-container">
-                <div class="Form-card">
-                    <div id="Login" class="form-header active">
-                        <h1>CONNEXION</h1>
-                    </div> 
 
-                    <div id="Register" class="form-header">
-                        <h1>INSCRIPTION</h1>
-                    </div>
-                </div> 
 
-                <div id="IDForm-Body"class="Form-body">
-                    <form id="FormLogin" method="POST" action="./PHP/verification_Connexion.php" >
+        <?php 
+            if (isset($_GET["message"]) && !empty($_GET["message"]) ) {
+                $error_msg = htmlspecialchars($_GET["message"]);
+                include("PHP/error_msg.php");
+            }
+        ?>
+        <div class="CONN-INSC">
+            <div class="container_INS_CONN" id="container">
+                <div class="form-container sign-up-container"> 
+                    <form action="./PHP/verification_Inscription.php" method="POST" class="form"> 
+                        <h1>Créer un compte</h1>
+                        
 
-                        <h2> Connectez-vous <br />sur <br/>Park'o Top</h2>
-
-                        <?php 
-                            if (isset($_GET["message"]) && !empty($_GET["message"]) ) {
-                                $error_msg = htmlspecialchars($_GET["message"]);
-                                include("PHP/error_msg.php");
-                            }
-                        ?>
-                        <div> 
-                            <div class="inputBox">
-                                <span>Mail</span><br /> 
-                                <input type="text" class="inputField" name="email" placeholder="Entrez votre mail" value="<?= isset($_SESSION["VAR_profil"]["email"]) && $_SESSION["VAR_profil"]["email"] != "error" ? $_SESSION["VAR_profil"]["email"] : "";?>">
-                            </div>
-                            <div class="inputBox">
-                                <span>Mot de passe</span><br />
-                                <input type="password" class="inputField" name="password" placeholder="Entrez votre mot de passe">
-                            </div>
-                            <div class="inputBox">
-                                <input type="submit" name="submit" class="button" value="Valider">
-                            </div>
-                        </div>
-                    </form>
-                    <form id="FormRegister" class="ToggleForm" method="POST" action="./PHP/verification_Inscription.php">
-
-                        <h2> BIENVENUE SUR Park'o Top </h2>
-
-                        <?php 
-                            if (isset($_GET["message"]) && !empty($_GET["message"]) ) {
-                                $error_msg = htmlspecialchars($_GET["message"]);
-                                include("PHP/error_msg.php");
-                            }
-                        ?>
-
-                        <div class="inputBox">
-                            <label>Prénom</label>
-                            <input type="text" name="firstName" class="inputField <?= isset($_SESSION["VAR_profil"]["firstName"]) && $_SESSION["VAR_profil"]["firstName"] != "error" ? "input_bon": "input_mauvais";?>" id="prenom" max="29" placeholder="Prenom" value="<?= isset($_SESSION["VAR_profil"]["firstName"]) && $_SESSION["VAR_profil"]["firstName"] != "error" ? $_SESSION["VAR_profil"]["firstName"] : "";?>" >
-                            <?php if(isset($_SESSION["VAR_profil"]["firstName"]) && $_SESSION["VAR_profil"]["firstName"] == "error") {
-                                echo '<p class="error-msg">Veuillez retournez un prenom svp</p>';
-                            }
-                            ?>
+                        <div class="input-container">
+                            <input type="text" name="lastName" class="text-input"id="name" placeholder=""  value="<?= isset($_SESSION["VAR_profil"]["lastName"]) && $_SESSION["VAR_profil"]["lastName"] != "error" ? $_SESSION["VAR_profil"]["lastName"] : "";?>" required  >
+                            <label for="nom" class="label">Nom</label>
+                        </div>  
+                        
+                        <div class="input-container">
+                            <input type="text" name="firstName" class="text-input" id="prenom" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["firstName"]) && $_SESSION["VAR_profil"]["firstName"] != "error" ? $_SESSION["VAR_profil"]["firstName"] : "";?>" required >
+                            <label for="prenom" class="label">Prenom</label>
                         </div>
 
-                        <div class="inputBox">
-                            <label>Nom</label>
-                            <input type="text" name="lastName" class="inputField <?= isset($_SESSION["VAR_profil"]["lastName"]) && $_SESSION["VAR_profil"]["lastName"] != "error" ? "input_bon": "input_mauvais";?>"  name="nom"  id="nom" max="29" placeholder="Nom" value="<?= isset($_SESSION["VAR_profil"]["lastName"]) && $_SESSION["VAR_profil"]["lastName"] != "error" ? $_SESSION["VAR_profil"]["lastName"] : "";?>">
-                            <?php if(isset($_SESSION["VAR_profil"]["lastName"]) && $_SESSION["VAR_profil"]["lastName"] == "error") {
-                                echo '<p class="error-msg">Veuillez retournez un nom svp</p>';
-                            }
-                            ?>
+                        <div class="input-container">
+                            <input type="email" name="email" class="text-input" id="mail" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["email"]) && $_SESSION["VAR_profil"]["email"] != "error" ? $_SESSION["VAR_profil"]["email"] : "";?>" required >
+                            <label for="mail" class="label">adresse-mail</label>
                         </div>
 
-                        <div class="inputBox">
-                            <label>Adresse Email</label>
-                            <input type="text" name="email" class="inputField <?= isset($_SESSION["VAR_profil"]["email"]) && $_SESSION["VAR_profil"]["email"] != "error" ? "input_bon": "input_mauvais";?>" id="email" size="30" max="29" placeholder="Adresse électronique" value="<?= isset($_SESSION["VAR_profil"]["email"]) && $_SESSION["VAR_profil"]["email"] != "error" ? $_SESSION["VAR_profil"]["email"] : "";?>" >
-                            <?php if(isset($_SESSION["VAR_profil"]["email"]) && $_SESSION["VAR_profil"]["email"] == "error") {
-                                echo '<p class="error-msg">Veuillez retournez un email svp</p>';
-                            }
-                            ?> 
-                        </div> 
-
-                        <div class="inputBox">
-                            <label>Mot de passe</label>
-                            <input type="password"  name="passwd" class="inputField <?= isset($_SESSION["VAR_profil"]["passwd"]) && $_SESSION["VAR_profil"]["passwd"] != "error" ? "input_bon": "input_mauvais";?>" id="password" max="29" placeholder="Mot de passe" value="<?= isset($_SESSION["VAR_profil"]["passwd"]) && $_SESSION["VAR_profil"]["passwd"] != "error" ? $_SESSION["VAR_profil"]["passwd"] : "";?>" >
-                            <?php if(isset($_SESSION["VAR_profil"]["passwd"]) && $_SESSION["VAR_profil"]["passwd"] == "error") {
-                                echo '<p class="error-msg">Veuillez retournez un password svp</p>';
-                            }
-                            ?>
+                        <div class="input-container">
+                            <input type="password" name="passwd" class="text-input" id="mdp" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["passwd"]) && $_SESSION["VAR_profil"]["passwd"] != "error" ? $_SESSION["VAR_profil"]["passwd"] : "";?>"  required>
+                            <label for="mdp" class="label">Mot de passe</label>
                         </div>
-                        <div class="inputBox terms">
-                            <label class="check">
-                                <input type="checkbox" name="valid_conditions" required>
-                                <span class="checkmark"></span>
-                            </label>
-                            <p>Agreed to terms and conditions</p>
-                        </div> 
 
-                        <div class="inputBox">
-                            <input type="submit" name="submit" value="Register" class="btn">
+                        <div class="input-container">
+                        <textarea name="adresse" class="text-input" rows="1" cols="26" placeholder=" Adresse" required><?= isset($_SESSION["VAR_profil"]["adresse"]) && $_SESSION["VAR_profil"]["adresse"] != "error" ? $_SESSION["VAR_profil"]["adresse"] : "" ;?></textarea>
+                            <label for="adresse" class="label">Adresse</label>
                         </div>
+
+
+                        <div class="input-container">
+                            <input id="codePostal" type="text" name="postalCode" class="text-input" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["postalCode"]) && $_SESSION["VAR_profil"]["postalCode"] != "error" ? $_SESSION["VAR_profil"]["postalCode"] : "";?>" required >
+                            <label  id="label_CodePostal" for="code_postal" class="label">Code Postal</label>
+                        </div>
+
+                        <input type="checkbox" name="valid_conditions" required>
+                        <span class="checkmark">Agreed to terms and conditions</span>
+                        <input type="submit"  name="submit" value="Register" class="btn">
                     </form>
                 </div>
-            </div>
-        </section>
-        <script>
-            const FormLogin= _('FormLogin');
-            const FormRegister= _('FormRegister');
-            const Login= _('Login');
-            const Register= _('Register');
-            const FormBody= _('IDForm-Body');
-            function urlGet(parameterName) {
-                var result = null,
-                    tmp = [];
-                    location.search.substr(1).split("&").forEach(function (item) {
-                    tmp = item.split("=");
-                    if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
-                    });
-                return result;
-            }
-            const form=urlGet("form")
-            
-            Login.addEventListener('click', () => {
-                Register.classList.remove('active');
-                Login.classList.add('active');
-                if(FormLogin.classList.contains('ToggleForm')){
-                    FormBody.style.transform = 'translate(0%)';
-                    FormBody.style.transition = 'transform 0.5s';
-                    FormLogin.classList.remove('ToggleForm');
-                    FormRegister.classList.add('ToggleForm');
-                }
-            })
 
-            Register.addEventListener('click', () => {
-                Login.classList.remove('active');
-                Register.classList.add('active');
-                if(FormRegister.classList.contains('ToggleForm')){
-                    FormBody.style.transform = 'translate(-100%)';
-                    FormBody.style.transition = 'transform 0.5s';
-                    FormRegister.classList.remove('ToggleForm');
-                    FormLogin.classList.add('ToggleForm');
-                }
-            })
+                <div class="form-container sign-in-container">
+                    <form action="./PHP/verification_Connexion.php" method="POST" class="form"> 
+                        <h1>Se connecter</h1>
+                        <div class="social-container">
+                            <a href="#" class="social"><i class="fa-brands fa-google-plus-g fa-bounce"></i></a>
+                            <a href="#" class="social"><i class="fa-brands fa-facebook-f fa-bounce"></i></a>
+                        </div>
+                        <span>Ou utilisez votre compte pour vous inscrire</span>
+                        <div class="input-container">
+                            <input type="email" name="email" class="text-input"id="mail" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["email"]) && $_SESSION["VAR_profil"]["email"] != "error" ? $_SESSION["VAR_profil"]["email"] : "";?>" required >
+                            <label for="email" class="label">adresse-mail</label>
+                        </div>
+                        <div class="input-container">
+                            <input type="password" name="passwd" class="text-input"id="mdp" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["passwd"]) && $_SESSION["VAR_profil"]["passwd"] != "error" ? $_SESSION["VAR_profil"]["passwd"] : "";?>"  required>
+                            <label for="passwd" class="label">Mot de passe</label>
+                        </div>
+                        <input type="submit"  name="submit" value="Se connecter" class="btn">
+                    </form>
+                </div>
 
-            if(form!=null && form == "Register") {
-                Register.click();
-            }
+                <div class="overlay-container">
+                    <div class="overlay">
+                        <div class="overlay-panel overlay-left">
+                            <h1>Bienvenue sur Park'o Top</h1>
+                            <button class="press btn" id="signIn">Se connecter</button>
+                        </div>
 
-            function _(e) {
-                return document.getElementById(e);
-            }
-        </script>
+                        <div class="overlay-panel overlay-right">
+                            <h1>Bienvenue sur Park'o Top</h1>
+                            <p> Ajouter une image standard</p>
+                            <button class="press btn" id="signUp" >S'inscrire</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>  
+
+            <script>
+                let signUpButton = document.getElementById("signUp")
+                let signInButton = document.getElementById("signIn")
+                let container = document.getElementById("container")
+
+                signUpButton.addEventListener('click',() => {
+                    container.classList.add("right-panel-active");
+                })
+
+                signInButton.addEventListener('click',() => {
+                    container.classList.remove("right-panel-active");
+                })
+            </script>
+        </div>
         
         <?php include_once("Footer.php"); ?>
     </body>
+
 </html>

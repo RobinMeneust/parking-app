@@ -1,7 +1,7 @@
 <?php 
 session_start();
 // Vérifier que les champs ne sont pas vides. 
-if(!isset($_POST['email']) || empty($_POST['email']) || !isset($_POST['password']) || empty($_POST['password']) ){
+if(!isset($_POST['email']) || empty($_POST['email']) || !isset($_POST['passwd']) || empty($_POST['passwd']) ){
 	// Redirection vers connexion.php
 	header('location:../Inscription_Connexion.php?message=Vous devez remplir les 2 champs pour vous connecter');
 	exit;
@@ -9,6 +9,7 @@ if(!isset($_POST['email']) || empty($_POST['email']) || !isset($_POST['password'
 
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 
+	
 	// Connexion à la base de données MySQL
 	$host = 'db';
 	$user = 'MYSQL_USER';
@@ -22,6 +23,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 		die("Erreur de connexion à la base de données : " . mysqli_connect_error());
 	}
 
+	
 	// Si tout est correcte création de variables simplifiées et sécurisées.
 	$identifiant = $_POST['email'];
 	$passwd = $_POST['passwd'];	
@@ -51,4 +53,5 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 	}	
 } 
 
+	
  ?>
