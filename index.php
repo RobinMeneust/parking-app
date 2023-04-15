@@ -22,29 +22,6 @@ session_start();
 			}
 		?>
 		<div class="content">
-			<?php
-			if($_SERVER["REQUEST_METHOD"] == "POST"){
-				$address = $_POST["search-address-text"];
-
-				if(strlen($address) > 200){
-					$address = "";
-				}
-			}
-
-			if(isSet($address)){
-				echo '<script>'."\n";
-				echo 'let address = "'.$address.'";'."\n";
-				echo 'if(address == ""){'."\n";
-				echo '	console.log("chaîne vide ou trop de caractères");'."\n";
-				echo '} else{'."\n";
-				echo '	let success = getParkingsNearAddress(address);'."\n";
-				echo '	if(success == -1){'."\n";
-				echo '		alert("Aucun parking n\'a été trouvé : Vérifier si l\'addresse est correcte. Il est aussi possible que vous ayez fait trop de requêtes")'."\n";
-				echo '	}'."\n";
-				echo '}'."\n";
-				echo '</script>'."\n";
-			} 
-			?>
 			<br>
 			<button class="menuButton" style="position:absolute;" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
 			
@@ -97,6 +74,26 @@ session_start();
 			</div>
 				<?php include_once("Footer.php"); ?>
 		</div>
-	</body>
 
+		<?php
+			if($_SERVER["REQUEST_METHOD"] == "POST"){
+				$address = $_POST["search-address-text"];
+
+				if(strlen($address) > 200){
+					$address = "";
+				}
+			}
+
+			if(isSet($address)){
+				echo '<script>'."\n";
+				echo 'let address = "'.$address.'";'."\n";
+				echo 'if(address == ""){'."\n";
+				echo '	console.log("chaîne vide ou trop de caractères");'."\n";
+				echo '} else{'."\n";
+				echo '	getParkingsNearAddress(address);'."\n";
+				echo '}'."\n";
+				echo '</script>'."\n";
+			} 
+			?>
+	</body>
 </html>

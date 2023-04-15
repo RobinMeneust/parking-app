@@ -157,7 +157,7 @@ async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxE
 	let data = [];
 
 	try{
-		msgBox.innerHTML="Fetching data..."; // Used to display in a span a message to the user
+		msgBox.innerHTML="Récupération des données..."; // Used to display in a span a message to the user
 		const response = await fetch(url)
 		const out = await response.json();
 		let nbParkings = out.elements.length;
@@ -165,7 +165,7 @@ async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxE
 			nbParkings--; // to ignore the "area" element at the end of the json
 		}
 
-		msgBox.innerHTML="Analyzing...";
+		msgBox.innerHTML="Traitement des données...";
 
 		for(let i=0; i<nbParkings; i++){
 			let parking = {
