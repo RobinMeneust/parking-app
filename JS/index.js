@@ -60,7 +60,8 @@ function displaySelectedParking(parking){
 		paymentTd.innerHTML += "<img id=\"icon_cash\" onclick=\"zoomIn(this)\" src=\"assets/img/"+imgCash+".png\" alt=\""+imgCash+"\"><br>";
 		paymentTd.innerHTML += "<img id=\"icon_card\" onclick=\"zoomIn(this)\" src=\"assets/img/"+imgCard+".png\" alt=\""+imgCard+"\">";	
 	} else{
-		paymentTd.innerHTML = "non spécifié";
+		paymentTd.innerHTML += "<img id=\"icon_cash\" onclick=\"zoomIn(this)\" src=\"assets/img/cash_unknown.png\" alt=\"cash_unknown\"><br>";
+		paymentTd.innerHTML += "<img id=\"icon_card\" onclick=\"zoomIn(this)\" src=\"assets/img/card_unknown.png\" alt=\"card_unknown\">";	
 	}
 
 	if(parking.nbFreeSlots == -1){

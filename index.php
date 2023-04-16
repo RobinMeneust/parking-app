@@ -72,8 +72,8 @@ session_start();
 					</table>
 				</div>
 			</div>
+				<?php include_once("Footer.php"); ?>
 		</div>
-		<?php include_once("Footer.php"); ?>
 
 		<?php
 			if($_SERVER["REQUEST_METHOD"] == "POST"){
