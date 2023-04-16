@@ -24,8 +24,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["h"]) && isset($_GET["s"])
 		die("Erreur de connexion à la base de données : " . mysqli_connect_error());
 	}
 
-	$query = "SELECT idAddress FROM Addresses WHERE houseNumber = ".$houseNumber." AND street = '".$street."' AND city = '".$city."' AND country = '".$country."' AND postalCode = ".$postalCode." AND lat = ".$lat." AND lng = ".$lng.";";
-	
+	$query = "SELECT idAddress FROM Addresses WHERE houseNumber = ".$houseNumber." AND street = \"".$street."\" AND city = \"".$city."\" AND country = \"".$country."\" AND postalCode = ".$postalCode." AND lat = ".$lat." AND lng = ".$lng.";";
 	if($resultSQL = mysqli_query($link,$query)){
 		if(mysqli_num_rows($resultSQL)>0){
 			// It's a duplicate, the value already exists
@@ -40,7 +39,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["h"]) && isset($_GET["s"])
 		exit;
 	}
 	
-	$query = "INSERT INTO Addresses VALUES(NULL,".$houseNumber.",'".$street."','".$city."','".$country."',".$postalCode.",".$lat.",".$lng.");";
+	$query = "INSERT INTO Addresses VALUES(NULL,".$houseNumber.",\"".$street."\",\"".$city."\",\"".$country."\",".$postalCode.",".$lat.",".$lng.");";
 
 	if($resultSQL = mysqli_query($link,$query)) {
 		echo mysqli_insert_id($link);

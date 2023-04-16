@@ -25,9 +25,9 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 
 	if(isset($_GET["y"])){
 		if($_GET['d'] == "expenses"){
-			$query = "SELECT MONTH(dateVisited) AS d, SUM(expenses) AS n FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = '".$_SESSION["VAR_profil"]["email"]."' AND YEAR(dateVisited) = \"".$_GET["y"]."\" GROUP BY MONTH(dateVisited);";
+			$query = "SELECT MONTH(dateVisited) AS d, SUM(expenses) AS n FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" AND YEAR(dateVisited) = \"".$_GET["y"]."\" GROUP BY MONTH(dateVisited);";
 		} else if($_GET['d'] == "visits"){
-			$query = "SELECT MONTH(dateVisited) AS d, COUNT(dateVisited) AS n FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = '".$_SESSION["VAR_profil"]["email"]."' AND YEAR(dateVisited) = '".$_GET["y"]."' GROUP BY MONTH(dateVisited);";
+			$query = "SELECT MONTH(dateVisited) AS d, COUNT(dateVisited) AS n FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" AND YEAR(dateVisited) = \"".$_GET["y"]."\" GROUP BY MONTH(dateVisited);";
 		} else {
 			exit;
 		}
@@ -39,7 +39,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 			echo json_encode($result);
 		}
 	} else if($_GET['d'] == "idUser"){
-		$query = "SELECT idUser FROM Users WHERE email = '".$_SESSION['VAR_profil']['email']."';";
+		$query = "SELECT idUser FROM Users WHERE email = \"".$_SESSION['VAR_profil']['email']."\";";
 		if($resultSQL = mysqli_query($link,$query)) {
 			$row = mysqli_fetch_assoc($resultSQL);
 			echo $row['idUser'];

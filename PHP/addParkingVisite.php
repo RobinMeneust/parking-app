@@ -25,7 +25,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["u"]) && isset($_GET["p"])
 		die("Erreur de connexion à la base de données : " . mysqli_connect_error());
 	}
 	
-	$query = "INSERT INTO ParkingVisite VALUES(NULL,".$idUser.",".$idParking.",'".$dateVisited."',".$expenses.");";
+	$query = "INSERT INTO ParkingVisite VALUES(NULL,".$idUser.",".$idParking.",\"".$dateVisited."\",".$expenses.");";
 
 	if($resultSQL = mysqli_query($link,$query)) {
 		mysqli_close($link);

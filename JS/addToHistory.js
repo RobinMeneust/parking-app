@@ -11,10 +11,13 @@ function getUserId(){
     .then(function(response) {
         if(response == "0"){
             alert("Vous n'êtes pas connecté");
+			throw new Error("Connection required");
         } else{
             return parseInt(response);
         }
-    });
+    }).catch((err) => {
+		throw err;
+	});
 }
 /*
 houseNumber "h"
@@ -28,16 +31,19 @@ lng = "n"
 async function addOrGetAddress(houseNumber, street, city, country, postalCode, lat, lng){
 	let url  = "./PHP/addAddress.php?h="+houseNumber+"&s="+street+"&i="+city+"&o="+country+"&p="+postalCode+"&a="+lat+"&n="+lng;
 	return fetch(url).then(function(response) {
-        if(response.status >= 200 && response.status < 300) {
-            return response.text();
+		if(response.status >= 200 && response.status < 300) {
+			return response.text();
         }
         throw new Error(response.statusText);
-    })
-    .then(function(response) {
+    }).then(function(response) {
         if(response !=""){
             return parseInt(response);
-        }
-    });
+        } else {
+			throw Error("Address id could not be fetched");
+		}
+    }).catch((err) => {
+		throw err;
+	});
 }
 
 /*
@@ -59,7 +65,9 @@ async function addOrGetParking(idAddress, parkingName){
         } else {
 			throw Error("Parking id could not be fetched");
 		}
-    });
+    }).catch((err) => {
+		throw err;
+	});
 }
 
 /*
@@ -110,10 +118,13 @@ async function addToHistory(){
 		let idAddress = await addOrGetAddress(houseNumber, street, city, country, postalCode, currentParking.pos.lat, currentParking.pos.lng);
 		let idParking = await addOrGetParking(idAddress, name);
 		
+		let infoBox = document.getElementById('infoBox');
 		if(addParkingVisite(idUser, idParking, dateVisited, expenses)){
-			document.getElementById('infoBox').innerText = "Le parking a bien été ajouté à votre historique";
+			infoBox.innerText = "Le parking a bien été ajouté à votre historique";
+			infoBox.style.color = "green";
 		} else{
-			alert("Une erreur est survenue, l'opération n'a pas été enregistrée");
+			infoBox.innerText = "Une erreur est survenue, l'opération n'a pas été enregistrée";
+			infoBox.style.color = "red";
 		}
 	} catch(err){
 		console.error(err);

@@ -337,9 +337,9 @@ function placeMarkers(allMarkers, data) {
                 button.type = "button";
                 
                 if(_globalUserMarker[0] == null){
-                    infoWindow.setContent(_selectedMarkerAddress+ '<br>' + '<span style="background-color:#fff; color:red; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;">Position requise pour l\'itinéraire</span>');
+                    infoWindow.setContent(_selectedMarkerAddress+ '<br>' + '<span class="invalid-box">Position requise pour l\'itinéraire</span> <br> <a href="addToHistory.php" class="map-button">Ajouter</a>');
                 } else{
-                    infoWindow.setContent(_selectedMarkerAddress + '<br>' + '<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button>');
+                    infoWindow.setContent(_selectedMarkerAddress + '<br>' + '<button type="button" class="map-button" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button> <br> <a href="addToHistory.php" class="map-button">Ajouter</a>');
 				}
 
                 _selectedMarkerInfoWindow = infoWindow;
@@ -436,7 +436,7 @@ async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestin
             _globalRouteDuration.push(date);
         }
 
-        const infoWindowContent = _selectedMarkerAddress + '<br>' + '<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ _selectedMarker.getPosition().lat() +','+_selectedMarker.getPosition().lng()+');">Itinéraire</button>';
+        const infoWindowContent = _selectedMarkerAddress + '<br>' + '<button type="button" class="map-button" class="map-button" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ _selectedMarker.getPosition().lat() +','+_selectedMarker.getPosition().lng()+');">Itinéraire</button>';
 
         let text = '<br>';
         let j = 1;

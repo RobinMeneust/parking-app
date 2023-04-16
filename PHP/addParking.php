@@ -34,7 +34,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["i"])){
 	if($name == null){
 		$query = "SELECT idParking FROM Parking WHERE idAddress = ".$idAddress." AND name = NULL";
 	} else{
-		$query = "SELECT idParking FROM Parking WHERE idAddress = ".$idAddress." AND name = '".$name."'";
+		$query = "SELECT idParking FROM Parking WHERE idAddress = ".$idAddress." AND name = \"".$name."\"";
 	}
 	
 	if($resultSQL = mysqli_query($link,$query)){
@@ -50,12 +50,12 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["i"])){
 		exit;
 	}
 	
-	$query = "INSERT INTO Parking VALUES(NULL,".$idAddress.",'".$name."')";
+	$query = "INSERT INTO Parking VALUES(NULL,".$idAddress.",\"".$name."\")";
 
 	if($name == null){
 		$query = "INSERT INTO Parking VALUES(NULL,".$idAddress.", NULL)";
 	} else{
-		$query = "INSERT INTO Parking VALUES(NULL,".$idAddress.",'".$name."')";
+		$query = "INSERT INTO Parking VALUES(NULL,".$idAddress.",\"".$name."\")";
 	}
 
 	if($resultSQL = mysqli_query($link,$query)) {

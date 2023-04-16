@@ -72,7 +72,7 @@
         }
         
         // verification email
-        if($resultSQL = mysqli_query($link,"SELECT COUNT(email) FROM Users WHERE email = ".$_SESSION["VAR_profil"]["email"].";")) {
+        if($resultSQL = mysqli_query($link,"SELECT COUNT(email) FROM Users WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\";")) {
             $tab = mysqli_fetch_row($resultSQL);
 			if($tab[0] != "0"){
                 mysqli_free_result($resultSQL);
@@ -83,7 +83,7 @@
         } 
         // Ajout donnée dans la base donnée
 
-        $sql = "INSERT INTO Users (email,lastName, firstName, passwd)  VALUES ('".$_SESSION['VAR_profil']['email']."', '".$_SESSION['VAR_profil']['lastName']."', '".$_SESSION['VAR_profil']['firstName']."', '".$_SESSION['VAR_profil']['passwd']."')";
+        $sql = "INSERT INTO Users (email,lastName, firstName, passwd)  VALUES (\"".$_SESSION['VAR_profil']['email']."\", \"".$_SESSION['VAR_profil']['lastName']."\", \"".$_SESSION['VAR_profil']['firstName']."\", \"".$_SESSION['VAR_profil']['passwd']."\")";
         if(mysqli_query($link, $sql)) {
 			mysqli_close($link);
             header('location:../index.php?message=Connecté');
