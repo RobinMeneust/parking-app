@@ -23,9 +23,9 @@ async function setCurrentParkingInSession(parking){
 }
 
 function displaySelectedParking(parking){
-	let table = document.getElementById("selectedParkingTable");
-
-	table.style.visibility = "visible";
+	let details = document.getElementById("searchDetailsSideBar");
+	
+	details.style.visibility = "visible";
 	//container.innerHTML = "Calcul du nombre de places disponibles...";
 	let addressTd = document.getElementById("addressSelectedParking");
 	let nbSlotsTd = document.getElementById("nbSlotsSelectedParking");
@@ -60,7 +60,7 @@ function displaySelectedParking(parking){
 		paymentTd.innerHTML += "<img id=\"icon_cash\" onclick=\"zoomIn(this)\" src=\"assets/img/"+imgCash+".png\" alt=\""+imgCash+"\"><br>";
 		paymentTd.innerHTML += "<img id=\"icon_card\" onclick=\"zoomIn(this)\" src=\"assets/img/"+imgCard+".png\" alt=\""+imgCard+"\">";	
 	} else{
-		paymentTd.innerHTML += "non spécifié";
+		paymentTd.innerHTML = "non spécifié";
 	}
 
 	if(parking.nbFreeSlots == -1){

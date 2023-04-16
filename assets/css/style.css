@@ -63,7 +63,7 @@ header {
 .search-bar form {
     display: flex;
 }
-
+  
 .search-bar input[type="text"] {
     flex: 1;
     padding: 10px;
@@ -101,10 +101,11 @@ a {
 }
 
 footer {
+    bottom: 0; left: 0;
     width: 100%;
     background-color: var(--primary-color);
     box-shadow: 0 16px 70px -8px rgba(0, 0, 0, 0.25);
-    border-radius: 20px 20px 0 0;
+    /*border-radius: 20px 20px 0 0;*/
     transition: background 0.3s linear;
 }
 
@@ -183,7 +184,11 @@ footer {
 }
 
 .service_header {
-    margin-right: 5%;
+    margin-right: 20px;
+}
+
+.service_header_last {
+    margin-right: 20px;
 }
 
 li.service_name {
@@ -228,7 +233,7 @@ hr {
 
 .footer_bottom {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     font-size: 0.875rem;
 }
@@ -342,9 +347,12 @@ hr {
     transition: left ease-in 0.5s;
 }
 
+#searchDetailsSideBar{
+    visibility : collapse;
+}
+
 #selectedParkingTable{
 	border-collapse: collapse;
-	visibility: hidden;
 }
 
 #selectedParkingTable td, #selectedParkingTable th{
@@ -376,6 +384,75 @@ hr {
     text-align: center;
 }
 
+/* Donn�es Personnelles et Mentions L�gales */
+
+.helpcontent {
+    padding: 0 30px 100px;
+    max-width : 1200px;
+    margin: 0 auto;
+}
+
+.helpcontent h1 {
+    color: #f5b027;
+    text-align: center;
+    font-size: 2.7em;
+    font-weight: bold;
+    margin: 30px 0 50px;
+}
+
+.helpcontent .h3 .titlehelp {
+    color: inherit;
+    font-size : 1.5em;
+    font-weight: bold;
+    margin: 20px;
+}
+
+.helpcontent h2 {
+    color: #f5b027;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin: 30px 0 20px;
+}
+
+.helpcontent .idz_btn_fix {
+    margin: 0 0 0 20px; /* 20px sur le dernier 0 de base */
+    text-align: center;
+}
+
+.helpcontent .idz_btn_fix .chat-cta {
+    display: inline-block;
+    font-size: 20px;
+    border-radius: 5px;
+    background-color: #f5b027;
+    color: white;
+    padding: 0.5em 1.25em;
+    text-decoration: none;
+    line-height: 1.1;
+}
+
+.helpcontent .idz_btn_fix .chat-cta-label {
+    display: inline-block;
+    font-size: 0.8em;
+}
+
+.helpcontent p {
+    font-size: 1em;
+    line-height: 1.5em;
+    margin: 0 20px 10px 20px;
+    text-align: justify;
+}
+
+.helpcontent strong {
+    font-weight: bold;
+}
+
+.helpcontent a {
+    color: #333333;
+    text-decoration: underline;
+}
+
+/* Fin Donnees Personnelles */
+
 @media screen and (max-width: 768px) {
     .content_footer {
         flex-wrap: wrap;
@@ -402,7 +479,7 @@ hr {
     }
 }
 
-@media screen and (max-width: 510px) {
+/*@media screen and (max-width: 480px) {
     .service_header {
         margin-bottom: 8px;
     }
@@ -411,19 +488,47 @@ hr {
         margin-bottom: 8px;
     }
 }
+A 343px, mettre tous en colonne droit A PROPOS - AIDE - NOTRE GROUPE avec display: block, un petit padding etc.
+*/
 
-/* Méthode 1 */
+/* Tableau Resultat */
 
-/*@media (prefers-color-scheme: light) {
-    footer {
-        background-color: #fff;
-        color: #000;
+/* Ne pas le prendre en compte dans la largueur de la page s'il n'est pas affiche avec display: collapse; normalement */
+
+@media screen and (max-width: 768px) {
+    #selectedParkingTable,
+    #selectedParkingTable tr,
+    #selectedParkingTable th,
+    #selectedParkingTableRowData,
+    #selectedParkingTableRowData td {
+        display: block;
+    }
+
+    #selectedParkingTable th {
+        display : none;
+    }
+
+    #selectedParkingTableRowData td{
+        padding-left: 150px;
+        position : relative;
+        margin-top: -1px;
+    }
+
+    #selectedParkingTableRowData td::before {
+        /*padding: 10px;*/
+        content: attr(data-label);
+        position: absolute;
+        top :0;
+        left: 0;
+        width: 130px;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    #selectedParkingTable tr {
+        margin-bottom: 1rem;
     }
 }
 
-@media (prefers-color-scheme: dark) {
-    footer {
-        background-color: #000;
-        color: #fff;
-    }
-}*/

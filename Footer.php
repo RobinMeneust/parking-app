@@ -4,7 +4,7 @@
             <div class="profil">
                 <div class="logo_area">
                     <img src="./assets/img/logo.png" alt="">
-                    <span class="logo_name">Park'O Top</span>
+                    <span class="logo_name">PARK'O TOP</span>
                     <button class="dark-mode" id="moon"><i class="fa-solid fa-moon"></i></button>
                     <button class="light-mode" id="sun hide"><i class="fa-solid fa-sun"></i></button>
                 </div>
@@ -21,31 +21,27 @@
             <div class="service_area">
                 <ul class="service_header">
                     <li class="service_name">A PROPOS</li>
-                    <li><a href="#">Conditions générales d'utilisation du compte</a></li>
                     <li><a href="#">Données Personnelles</a></li>
                     <li><a href="#">Mentions Légales</a></li>
                 </ul>
                 <ul class="service_header">
-                    <li class="service_name">AIDE, SAV & SERVICES</li>
+                    <li class="service_name">AIDE</li>
                     <li><a href="#">Besoin d'aide</a></li>
                     <li><a href="#">Contactez-nous</a></li>
-                    <li><a href="#">Services Park'o Top</a></li>
                 </ul>
                 <ul class="service_header_last">
-                    <li class="service_name">LE GROUPE PARK'O TOP</li>
+                    <li class="service_name">NOTRE GROUPE</li>
                     <li><a href="#">Qui sommes-nous</a></li>
-                    <li><a href="#">Développement Durable</a></li>
-                    <li><a href="#">Groupe Park'O Top</a></li>
                 </ul>
             </div>
         </div>
         <hr>
-            <div class="footer_bottom">
-                <div class="copy_right">
-                    <i class="fa-solid fa-copyright"></i>
-                    <span>2023 Park'O Top</span> 
-                </div>
+        <div class="footer_bottom">
+            <div class="copy_right">
+                <i class="fa-solid fa-copyright"></i>
+                    <span>2023 PARK'O TOP</span> 
             </div>
+        </div>
     </div>
 </footer>
 

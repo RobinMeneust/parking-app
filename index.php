@@ -3,7 +3,7 @@ session_start();
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	<head>
 		<?php include_once("head.php"); ?>
 		<script src="./JS/index.js"></script>
@@ -15,13 +15,15 @@ session_start();
 
 	<body class="light" onload="initializeForms();">
 		<?php include_once("Header.php"); ?>
+
 		<?php 
 			if (isset($_GET["message"]) && !empty($_GET["message"]) ) {
 				$error_msg = htmlspecialchars($_GET["message"]);
 				include("PHP/error_msg.php");
 			}
 		?>
-		<div class="content">
+
+		<div class="content">	
 			<br>
 			<button class="menuButton" style="position:absolute;" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
 			
@@ -51,28 +53,30 @@ session_start();
 					<button class="menuButton rectangular" style="position:absolute;" onclick="getSearchFilters()">Appliquer mes filtres</button>
 				</div>
 			</div>
+
 			<div class="row">
 				<div class="column" id="map"></div>
-				<div class="column" id="searchDetailsSideBar">
-					<h2>Détail du parking sélectionné</h2>
+				<span id="searchMsgBox"></span>
+				<div class="column" id="searchDetailsSideBar">				
+					<h2>Détails du parking sélectionné</h2>
 					<table id="selectedParkingTable">
-						<span id="searchMsgBox"></span>
 						<tr>
 							<th>Adresse</th>
-							<th>Nombre de places disponibles</th>
-							<th>Horaires d'ouvertures</th>
+							<th>Places disponibles</th>
+							<th>Horaires</th>
 							<th>Paiement</th>
 						</tr>
 						<tr id="selectedParkingTableRowData">
-							<td id="addressSelectedParking"></td>
-							<td id="nbSlotsSelectedParking"></td>
-							<td id="openingHoursSelectedParking"></td>
-							<td id="paymentSelectedParking"></td>
+							<td id="addressSelectedParking" data-label="Adresse"></td>
+							<td id="nbSlotsSelectedParking" data-label="Places disponibles"></td>
+							<td id="openingHoursSelectedParking" data-label="Horaires"></td>
+							<td id="paymentSelectedParking" data-label="Paiement"></td>
 						</tr>
 					</table>
 				</div>
 			</div>
 		</div>
+
 		<?php include_once("Footer.php"); ?>
 
 		<?php
@@ -94,6 +98,6 @@ session_start();
 				echo '}'."\n";
 				echo '</script>'."\n";
 			} 
-			?>
+		?>
 	</body>
 </html>
