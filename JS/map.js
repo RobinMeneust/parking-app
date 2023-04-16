@@ -1,14 +1,17 @@
 const NUMBER_ROUTES = 2;
 
-let map, infoWindow, buttonPos, buttonSearchParam;
+let map, buttonPos, buttonSearchParam;
 window.initMap = initMap;
 let prevInfoWindow = null;
 let _globalAllMarkers = [];
 let _globalUserMarker = [];
 let _selectedMarker = undefined;
+let _selectedMarkerInfoWindow = undefined;
+let _selectedMarkerAddress = "undefined";
 let _globalDirectionsService = undefined;
 let _globalDirectionsRenderer = [];
 let _globalRouteDuration = [];
+let _globalSelectedRoute = undefined;
 
 let userLocation = {lat:null,lng:null};
 let searchRadius = 1;
@@ -211,6 +214,15 @@ function initMap() {
                 }
             }
         }
+        if(_selectedMarkerInfoWindow != undefined){
+            _selectedMarkerInfoWindow.close();
+        }
+
+        if (_globalDirectionsRenderer.length != 0 || _globalDirectionsRenderer != []) {
+            for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
+                _globalDirectionsRenderer[i].setMap(null);                
+            }
+        }
     });
     const directionsService = new google.maps.DirectionsService();
     _globalDirectionsService = directionsService;
@@ -240,8 +252,12 @@ function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 
 
 function placeMarkers(allMarkers, data) {
+    if (_globalDirectionsRenderer.length != 0 || _globalDirectionsRenderer != []) {
+        for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
+            _globalDirectionsRenderer[i].setMap(null);                
+        }
+    }
 	data.forEach((parking) => {
-		let addedButton;
 		let distance = parking.distance;
 		if(distance<0){
 			distance = "";
@@ -269,6 +285,7 @@ function placeMarkers(allMarkers, data) {
 						promise[0] = getAddressFromPos(parking.pos).then((address) => {
 							parking.address = address;
 							infoWindow.setContent(address.formatted);
+                            _selectedMarkerAddress = address.formatted;
 						});
 					} catch(err){
 						console.error("Data could not be fetched or parsed from Opencagedata API");
@@ -282,34 +299,31 @@ function placeMarkers(allMarkers, data) {
 				openInfoWindow(infoWindow, prevInfoWindow, marker, map);
 				prevInfoWindow = infoWindow;
 
-                if(addedButton != true){
-                    const button = document.createElement("button");
-                    button.style.backgroundColor = "#fff";
-                    button.style.border = "2px solid #fff";
-                    button.style.borderRadius = "3px";
-                    button.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
-                    button.style.color = "rgb(25,25,25)";
-                    button.style.cursor = "pointer";
-                    button.style.fontFamily = "Roboto,Arial,sans-serif";
-                    button.style.fontSize = "16px";
-                    button.style.lineHeight = "38px";
-                    button.style.margin = "8px 0 22px";
-                    button.style.padding = "0 5px";
-                    button.style.textAlign = "center";
-                    button.textContent = "Itinéraire";
-                    button.title = "Cliquez pour rejoindre le parking.";
-                    button.type = "button";
-					
-					if(_globalUserMarker[0] == null){
-						infoWindow.setContent(infoWindow.getContent() + '<br>' +
-						'<span style="background-color:#fff; color:red; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;">Position requise pour l\'itinéraire</span>');
-						addedButton = true;
-					} else{
-						infoWindow.setContent(infoWindow.getContent() + '<br>' +
-						'<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button>');
-						addedButton = true;
-					}
-                }
+                const button = document.createElement("button");
+                button.style.backgroundColor = "#fff";
+                button.style.border = "2px solid #fff";
+                button.style.borderRadius = "3px";
+                button.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+                button.style.color = "rgb(25,25,25)";
+                button.style.cursor = "pointer";
+                button.style.fontFamily = "Roboto,Arial,sans-serif";
+                button.style.fontSize = "16px";
+                button.style.lineHeight = "38px";
+                button.style.margin = "8px 0 22px";
+                button.style.padding = "0 5px";
+                button.style.textAlign = "center";
+                button.textContent = "Itinéraire";
+                button.title = "Cliquez pour rejoindre le parking.";
+                button.type = "button";
+                
+                if(_globalUserMarker[0] == null){
+                    infoWindow.setContent(_selectedMarkerAddress+ '<br>' + '<span style="background-color:#fff; color:red; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;">Position requise pour l\'itinéraire</span>');
+                } else{
+                    infoWindow.setContent(_selectedMarkerAddress + '<br>' + '<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button>');
+				}
+
+                _selectedMarkerInfoWindow = infoWindow;
+
 				setCurrentParkingInSession(parking);
 				displaySelectedParking(parking);
 			});
@@ -337,7 +351,7 @@ function placeMarkers(allMarkers, data) {
             });
 
             infoWindow.addListener('closeclick', ()=>{
-                _selectedMarker = marker;
+                _selectedMarker = undefined;
                 for (let i = 0; i < allMarkers.length; i++) {
                     if(allMarkers[i].getPosition() != marker.getPosition()){
                         if(allMarkers[i].getMap() == null){
@@ -371,8 +385,13 @@ function placeMarkers(allMarkers, data) {
 const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestination) {
     const origin = new google.maps.LatLng(latOrigin, lngOrigin);
     const destination = new google.maps.LatLng(latDestination, lngDestination);
+    processTravelTime(latOrigin, lngOrigin, latDestination, lngDestination);
+    calculateAndDisplayRoute(_globalDirectionsService, origin, destination);
+};
 
+async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestination){
     _globalRouteDuration = [];
+    _globalSelectedRoute = undefined;
 
     let headers = new Headers();
     headers.append("Content-Type", "application/json");
@@ -389,19 +408,41 @@ const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestinatio
     jsonResponse.then((out) => {
         if(out.routes.length > 1 ){
             for (let i = 0; i < NUMBER_ROUTES; i++) {
-                convertSeconds(out.routes[i].duration);
+                const date = new Date(parseInt(out.routes[i].duration) * 1000).toISOString().substring(11, 16);
+                _globalRouteDuration.push(date);
             }
         }else{
-            convertSeconds(out.routes[0].duration);
+            const date = new Date(parseInt(out.routes[0].duration) * 1000).toISOString().substring(11, 16);
+            _globalRouteDuration.push(date);
         }
+
+        const infoWindowContent = _selectedMarkerAddress + '<br>' + '<button type="button" style="background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;test-align:center;" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ _selectedMarker.getPosition().lat() +','+_selectedMarker.getPosition().lng()+');">Itinéraire</button>';
+
+        let text = '<br>';
+        let j = 1;
+        for (let i = 0; i < NUMBER_ROUTES; i++) {
+            if(i%2==0){
+                color = '#00458E';
+            }else{
+                color = '#ED1C24';
+            }
+            j = j + i;     
+            text = text + '<label><mark style="color: white; background-color:'+color+'";>'+'Trajet'+ j + " : </mark></label>" + _globalRouteDuration[i] + '<button onClick="selectedRoute('+i+');">Sélectionner</button><br><br>';
+        }
+        _selectedMarkerInfoWindow.setContent(infoWindowContent + text);
     });
+}
 
-    calculateAndDisplayRoute(_globalDirectionsService, origin, destination);
-};
-
-function convertSeconds(seconds){
-    const date = new Date(parseInt(seconds) * 1000).toISOString().substring(11, 16);
-    _globalRouteDuration.push(date);
+function selectedRoute(index){
+    for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
+        _globalDirectionsRenderer[i].setMap(map);
+    }
+    _globalSelectedRoute = _globalDirectionsRenderer[index];
+    for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
+        if(_globalDirectionsRenderer[i] != _globalSelectedRoute){
+            _globalDirectionsRenderer[i].setMap(null);
+        }
+    }
 }
 
 function removeAllMarkers(allMarkers) {
@@ -532,7 +573,6 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
             directionsRenderer.setRouteIndex(i);
             _globalDirectionsRenderer.push(directionsRenderer);
         }
-        console.log(_globalRouteDuration);
         /*
         document.getElementById("warnings-panel").innerHTML =
           "<b>" + result.routes[0].warnings + "</b>";
