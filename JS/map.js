@@ -25,7 +25,7 @@ async function refreshUserLocation(){
 		userLocation.lat = pos.coords.latitude;
 		userLocation.lng = pos.coords.longitude;
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 }
 
@@ -39,6 +39,26 @@ function centerMapToUserPos(){
 			alert("Votre position est requise");
 		}
 	});
+}
+
+async function onFetchAddMarkers(data, allMarkers, coordAddress, address){
+	if(data.length == 0){
+		alert("Aucun parking n'a été trouvé dans cette zone");
+		return;
+	}
+	if (allMarkers.length != 0 || allMarkers != undefined || _globalAllMarkers.length != 0 || _globalAllMarkers != undefined){
+		removeAllMarkers(allMarkers);
+		removeAllMarkers(_globalAllMarkers);
+	}
+	if(coordAddress != null && address != null){
+		allMarkers.push(placeMarkerAddress(coordAddress, address));
+	}
+	placeMarkers(allMarkers, data);
+	if (allMarkers.length != 0 || allMarkers != undefined){
+		const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
+		map.setCenter(coordFirstMarker);
+		map.setZoom(15);
+	}
 }
 
 async function searchNearUser(){
@@ -57,32 +77,20 @@ async function searchNearUser(){
 		return;
 	}
 
-	if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
-        userMarker.pop();
-		_globalUserMarker.pop()
+	if(userMarker.length != 0 || userMarker != undefined || _globalUserMarker != undefined || _globalUserMarker.length != 0) {
+		userMarker.pop();
+		_globalUserMarker.pop();
 	}
 
 	userMarker.push(placeUserMarker());
 	if(userMarker != null){
 		_globalUserMarker = userMarker;
 	}
+	
 
 	try{
-		getParkingsData(userLocation, userLocation, areaParams, searchRadius, nbMaxResults).then((data) => {
-			if(data.length == 0){
-				alert("Aucun parking n'a été trouvé dans cette zone");
-				return;
-			}
-			if ((allMarkers.length != 0 || allMarkers != undefined) && (_globalAllMarkers.length != 0)|| _globalAllMarkers != undefined){
-				removeAllMarkers(allMarkers);
-                removeAllMarkers(_globalAllMarkers);
-			}
-			placeMarkers(allMarkers, data);
-			if (allMarkers.length != 0 || allMarkers != undefined){
-				const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
-				map.setCenter(coordFirstMarker);
-				map.setZoom(15);
-			}
+		getParkingsData(userLocation, userLocation, areaParams, searchRadius, nbMaxResults).then((data) =>{
+			onFetchAddMarkers(data, allMarkers, null, null);
 		});
 	} catch(err){
 		msgBox.innerHTML="";
@@ -115,9 +123,9 @@ async function getSearchFilters() {
 	}
 
 	if(areaParams != "null"){
-		if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
+		if(userMarker.length != 0 || userMarker != undefined || _globalUserMarker != undefined || _globalUserMarker.length != 0) {
 			userMarker.pop();
-			_globalUserMarker.pop()
+			_globalUserMarker.pop();
 		}
 
 		let msgBox = document.getElementById('searchMsgBox');
@@ -130,21 +138,8 @@ async function getSearchFilters() {
 		}		
 		
 		try{
-			getParkingsData(userLocation, userLocation, 'area[name="' + areaParams + '"];', searchRadius, nbMaxResults).then((data) => {
-				if(data.length == 0){
-					alert("Aucun parking n'a été trouvé dans cette zone");
-					return;
-				}
-				if ((allMarkers.length != 0 || allMarkers != undefined) && (_globalAllMarkers.length != 0 || _globalAllMarkers != undefined)){
-					removeAllMarkers(allMarkers);
-                    removeAllMarkers(_globalAllMarkers);
-				}
-				placeMarkers(allMarkers, data);
-				if (allMarkers.length != 0 || allMarkers != undefined){
-					const coordFirstMarker = new google.maps.LatLng(data[0].pos.lat, data[0].pos.lng);
-					map.setCenter(coordFirstMarker);
-					map.setZoom(15);
-				}
+			getParkingsData(userLocation, userLocation, 'area[name="' + areaParams + '"];', searchRadius, nbMaxResults).then((data) =>{
+				onFetchAddMarkers(data, allMarkers, null, null);
 			});
 		} catch(err){
 			msgBox.innerHTML="";
@@ -170,9 +165,9 @@ async function getParkingsNearAddress(address){
 	let userMarker = [];
 	let areaParams = "";
 
-	if((userMarker.length != 0 || userMarker != undefined) && (_globalUserMarker != undefined || _globalUserMarker.length != 0)){
+	if(userMarker.length != 0 || userMarker != undefined || _globalUserMarker != undefined || _globalUserMarker.length != 0) {
 		userMarker.pop();
-		_globalUserMarker.pop()
+		_globalUserMarker.pop();
 	}
 
 	let msgBox = document.getElementById('searchMsgBox');
@@ -192,21 +187,8 @@ async function getParkingsNearAddress(address){
 	
 	msgBox.innerHTML="Récupération de l'adresse...";
 	getCoordFromAddress(address).then((coord) =>{
-		getParkingsData(coord, userLocation, areaParams, document.getElementById("distanceSlider").value, 100).then((data) => {
-			if(data.length == 0){
-				alert("Aucun parking n'a été trouvé dans cette zone");
-				return;
-			}
-			if ((allMarkers.length != 0 || allMarkers != undefined)&&(_globalAllMarkers.length != 0 || _globalAllMarkers != undefined)){
-				removeAllMarkers(allMarkers);
-				removeAllMarkers(_globalAllMarkers);
-			}
-			allMarkers.push(placeMarker(coord, address));
-			placeMarkers(allMarkers, data);
-			const coordFirstMarker = new google.maps.LatLng(coord.lat, coord.lng);
-			map.setCenter(coordFirstMarker);
-			map.setZoom(15);
-			return 0;
+		getParkingsData(coord, userLocation, areaParams, document.getElementById("distanceSlider").value, 100).then((data) =>{
+			onFetchAddMarkers(data, allMarkers, coord, address);
 		});
 	}).catch((err) => {
 		msgBox.innerHTML="";
@@ -391,7 +373,6 @@ function placeMarkers(allMarkers, data) {
                 }
             });
 
-
 			allMarkers.push(marker);
             _globalAllMarkers = allMarkers;
 			return 1;
@@ -475,55 +456,52 @@ function removeAllMarkers(allMarkers) {
 
 
 function placeUserMarker(){
-	if(userLocation.lat == null || userLocation.lng == null){
+	let icon = {
+		path: "M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z",
+		fillColor: "blue",
+		fillOpacity: 1.0,
+		strokeWeight: 0,
+		rotation: 0,
+		scale: 2,
+		anchor: new google.maps.Point(12,12),
+	};	
+    return placeMarker(userLocation, icon, "Ma position actuelle", null);
+}
+
+function placeMarkerAddress(coordAddress, address){
+	let icon = {
+		path: "M 0 0 V 15 H 0.5 V 0 H 0 M 0.5 1 L 10 4 L 0.5 8",
+		fillColor: "blue",
+		fillOpacity: 1.0,
+		strokeWeight: 0,
+		rotation: 0,
+		scale: 3,
+		anchor: new google.maps.Point(12,12),
+	};
+
+	return placeMarker(coordAddress, icon, "Addresse recherchée", address);
+}
+
+function placeMarker(posMarker, icon, title, description){
+	if(posMarker.lat == null || posMarker.lng == null){
 		return null;
 	}
 	const marker = new google.maps.Marker({
-		position: userLocation,
-		map,
-		icon: {
-			path: "M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z",
-			fillColor: "blue",
-			fillOpacity: 1.0,
-			strokeWeight: 0,
-			rotation: 0,
-			scale: 2,
-			anchor: new google.maps.Point(12,12),
-		},
-		title: "Ma position actuelle",
-	});
-	marker.setMap(map);
-    return marker;
-}
-
-function placeMarker(coords, description){		
-    const marker = new google.maps.Marker({
-        position: {
-			lat: coords.lat,
-            lng: coords.lng
-        },
-		icon:{
-			path: "M 0 0 V 15 H 0.5 V 0 H 0 M 0.5 1 L 10 4 L 0.5 8",
-			fillColor: "blue",
-            fillOpacity: 1.0,
-            strokeWeight: 0,
-            rotation: 0,
-            scale: 3,
-            anchor: new google.maps.Point(12,12),
-		},
-		title: "Addresse recherchée",
+        position: posMarker,
+		icon:icon,
+		title: title,
     });
 
-	var infoWindow = new google.maps.InfoWindow({
-		content: description,
-	});
+	if(description != null){
+		var infoWindow = new google.maps.InfoWindow({
+			content: description,
+		});
+		marker.addListener("click", async function(){
+			openInfoWindow(infoWindow, prevInfoWindow, marker, map);
+			prevInfoWindow = infoWindow;
+		});
+	}
 
-	marker.addListener("click", async function(){
-		openInfoWindow(infoWindow, prevInfoWindow, marker, map);
-		prevInfoWindow = infoWindow;
-	});
-	
-	
 	marker.setMap(map);
     return marker;
 }
