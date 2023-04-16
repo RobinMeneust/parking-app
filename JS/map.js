@@ -46,10 +46,14 @@ async function searchNearUser(){
 	let userMarker = [];
 	let areaParams = "";
 
+	let msgBox = document.getElementById('searchMsgBox');
+
+	msgBox.innerHTML="Récupération de la position...";
 	await refreshUserLocation();
 	if(userLocation.lat == null || userLocation.lng == null){
 		console.error("position is required but could not be fetched");
 		alert("Votre position est requise");
+		msgBox.innerHTML="";
 		return;
 	}
 
@@ -81,6 +85,7 @@ async function searchNearUser(){
 			}
 		});
 	} catch(err){
+		msgBox.innerHTML="";
 		console.error("Data could not be fetched or parsed from Overpass API");
 		alert("Les données n'ont pas pu être récupérées. Vous avez peut-être fait trop de requêtes en peu de temps ou le service est surchargé. Veuillez réessayer ultérieuremnt.")
 	}
@@ -115,6 +120,8 @@ async function getSearchFilters() {
 			_globalUserMarker.pop()
 		}
 
+		let msgBox = document.getElementById('searchMsgBox');
+		msgBox.innerHTML="Récupération de la position...";
 		await refreshUserLocation();
 
 		userMarker.push(placeUserMarker());
@@ -140,6 +147,7 @@ async function getSearchFilters() {
 				}
 			});
 		} catch(err){
+			msgBox.innerHTML="";
 			console.error("Data could not be fetched or parsed from Overpass API");
 			alert("Les données n'ont pas pu être récupérées. Vous avez peut-être fait trop de requêtes en peu de temps ou le service est surchargé. Veuillez réessayer ultérieuremnt.")
 		}
@@ -149,6 +157,9 @@ async function getSearchFilters() {
 async function getCoordFromAddress(address){
 	url = 'https://nominatim.openstreetmap.org/search?q='+address+'&format=json';
 	return fetch(url).then((res) => res.json()).then((out) => {
+		if(out.length == 0){
+			throw new Error("Adresse non trouvée");
+		}
 		let coord = {lat:parseFloat(out[0].lat), lng:parseFloat(out[0].lon)};
 		return coord;
 	}).catch(error => { throw error });
@@ -163,6 +174,9 @@ async function getParkingsNearAddress(address){
 		userMarker.pop();
 		_globalUserMarker.pop()
 	}
+
+	let msgBox = document.getElementById('searchMsgBox');
+	msgBox.innerHTML="Récupération de la position...";
 	
 	await refreshUserLocation();
 
@@ -172,9 +186,11 @@ async function getParkingsNearAddress(address){
 	}
 	
 	if(address == ""){
+		msgBox.innerHTML="";
 		return -1;
 	}
 	
+	msgBox.innerHTML="Récupération de l'adresse...";
 	getCoordFromAddress(address).then((coord) =>{
 		getParkingsData(coord, userLocation, areaParams, document.getElementById("distanceSlider").value, 100).then((data) => {
 			if(data.length == 0){
@@ -193,7 +209,11 @@ async function getParkingsNearAddress(address){
 			return 0;
 		});
 	}).catch((err) => {
-		return -1;
+		msgBox.innerHTML="";
+		let searchBox = document.getElementById("search-address-text");
+		searchBox.placeholder = 'Adresse inconnue';
+		searchBox.style.color = "red";
+		searchBox.style.borderColor = "red";
 	});
 }
 
@@ -230,7 +250,7 @@ function initMap() {
     const bottomRightDiv = document.createElement("div");
 	const topCenterDiv = document.createElement("div");
     const locationButton = createMapButton(addLocationToMap, "Localisez-moi", "Cliquez pour recentrer la carte sur votre position");
-	const searchNearPosButton = createMapButton(searchNearUser, "Rechercher des parkings", "Cliquez pour lancer la recherche à partir de votre position");
+	const searchNearPosButton = createMapButton(searchNearUser, "Parkings autour de moi", "Cliquez pour lancer la recherche à partir de votre position");
 
     bottomRightDiv.appendChild(locationButton);
     topCenterDiv.appendChild(searchNearPosButton);

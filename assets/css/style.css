@@ -63,11 +63,11 @@ header {
 .search-bar form {
     display: flex;
 }
-  
+
 .search-bar input[type="text"] {
     flex: 1;
     padding: 10px;
-    border: none;
+    border: solid 1px transparent;
     border-radius: 5px;
     box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
 }
