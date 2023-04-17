@@ -263,7 +263,7 @@ function placeMarkers(allMarkers, data) {
 		let distance = parking.distance;
 		if(distance<0){
 			distance = "";
-		} else{
+		}else{
 			distance = distance.toFixed(0).toString() + " m";
 		}
 		if (parking.pos.lat != undefined && parking.pos.lng != undefined) {
@@ -332,55 +332,39 @@ function placeMarkers(allMarkers, data) {
             
             marker.addListener("click", () => {
                 _selectedMarker = marker;
-                for (let i = 0; i < allMarkers.length; i++) {
-                    if(allMarkers[i].getPosition() != marker.getPosition()){
-                        if(allMarkers[i].getMap() == null){
-                            allMarkers[i].setMap(map);
-                            infoWindow.close();
-                        }else{
-                            openInfoWindow(infoWindow, prevInfoWindow, marker, map);
-                            allMarkers[i].setMap(null);
-                        }
-                    }
-                }
-                if(_globalDirectionsRenderer.length != 0 || _globalDirectionsRenderer != undefined){
-                    _globalDirectionsRenderer.forEach((renderer) =>{
-                        if(renderer.getMap() == map){
-                            renderer.setMap(null);
-                        }
-                    });
-                }
+                displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map);
             });
 
             infoWindow.addListener('closeclick', ()=>{
                 _selectedMarker = undefined;
-                for (let i = 0; i < allMarkers.length; i++) {
-                    if(allMarkers[i].getPosition() != marker.getPosition()){
-                        if(allMarkers[i].getMap() == null){
-                            allMarkers[i].setMap(map);
-                        }else{
-                            openInfoWindow(infoWindow, prevInfoWindow, marker, map);
-                            allMarkers[i].setMap(null);
-                        }
-                    }
-                }
-                if(_globalDirectionsRenderer.length != 0 || _globalDirectionsRenderer != undefined){
-                    _globalDirectionsRenderer.forEach((renderer) =>{
-                        if(renderer.getMap() == map){
-                            renderer.setMap(null);
-                        }
-                    });
-                }
+                displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map);
             });
 
 			allMarkers.push(marker);
             _globalAllMarkers = allMarkers;
-			return 1;
-		} else {
-			return 0;
 		}
 	});
-	return 0;
+}
+
+function displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map){
+    for (let i = 0; i < allMarkers.length; i++) {
+        if(allMarkers[i].getPosition() != marker.getPosition()){
+            if(allMarkers[i].getMap() == null){
+                allMarkers[i].setMap(map);
+                infoWindow.close();
+            }else{
+                openInfoWindow(infoWindow, prevInfoWindow, marker, map);
+                allMarkers[i].setMap(null);
+            }
+        }
+    }
+    if(_globalDirectionsRenderer.length != 0 || _globalDirectionsRenderer != undefined){
+        _globalDirectionsRenderer.forEach((renderer) =>{
+            if(renderer.getMap() == map){
+                renderer.setMap(null);
+            }
+        });
+    }
 }
 
 const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestination) {
@@ -528,8 +512,6 @@ function addLocationToMap(){
 
 function createMapButton(action, textContent, title, ) {
     const controlButton = document.createElement("button");
-
-    // Set CSS for the control.
     controlButton.style.backgroundColor = "#fff";
     controlButton.style.border = "2px solid #fff";
     controlButton.style.borderRadius = "3px";
@@ -546,8 +528,7 @@ function createMapButton(action, textContent, title, ) {
     controlButton.title = title;
     controlButton.type = "button";
     controlButton.addEventListener("click", action);
-	
-	return controlButton;
+	return (controlButton);
 }
 
 
