@@ -427,8 +427,11 @@ async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestin
             }else{
                 color = '#ED1C24';
             }
-            j = j + i;     
+            j = j + i;  
+            if(_globalRouteDuration[i] != undefined){
+   
             text = text + '<label><mark style="color: white; background-color:'+color+'";>'+'Trajet'+ j + " : </mark></label>" + _globalRouteDuration[i] + '<button onClick="selectedRoute('+i+');">Sélectionner</button><br><br>';
+            }
         }
         _selectedMarkerInfoWindow.setContent(_selectedMarkerAddress + text);
     });
