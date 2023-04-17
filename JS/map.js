@@ -417,7 +417,7 @@ async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestin
             _globalRouteDuration.push(date);
         }
 
-        const infoWindowContent = _selectedMarkerAddress + '<br>' + '<button type="button" class="map-button" class="map-button" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ _selectedMarker.getPosition().lat() +','+_selectedMarker.getPosition().lng()+');">Itinéraire</button>';
+        // const infoWindowContent = _selectedMarkerAddress + '<br>' + '<button type="button" class="map-button" class="map-button" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ _selectedMarker.getPosition().lat() +','+_selectedMarker.getPosition().lng()+');">Itinéraire</button>';
 
         let text = '<br>';
         let j = 1;
@@ -430,7 +430,7 @@ async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestin
             j = j + i;     
             text = text + '<label><mark style="color: white; background-color:'+color+'";>'+'Trajet'+ j + " : </mark></label>" + _globalRouteDuration[i] + '<button onClick="selectedRoute('+i+');">Sélectionner</button><br><br>';
         }
-        _selectedMarkerInfoWindow.setContent(infoWindowContent + text);
+        _selectedMarkerInfoWindow.setContent(_selectedMarkerAddress + text);
     });
 }
 
