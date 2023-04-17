@@ -3,81 +3,81 @@ let year = "2023";
 let button = null;
 const regex = new RegExp('^([0-9]{4})$'); // used to check if the given date (year) is correct
 
+let visitsGraph = null;
+let expensesGraph = null;
+/*
+    Initialize the page userGraphs.php
+*/
+
 function initialize() {
     button = document.getElementById('refreshDate');
     button.addEventListener("click",function(){refreshDate();});
 
-    getExpensesValues().then((result) =>{
+    sendQueryGraph('./PHP/queryMsqliGet.php?d=expenses&y='+year).then((result) =>{
         let expensesValues = result;
-        createExpensesGraph(expensesValues);
+        expensesGraph = createExpensesGraph(expensesValues);
     });
     
-    getVisitsValues().then((result) =>{
+    sendQueryGraph('./PHP/queryMsqliGet.php?d=visits&y='+year).then((result) =>{
         let visitsValues = result;
-        console.log(visitsValues);
-        createVisitsGraph(visitsValues);
+        visitsGraph = createVisitsGraph(visitsValues);
     });
 }
+
+/*
+    Create a graph with Chart.js
+*/
+
+function createGraph(idCanvas, type, yValues, borderColor, bgColor, doFill, title){
+    return new Chart(idCanvas, {
+        type: type,
+        data:{
+            labels:months,
+            datasets: [{
+                data: yValues,
+                borderColor: borderColor,
+                backgroundColor: bgColor,
+                fill: doFill
+            }]
+        },
+        options:{
+            responsive: true,
+            legend: {display: false},
+            title: {
+                display: true,
+                text: title
+            },
+            scales: {
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
+
+/*
+    Create a graph giving the total number of visits per month for the given year
+*/
 
 function createVisitsGraph(visitsValues){
-    var visits = new Chart("visits", {
-        type: "bar",
-        data:{
-            labels:months,
-            datasets: [{
-                data: visitsValues,
-                backgroundColor:"blue"
-            }]
-        },
-        options:{
-            responsive: true,
-            legend: {display: false},
-            title: {
-                display: true,
-                text: 'Nombre de stationnements par mois'
-            },
-            scales: {
-                yAxes: [{
-                    display: true,
-                    ticks: {
-                        beginAtZero: true
-    
-                    }
-                }]
-            }
-        }
-    });
+    return createGraph("visits", "bar", visitsValues, "black", "blue", false, "Nombre de stationnements par mois");
 }
 
+/*
+    Create a graph giving the total number of expenses per month for the given year
+*/
+
 function createExpensesGraph(expensesValues){
-    var expenses = new Chart("expenses", {
-        type: "line",
-        data:{
-            labels:months,
-            datasets: [{
-                borderColor: 'blue',
-                fill:false,
-                data: expensesValues,
-            }]
-        },
-        options:{
-            responsive: true,
-            legend: {display: false},
-            title: {
-                display: true,
-                text: 'Dépenses par mois'
-            },
-            scales: {
-                yAxes: [{
-                    display: true,
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
+    return createGraph("expenses", "line", expensesValues, "blue", "black", false, "Dépenses par mois");
 }
+
+/*
+    Send data to the given url, fetch the result and return it in an array
+*/
 
 async function sendQueryGraph(url){
     let result = [0,0,0,0,0,0,0,0,0,0,0,0];
@@ -100,13 +100,9 @@ async function sendQueryGraph(url){
     });
 }
 
-function getExpensesValues(){
-    return sendQueryGraph('./PHP/queryMsqliGet.php?d=expenses&y='+year);
-}
-
-function getVisitsValues(){
-    return sendQueryGraph('./PHP/queryMsqliGet.php?d=visits&y='+year);
-}
+/*
+    Change the date of the data displayed in the 2 graphs
+*/
 
 function refreshDate(){
     let tempYear = document.getElementById('yearGraph').value;
@@ -114,14 +110,14 @@ function refreshDate(){
     if(regex.test(tempYear) && tempYearInt >= 2000){
         year = tempYear;
 
-        getExpensesValues().then((result) =>{
+        sendQueryGraph('./PHP/queryMsqliGet.php?d=expenses&y='+year).then((result) =>{
             let expensesValues = result;
-            createExpensesGraph(expensesValues);
+            expensesGraph = createExpensesGraph(expensesValues);
         });
         
-        getVisitsValues().then((result) =>{
+        sendQueryGraph('./PHP/queryMsqliGet.php?d=visits&y='+year).then((result) =>{
             let visitsValues = result;
-            createVisitsGraph(visitsValues);
+            visitsGraph = createVisitsGraph(visitsValues);
         });
     } else{
         document.getElementById('yearGraph').value = "2023";

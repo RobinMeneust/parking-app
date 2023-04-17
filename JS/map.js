@@ -55,7 +55,7 @@ function centerMapToUserPos(){
 
 
 /*
-    TODO
+    Delete old markers (parkings and address searched), create the new ones and recenter the map around one of them
 */
 async function onFetchAddMarkers(data, allMarkers, coordAddress, address){
 	if(data.length == 0){
