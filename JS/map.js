@@ -9,7 +9,7 @@ window.initMap = initMap;
 // Global variable for easier access through the application
 let prevInfoWindow = null;
 let _globalAllMarkers = [];
-let _globalUserMarker = [];
+let _globalUserMarker = null;
 let _selectedMarker = undefined;
 let _selectedMarkerInfoWindow = undefined;
 let _selectedMarkerAddress = "undefined";
@@ -82,7 +82,7 @@ async function onFetchAddMarkers(data, allMarkers, coordAddress, address){
 */
 async function searchNearUser(){
 	let allMarkers = [];
-	let userMarker = [];
+	let userMarker = null;
 	let areaParams = "";
 
 	let msgBox = document.getElementById('searchMsgBox');
@@ -97,15 +97,8 @@ async function searchNearUser(){
 	}
 
     // replace the user's marker
-	if(userMarker.length != 0 || userMarker != undefined || _globalUserMarker != undefined || _globalUserMarker.length != 0) {
-		userMarker.pop();
-		_globalUserMarker.pop();
-	}
-
-	userMarker.push(placeUserMarker());
-	if(userMarker != null){
-		_globalUserMarker = userMarker;
-	}
+	userMarker = placeUserMarker();
+	_globalUserMarker = userMarker;
 	
 
 	try{
@@ -125,7 +118,7 @@ async function searchNearUser(){
 */
 async function getSearchFilters() {
 	let allMarkers = [];
-	let userMarker = [];
+	let userMarker = null;
 	
 	//let areaParams = 'area[name="' + selectElement.options[selectElement.selectedIndex].value + '"];';
 	let selectElement = document.getElementById("selectSearchParams");
@@ -147,19 +140,13 @@ async function getSearchFilters() {
 	}
 
 	if(areaParams != "null"){
-		if(userMarker.length != 0 || userMarker != undefined || _globalUserMarker != undefined || _globalUserMarker.length != 0) {
-			userMarker.pop();
-			_globalUserMarker.pop();
-		}
-
 		let msgBox = document.getElementById('searchMsgBox');
 		msgBox.innerHTML="Récupération de la position...";
 		await refreshUserLocation();
 
-		userMarker.push(placeUserMarker());
-		if(userMarker != null){
-			_globalUserMarker = userMarker;
-		}		
+		 // replace the user's marker
+		userMarker = placeUserMarker();
+		_globalUserMarker = userMarker;	
 		
 		try{
 			getParkingsData(userLocation, userLocation, 'area[name="' + areaParams + '"];', searchRadius, nbMaxResults).then((data) =>{
@@ -194,23 +181,17 @@ async function getCoordFromAddress(address){
 */
 async function getParkingsNearAddress(address){
 	let allMarkers = [];
-	let userMarker = [];
+	let userMarker = null;
 	let areaParams = "";
-
-	if(userMarker.length != 0 || userMarker != undefined || _globalUserMarker != undefined || _globalUserMarker.length != 0) {
-		userMarker.pop();
-		_globalUserMarker.pop();
-	}
 
 	let msgBox = document.getElementById('searchMsgBox');
 	msgBox.innerHTML="Récupération de la position...";
 	
 	await refreshUserLocation();
 
-	userMarker.push(placeUserMarker());
-	if(userMarker != null){
-		_globalUserMarker = userMarker;
-	}
+ 	// replace the user's marker
+	userMarker = placeUserMarker();
+	_globalUserMarker = userMarker;
 	
 	if(address == ""){
 		msgBox.innerHTML="";
@@ -349,11 +330,11 @@ function placeMarkers(allMarkers, data) {
 				prevInfoWindow = infoWindow;
                 
                 // add button to interact with the history of parking visited 
-                if(_globalUserMarker[0] == null){
+                if(_globalUserMarker == null){
                     infoWindow.setContent(_selectedMarkerAddress+ '<br>' + '<span class="invalid-box">Position requise pour l\'itinéraire</span> <br> <a href="addToHistory.php" class="map-button">Ajouter</a>');
                 } else{
                     // add another button to join the parking from user's location
-                    infoWindow.setContent(_selectedMarkerAddress + '<br>' + '<button type="button" class="map-button" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button> <br> <a href="addToHistory.php" class="map-button">Ajouter</a>');
+                    infoWindow.setContent(_selectedMarkerAddress + '<br>' + '<button type="button" class="map-button" onClick="goTo('+ _globalUserMarker.getPosition().lat() +','+ _globalUserMarker.getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button> <br> <a href="addToHistory.php" class="map-button">Ajouter</a>');
 				}
 
                 _selectedMarkerInfoWindow = infoWindow;
@@ -444,8 +425,6 @@ async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestin
             _globalRouteDuration.push(date);
         }
 
-        // const infoWindowContent = _selectedMarkerAddress + '<br>' + '<button type="button" class="map-button" class="map-button" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ _selectedMarker.getPosition().lat() +','+_selectedMarker.getPosition().lng()+');">Itinéraire</button>';
-
         let text = '<br>';
         let j = 1;
         for (let i = 0; i < NUMBER_ROUTES; i++) {
@@ -494,6 +473,9 @@ function removeAllMarkers(allMarkers) {
     Place a marker on the user's location
 */
 function placeUserMarker(){
+	if(_globalUserMarker != null){
+		_globalUserMarker.setMap(null);
+	}
 	let icon = {
 		path: "M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z",
 		fillColor: "blue",
@@ -502,7 +484,7 @@ function placeUserMarker(){
 		rotation: 0,
 		scale: 2,
 		anchor: new google.maps.Point(12,12),
-	};	
+	};
     return placeMarker(userLocation, icon, "Ma position actuelle", null);
 }
 
@@ -551,18 +533,14 @@ function placeMarker(posMarker, icon, title, description){
 }
 
 /*
-    Function used by a button on the map to locate the suer's position and center the map on it
+    Function used by a button on the map to locate the user's position and center the map on it
 */
 function addLocationToMap(){
 	refreshUserLocation().then(() =>{
 		if(userLocation.lat != null && userLocation.lng != null){
 			map.setCenter(new google.maps.LatLng(userLocation.lat, userLocation.lng));
 			map.setZoom(15);
-
-			if(_globalUserMarker != undefined || _globalUserMarker.length != 0){
-				_globalUserMarker.pop();
-			}
-			_globalUserMarker.push(placeUserMarker());
+			_globalUserMarker = placeUserMarker();
 		} else {
 			console.error("position is required but could not be fetched");
 			alert("Votre position est requise");
