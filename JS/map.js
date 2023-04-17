@@ -456,10 +456,10 @@ async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestin
             }
             j = j + i;  
             if(_globalRouteDuration[i] != undefined){
-   
-            text = text + '<label><mark style="color: white; background-color:'+color+'";>'+'Trajet'+ j + " : </mark></label>" + _globalRouteDuration[i] + '<button onClick="selectedRoute('+i+');">Sélectionner</button><br><br>';
+            	text = text + '<label><mark style="color: white; background-color:'+color+'";>'+'Trajet'+ j + " : </mark></label>" + _globalRouteDuration[i] + '<button onClick="selectedRoute('+i+');">Sélectionner</button><br>';
             }
         }
+		text += '<br> <a href="addToHistory.php" class="map-button">Ajouter</a>';
         _selectedMarkerInfoWindow.setContent(_selectedMarkerAddress + text);
     });
 }
