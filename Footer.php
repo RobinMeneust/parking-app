@@ -8,26 +8,22 @@
                     <button class="dark-mode" id="moon"><i class="fa-solid fa-moon"></i></button>
                     <button class="light-mode" id="sun hide"><i class="fa-solid fa-sun"></i></button>
                 </div>
+
                 <div class="desc_area">
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo laborum ipsa natus, qui aliquid magnam aut reprehenderit, dolorem quos, debitis nesciunt est placeat asperiores et impedit aliquam consectetur maiores quaerat.</p>
                 </div>
-                <div class="social_media">
-                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#"><i class="fa-brands fa-square-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-square-twitter"></i></a>
-                </div>
             </div>
+
             <div class="service_area">
                 <ul class="service_header">
                     <li class="service_name">A PROPOS</li>
                     <li><a href="#">Données Personnelles</a></li>
-                    <li><a href="#">Mentions Légales</a></li>
+                    <li><a href="./legalNotice.php">Mentions Légales</a></li>
                 </ul>
                 <ul class="service_header">
                     <li class="service_name">AIDE</li>
-                    <li><a href="#">Besoin d'aide</a></li>
-                    <li><a href="#">Contactez-nous</a></li>
+                    <li><a href="./needHelp.php">Besoin d'aide</a></li>
+                    <li><a href="./form.php">Contactez-nous</a></li>
                 </ul>
                 <ul class="service_header_last">
                     <li class="service_name">NOTRE GROUPE</li>
@@ -35,7 +31,9 @@
                 </ul>
             </div>
         </div>
+
         <hr>
+        
         <div class="footer_bottom">
             <div class="copy_right">
                 <i class="fa-solid fa-copyright"></i>

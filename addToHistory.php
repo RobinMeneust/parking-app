@@ -1,6 +1,6 @@
 <?php session_start(); 
 if(!isset($_SESSION['VAR_profil'])){
-	header('location:../Inscription_Connexion.php?message=Veuillez vous connecter');
+	header('location:../registerLogin.php?message=Veuillez vous connecter');
 }
 ?>
 

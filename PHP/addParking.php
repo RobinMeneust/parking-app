@@ -1,5 +1,4 @@
-<?php
-session_start();
+<?php session_start();
 
 // idAddress, name
 if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["i"])){
@@ -63,4 +62,5 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["i"])){
 		mysqli_close($link);
 	}
 }
+
 ?>

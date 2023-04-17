@@ -1,6 +1,4 @@
-<?php
-session_start();
-?>
+<?php session_start(); ?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -19,7 +17,7 @@ session_start();
 		<?php 
 			if (isset($_GET["message"]) && !empty($_GET["message"]) ) {
 				$error_msg = htmlspecialchars($_GET["message"]);
-				include("PHP/error_msg.php");
+				include("./PHP/errorMessage.php");
 			}
 		?>
 
@@ -32,7 +30,7 @@ session_start();
 					<h2>Filtres</h2>
 					<br>
 					<form>
-						<legend>Départements ou arrondissements :</legend>
+						<legend>Départements ou arrondissements</legend>
 						<br>
 						<select id="selectSearchParams">
 							<option disabled selected value="null"></option>

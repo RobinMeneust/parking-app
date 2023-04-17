@@ -97,7 +97,7 @@ expenses = "e"
 */
 
 async function addParkingVisite(idUser, idParking, dateVisited, expenses){
-	let url  = "./PHP/addParkingVisite.php?u="+idUser+"&p="+idParking+"&d="+dateVisited+"&e="+expenses;
+	let url  = "./PHP/addParkingVisited.php?u="+idUser+"&p="+idParking+"&d="+dateVisited+"&e="+expenses;
 	return fetch(url).then(function(response) {
         if(response.status >= 200 && response.status < 300) {
             return response.text();

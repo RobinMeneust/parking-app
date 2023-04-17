@@ -1,5 +1,4 @@
-<?php
-session_start();
+<?php session_start();
 
 $parking = Array();
 $pos = Array();
@@ -23,4 +22,5 @@ $_SESSION["currentParking"] = $parking;
 echo json_encode($_SESSION["currentParking"]);
 
 exit;
+
 ?>

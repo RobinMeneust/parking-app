@@ -1,5 +1,4 @@
-<?php
-session_start();
+<?php session_start();
 
 // houseNumber, street, city, country, postalCode, lat, lng
 if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["h"]) && isset($_GET["s"]) && isset($_GET["i"]) && isset($_GET["o"]) && isset($_GET["p"]) && isset($_GET["a"]) && isset($_GET["n"])){
@@ -46,4 +45,5 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["h"]) && isset($_GET["s"])
 		mysqli_close($link);
 	}
 }
+
 ?>

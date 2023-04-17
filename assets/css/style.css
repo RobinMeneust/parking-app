@@ -4,7 +4,18 @@
 }
 
 .map-button{
-    background-color:#fff; border:2px solid #fff; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,.3); color:rgb(25,25,25); cursor:pointer; font-family:Roboto,Arial,sans-serif;font-size:16px;line-height:38px; margin:8px 0 22px;padding:0 5px;text-align:center;
+    background-color:#fff;
+    border:2px solid #fff;
+    border-radius:3px;
+    box-shadow:0 2px 6px rgba(0,0,0,.3);
+    color:rgb(25,25,25);
+    cursor:pointer;
+    font-family:Roboto,Arial,sans-serif;
+    font-size:16px;
+    line-height:38px;
+    margin:8px 0 22px;
+    padding:0 5px;
+    text-align:center;
 }
 
 .invalid-box{
@@ -177,16 +188,6 @@ footer {
     line-height: 28px;
 }
 
-.social_media a {
-    color: var(--secondary-color);
-    margin-right: 22px;
-    line-height: 24px;
-}
-
-.social_media a:hover {
-    color: var(--secondary-color);
-}
-
 .service_area {
     display: flex;
 }
@@ -260,7 +261,7 @@ hr {
 
 #map {
 	height: 524px;
-	width: 950px;
+	width: 950px;  
 }
 
 .row{
@@ -392,10 +393,16 @@ hr {
     text-align: center;
 }
 
-/* Donn�es Personnelles et Mentions L�gales */
+/* Profil */
+
+
+
+/* Fin Profil */
+
+/* Donnees Personnelles et Mentions Legales */
 
 .helpcontent {
-    padding: 0 30px 100px;
+    padding: 0 30px 0;
     max-width : 1200px;
     margin: 0 auto;
 }
@@ -408,7 +415,7 @@ hr {
     margin: 30px 0 50px;
 }
 
-.helpcontent .h3 .titlehelp {
+.helpcontent .titlehelp {
     color: inherit;
     font-size : 1.5em;
     font-weight: bold;
@@ -420,6 +427,13 @@ hr {
     font-size: 1.8em;
     font-weight: bold;
     margin: 30px 0 20px;
+}
+
+.helpcontent h3 {
+    color: inherit;
+    font-size : 1.5em;
+    font-weight: bold;
+    margin: 20px;
 }
 
 .helpcontent .idz_btn_fix {
@@ -459,7 +473,9 @@ hr {
     text-decoration: underline;
 }
 
-/* Fin Donnees Personnelles */
+/* Fin Donnees Personnelles et Mentions Legales */
+
+
 
 @media screen and (max-width: 768px) {
     .content_footer {

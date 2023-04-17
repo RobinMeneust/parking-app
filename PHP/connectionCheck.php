@@ -1,9 +1,9 @@
-<?php 
-session_start();
+<?php session_start();
+
 // Vérifier que les champs ne sont pas vides. 
 if(!isset($_POST['email']) || empty($_POST['email']) || !isset($_POST['passwd']) || empty($_POST['passwd']) ){
 	// Redirection vers connexion.php
-	header('location:../Inscription_Connexion.php?message=Vous devez remplir les 2 champs pour vous connecter');
+	header('location:../registerLogin.php?message=Vous devez remplir les 2 champs pour vous connecter');
 	exit;
 }
 
@@ -43,15 +43,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 				$_SESSION["VAR_profil"] = $VAR_profil;
 				mysqli_free_result($resultSQL);
 				// Redirection vers la page d'accueil
-				header('location:../index.php?message=Connecté'); //Remplacé index par Profile.php
+				header('location:../index.php?message=Connecté'); //Remplacé index par profile.php
 				exit;
 			}
 		}
 		mysqli_free_result($resultSQL);
-		header('location:../Inscription_Connexion.php?message=Le mail et/ou le mot de passe ne sont pas bons');
+		header('location:../registerLogin.php?message=Le mail et/ou le mot de passe ne sont pas bons');
 		exit;
 	}	
 } 
-
 	
- ?>
+?>

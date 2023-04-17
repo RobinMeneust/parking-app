@@ -1,5 +1,4 @@
-<?php
-session_start();
+<?php session_start();
 
 if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 
@@ -19,7 +18,6 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 	if (!$link) {
 		die("Erreur de connexion à la base de données : " . mysqli_connect_error());
 	}
-	//q=expenses&year=2024'
 
 	$result = array();
 
@@ -46,4 +44,5 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 		}
 	}
 }
+
 ?>
