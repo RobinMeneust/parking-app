@@ -1,3 +1,7 @@
+/*
+	Initialize the forms in index.php (search filters)
+*/
+
 function initializeForms(){
 	let arrondissements = document.getElementById("arrondissementsOptgroup");
 	let departements = document.getElementById("departementsOptgroup");
@@ -17,10 +21,18 @@ function initializeForms(){
 	addOption(departements, "Val-d'Oise", "95 Val-d'Oise");
 }
 
+/*
+	Save the given parking into a session variable
+*/
+
 async function setCurrentParkingInSession(parking){
 	let url  = "./PHP/setCurrentParkingSession.php?lat="+parking.pos.lat+"&lng="+parking.pos.lng+"&name="+parking.name+"&nb="+parking.address.houseNumber+"&street="+parking.address.street+"&city="+parking.address.city+"&country="+parking.address.country+"&postal="+parking.address.postalCode;
 	await fetch(url);
 }
+
+/*
+	Display the selected parking information
+*/
 
 function displaySelectedParking(parking){
 	let details = document.getElementById("searchDetailsSideBar");
@@ -77,6 +89,10 @@ function displaySelectedParking(parking){
 		nbSlotsTd.innerHTML = parking.nbFreeSlots +" / "+ parking.capacity;
 	}
 }
+
+/*
+	Show or hide the left menu (search filters)
+*/
 
 function toggleMenuVisibility(){
 	let element = document.getElementById("sideBarContent");

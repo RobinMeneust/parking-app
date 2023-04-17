@@ -1,3 +1,7 @@
+/*
+	Calculate the distance in meters between two points in polar coordinates by using the Haversine function
+*/
+
 function distMeters(x0, x1){
 	//src : https://en.wikipedia.org/wiki/Haversine_formula
 	const R = 6371e3; // Earth radius
@@ -17,6 +21,10 @@ function distMeters(x0, x1){
 	return 2 * R * Math.asin(Math.sqrt(h));
 }
 
+/*
+	Get the capacity from the given data object
+*/
+
 function getCapacity(data, surface){
 	/*
 	Surface -> capacity : https://www.dimensions.com/element/90-degree-parking-spaces-layouts
@@ -25,16 +33,23 @@ function getCapacity(data, surface){
 	let capacity = {value:0, approx:false};
 
 	if(data.hasOwnProperty('capacity')){
+		// The capacity is in the data given so we can directly use it
 		capacity = parseInt(data.capacity);
 	}else{
+		// The capacity isn't in the data, so we have to calculate it by using the surface
 		capacity = surface * (3/100);
 		capacity = Math.round(capacity);
 	}
+	// If there is an error (surface <= 0 for instance) then 0 is return
 	if(capacity < 0){
 		capacity = 0;
 	}
 	return capacity
 }
+
+/*
+	Get the fee from the given data object
+*/
 
 function getFee(data){
 	if(data.hasOwnProperty('fee')){
@@ -46,6 +61,10 @@ function getFee(data){
 		return -1;
 	}
 }
+
+/*
+	Get the accepted payment methods from the given data object
+*/
 
 function getPaymentMethod(data){
 	let payment = {cash:-1, card:-1};
@@ -83,6 +102,10 @@ function getPaymentMethod(data){
 	return payment.card;
 }
 
+/*
+	Get the address from a position defined by its latitude and longitude, by using Opencagedata's API
+*/
+
 async function getAddressFromPos(pos){
 	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470");
 	const json = await response.json();
@@ -112,6 +135,10 @@ async function getAddressFromPos(pos){
 	return address;
 }
 
+/*
+	Get the surface of the rectangle defined by 2 points defined by their latitude and longitude
+*/
+
 function getSurface(x0,x1){
 	let lowerLeft = x0;
 	let upperLeft = {lat:x1.lat, lng:x0.lng};
@@ -122,6 +149,10 @@ function getSurface(x0,x1){
 	return latLength * lngLength;
 }
 
+/*
+	Get the parking name from the data if it's defined
+*/
+
 function getParkingName(data){
 	if(data.hasOwnProperty('name')){
 		return data.name;
@@ -129,6 +160,10 @@ function getParkingName(data){
 		return "";
 	}
 }
+
+/*
+	Get all of the parkings in the searched area and get or calculate their associated data
+*/
 
 async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxElements){
 	let msgBox = document.getElementById('searchMsgBox');
@@ -237,7 +272,10 @@ async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxE
 	}
 }
 
-// Used to predict the number of free slots
+/*
+	Fetch some activities that can have an impact on the number of available slots in the parking lot
+*/
+
 async function fetchNearbyElements(pos, params, weightValue){
 	url = 'https://overpass-api.de/api/interpreter?data=[out:json];(node'+params+'(around:500,'+pos.lat+','+pos.lng+');way'+params+'(around:500,'+pos.lat+','+pos.lng+');relation'+params+'(around:500,'+pos.lat+','+pos.lng+'););out count;';
 	return fetch(url).then((res) => res.json()).then((out) => {
@@ -246,6 +284,9 @@ async function fetchNearbyElements(pos, params, weightValue){
 	}).catch(error => { throw error });
 }
 
+/*
+	Get the name of the city where is located the given point defined by its latitude and longitude
+*/
 async function getCityName(pos){
 	try{
 		const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470&limit=1")
@@ -260,6 +301,10 @@ async function getCityName(pos){
 	}
 }
 
+/*
+	Get the populatio nof the city where is located the given point defined by its latitude and longitude
+*/
+
 async function getCityPopulation(pos){	
 	try{
 		const city = await getCityName(pos);
@@ -273,7 +318,10 @@ async function getCityPopulation(pos){
 	}
 }
 
-//holidays ratio : 0 means that the date has no influence whereas 1 means that this place is only open during holidays. Values between 0 and 1 are accepted and gives the increase rate depending on if we are during holidays or not
+
+/*
+	Flatten the given data so that it's between 0 and max. And change the curve slope by changing the speed arguments (a higher speed means a faster convergence to max)
+*/
 
 function flatten(x, max, speed) {
 	let newX = x * speed;
@@ -283,6 +331,10 @@ function flatten(x, max, speed) {
 	}
 	return result
 }
+
+/*
+	Get the time period (morning, noon,...) from the given hour of the day
+*/
 
 function getTimePeriod(hour){
 
@@ -323,6 +375,10 @@ function getTimePeriod(hour){
 	}
 }
 
+/*
+	Return true if we are during holidays in France (2023 dates only)
+*/
+
 function isHolidays(date){
 	if((date.month==10 && date.day>=21)
 	|| (date.month==11 && date.day<7)
@@ -339,6 +395,11 @@ function isHolidays(date){
 	return false;
 }
 
+/*
+	Get the weight of an element by using its data. We use the population density, the opening hours and the default weight of the object.
+	The date is also used, for instance during holidays there is more tourists, so touristic activities will get a higher weight
+*/
+
 function getWeight(population, currentDate, holidays_ratio, openingHours, importance){
 	let weight = 1;
 				
@@ -346,6 +407,7 @@ function getWeight(population, currentDate, holidays_ratio, openingHours, import
 		weight+=0.1;
 	}
 
+	//holidays ratio : 0 means that the date has no influence whereas 1 means that this place is only open during holidays. Values between 0 and 1 are accepted and gives the increase rate depending on if we are during holidays or not
 	if(isHolidays(currentDate)){
 		if(holidays_ratio>0.0)
 			weight+=importance*holidays_ratio;
@@ -365,16 +427,23 @@ function getWeight(population, currentDate, holidays_ratio, openingHours, import
 	return weight;
 }
 
+/*
+	Calculate the availability of a parking, which is number between 0 (full) and 1 (empty)
+*/
+
 function getAvailability(data){
 	let availability = 0.0;
+	
+	// for each activity types (shops, ...), we add its associated value (weight * number of occurrences) to the final score (unavailability here)
 	for(e of data){
 		// We flatten x because, for instance, it doesn't make a lot of difference if there are 1 or 3 shops, especially since we don't know how big those shops are, so we want to limit the value between 0 and 10, to avoid getting way too big values
 		availability += e.weight * flatten(e.count, 10, 1);
 	}
 
+	// Flatten the result, so that it stays in [0,1]
 	availability = 1-flatten(availability, 1, 0.1);
 
-	// Adjust values to be more realistic (we rarely have an empty or a completely full parking)
+	// Readjust the values (we rarely have an empty or a completely full parking)
 	if(availability<0.1){
 		availability = 0.1;
 	} else if(availability>0.9){
@@ -383,6 +452,10 @@ function getAvailability(data){
 
 	return availability;
 }
+
+/*
+	Predict the number of available slots in the given parking
+*/
 
 async function getNbOfAvailableSlots(parking){
 	let capacity = parking.capacity;

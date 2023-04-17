@@ -1,5 +1,9 @@
 let currentParking = null;
 
+/*
+	Get the user id of the current connected user from the database
+*/
+
 function getUserId(){
 	let url  = "./PHP/queryMsqliGet.php?d=idUser";
 	return fetch(url).then(function(response) {
@@ -19,6 +23,10 @@ function getUserId(){
 		throw err;
 	});
 }
+
+/*
+	Add the given address in the database if it doesn't exist and return its id
+*/
 /*
 houseNumber "h"
 street = "s"
@@ -28,6 +36,7 @@ postalCode = "p"
 lat = "a"
 lng = "n"
 */
+
 async function addOrGetAddress(houseNumber, street, city, country, postalCode, lat, lng){
 	let url  = "./PHP/addAddress.php?h="+houseNumber+"&s="+street+"&i="+city+"&o="+country+"&p="+postalCode+"&a="+lat+"&n="+lng;
 	return fetch(url).then(function(response) {
@@ -45,6 +54,11 @@ async function addOrGetAddress(houseNumber, street, city, country, postalCode, l
 		throw err;
 	});
 }
+
+
+/*
+	Add the given parking in the database if it doesn't exist and return its id
+*/
 
 /*
 idAddress = "i"/
@@ -70,6 +84,11 @@ async function addOrGetParking(idAddress, parkingName){
 	});
 }
 
+
+/*
+	Add the given parking visite in the database if it doesn't exist and return its id
+*/
+
 /*
 idUser = "u"
 idParking = "p"
@@ -94,6 +113,10 @@ async function addParkingVisite(idUser, idParking, dateVisited, expenses){
     });
 }
 
+/*
+	Get the data about the currently selected parking from the session variable
+*/
+
 async function getCurrentParkingFromSession(){
 	let url  = "./PHP/getCurrentParkingSession.php";
 	let response = await fetch(url);
@@ -101,6 +124,9 @@ async function getCurrentParkingFromSession(){
 	currentParking = json;
 }
 
+/*
+	Add the selected parking visite to the database
+*/
 async function addToHistory(){
 	document.getElementById('infoBox').innerText = "";
 
