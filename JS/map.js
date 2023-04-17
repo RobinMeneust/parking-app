@@ -301,22 +301,7 @@ function placeMarkers(allMarkers, data) {
 				openInfoWindow(infoWindow, prevInfoWindow, marker, map);
 				prevInfoWindow = infoWindow;
 
-                const button = document.createElement("button");
-                button.style.backgroundColor = "#fff";
-                button.style.border = "2px solid #fff";
-                button.style.borderRadius = "3px";
-                button.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
-                button.style.color = "rgb(25,25,25)";
-                button.style.cursor = "pointer";
-                button.style.fontFamily = "Roboto,Arial,sans-serif";
-                button.style.fontSize = "16px";
-                button.style.lineHeight = "38px";
-                button.style.margin = "8px 0 22px";
-                button.style.padding = "0 5px";
-                button.style.textAlign = "center";
-                button.textContent = "Itinéraire";
-                button.title = "Cliquez pour rejoindre le parking.";
-                button.type = "button";
+                const button = createItineraireButton();
                 
                 if(_globalUserMarker[0] == null){
                     infoWindow.setContent(_selectedMarkerAddress+ '<br>' + '<span class="invalid-box">Position requise pour l\'itinéraire</span> <br> <a href="addToHistory.php" class="map-button">Ajouter</a>');
@@ -365,6 +350,27 @@ function displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map){
             }
         });
     }
+}
+
+function createItineraireButton(){
+    const button = document.createElement("button");
+    button.style.backgroundColor = "#fff";
+    button.style.border = "2px solid #fff";
+    button.style.borderRadius = "3px";
+    button.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+    button.style.color = "rgb(25,25,25)";
+    button.style.cursor = "pointer";
+    button.style.fontFamily = "Roboto,Arial,sans-serif";
+    button.style.fontSize = "16px";
+    button.style.lineHeight = "38px";
+    button.style.margin = "8px 0 22px";
+    button.style.padding = "0 5px";
+    button.style.textAlign = "center";
+    button.textContent = "Itinéraire";
+    button.title = "Cliquez pour rejoindre le parking.";
+    button.type = "button";
+
+    return(button);
 }
 
 const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestination) {
