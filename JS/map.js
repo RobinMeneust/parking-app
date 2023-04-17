@@ -1,7 +1,12 @@
+// Maximal number of routes you want to process
 const NUMBER_ROUTES = 2;
 
 let map, buttonPos, buttonSearchParam;
+
+// Initialization of the map in the window
 window.initMap = initMap;
+
+// Global variable for easier access through the application
 let prevInfoWindow = null;
 let _globalAllMarkers = [];
 let _globalUserMarker = [];
@@ -13,11 +18,15 @@ let _globalDirectionsRenderer = [];
 let _globalRouteDuration = [];
 let _globalSelectedRoute = undefined;
 
+// Default value for the search with the API
 let userLocation = {lat:null,lng:null};
 let searchRadius = 1;
 let nbMaxResults = 50;
 
 
+/*
+    Function that the position of user's marker
+*/
 async function refreshUserLocation(){
 	const posPromise = () => new Promise((resolve, error) => navigator.geolocation.getCurrentPosition(resolve, error));
 	try {
@@ -29,6 +38,9 @@ async function refreshUserLocation(){
 	}
 }
 
+/* 
+    Center the map on the position of the user
+*/
 function centerMapToUserPos(){
 	refreshUserLocation().then(() =>{
 		if(userLocation.lat != null && userLocation.lng != null){
@@ -41,6 +53,10 @@ function centerMapToUserPos(){
 	});
 }
 
+
+/*
+    TODO
+*/
 async function onFetchAddMarkers(data, allMarkers, coordAddress, address){
 	if(data.length == 0){
 		alert("Aucun parking n'a été trouvé dans cette zone");
@@ -61,6 +77,9 @@ async function onFetchAddMarkers(data, allMarkers, coordAddress, address){
 	}
 }
 
+/*
+    Research parkings near the user's location
+*/
 async function searchNearUser(){
 	let allMarkers = [];
 	let userMarker = [];
@@ -77,6 +96,7 @@ async function searchNearUser(){
 		return;
 	}
 
+    // replace the user's marker
 	if(userMarker.length != 0 || userMarker != undefined || _globalUserMarker != undefined || _globalUserMarker.length != 0) {
 		userMarker.pop();
 		_globalUserMarker.pop();
@@ -99,6 +119,10 @@ async function searchNearUser(){
 	}
 }
 
+
+/*
+    Research parkings using the user's filter
+*/
 async function getSearchFilters() {
 	let allMarkers = [];
 	let userMarker = [];
@@ -149,6 +173,10 @@ async function getSearchFilters() {
 	}
 }
 
+
+/*
+    Get the coordinates using an address provided by the user
+*/
 async function getCoordFromAddress(address){
 	url = 'https://nominatim.openstreetmap.org/search?q='+address+'&format=json';
 	return fetch(url).then((res) => res.json()).then((out) => {
@@ -160,6 +188,10 @@ async function getCoordFromAddress(address){
 	}).catch(error => { throw error });
 }
 
+
+/*
+    Research parkings around the coordinates of the address provided by the user
+*/
 async function getParkingsNearAddress(address){
 	let allMarkers = [];
 	let userMarker = [];
@@ -199,6 +231,9 @@ async function getParkingsNearAddress(address){
 	});
 }
 
+/*
+    Initialization of the map with the parameters, the events and the buttons
+*/
 function initMap() {
 	map = new google.maps.Map(document.getElementById("map"), {
 		center: {
@@ -241,6 +276,10 @@ function initMap() {
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(topCenterDiv);
 }
 
+
+/*
+    Close the previous information window and open another information window
+*/
 function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 	if(prevInfoWindow != null){
 		prevInfoWindow.close();
@@ -251,14 +290,18 @@ function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 	});
 }
 
-
-
+/*
+    Place every parkings found on the map using markers
+*/
 function placeMarkers(allMarkers, data) {
+    // Disable any direction renderer existing
     if (_globalDirectionsRenderer.length != 0 || _globalDirectionsRenderer != []) {
         for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
             _globalDirectionsRenderer[i].setMap(null);                
         }
     }
+
+    // Looping through the data received from the request
 	data.forEach((parking) => {
 		let distance = parking.distance;
 		if(distance<0){
@@ -267,6 +310,7 @@ function placeMarkers(allMarkers, data) {
 			distance = distance.toFixed(0).toString() + " m";
 		}
 		if (parking.pos.lat != undefined && parking.pos.lng != undefined) {
+            // create a new marker for each parking
 			const marker = new google.maps.Marker({
 				position: {
 					lat: parking.pos.lat,
@@ -275,11 +319,14 @@ function placeMarkers(allMarkers, data) {
 				map,
 				title: distance,
 			});
+            // create an information window for each parking
 			var infoWindow = new google.maps.InfoWindow({
 				content: "",
 				ariaLabel: distance,
 			});
 			marker.setMap(map);
+
+            // when the marker is clicked, show the address found in the information window
 			marker.addListener("click", async function(){
 				let promise = [];
 				if(infoWindow.getContent()== ""){
@@ -301,9 +348,11 @@ function placeMarkers(allMarkers, data) {
 				openInfoWindow(infoWindow, prevInfoWindow, marker, map);
 				prevInfoWindow = infoWindow;
                 
+                // add button to interact with the history of parking visited 
                 if(_globalUserMarker[0] == null){
                     infoWindow.setContent(_selectedMarkerAddress+ '<br>' + '<span class="invalid-box">Position requise pour l\'itinéraire</span> <br> <a href="addToHistory.php" class="map-button">Ajouter</a>');
                 } else{
+                    // add another button to join the parking from user's location
                     infoWindow.setContent(_selectedMarkerAddress + '<br>' + '<button type="button" class="map-button" onClick="goTo('+ _globalUserMarker[0].getPosition().lat() +','+ _globalUserMarker[0].getPosition().lng() +','+ marker.getPosition().lat() +','+marker.getPosition().lng()+');">Itinéraire</button> <br> <a href="addToHistory.php" class="map-button">Ajouter</a>');
 				}
 
@@ -323,12 +372,16 @@ function placeMarkers(allMarkers, data) {
                 displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map);
             });
 
+            // add the markers to an array of markers to keep a trace of it
 			allMarkers.push(marker);
             _globalAllMarkers = allMarkers;
 		}
 	});
 }
 
+/*
+    Display every markers on the map
+*/
 function displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map){
     for (let i = 0; i < allMarkers.length; i++) {
         if(allMarkers[i].getPosition() != marker.getPosition()){
@@ -350,6 +403,9 @@ function displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map){
     }
 }
 
+/*
+    Function that process the duration of the travel and show the route on the map
+*/
 const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestination) {
     const origin = new google.maps.LatLng(latOrigin, lngOrigin);
     const destination = new google.maps.LatLng(latDestination, lngDestination);
@@ -357,6 +413,10 @@ const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestinatio
     calculateAndDisplayRoute(_globalDirectionsService, origin, destination);
 };
 
+
+/*
+    Fetch the duration for a route from the user's location to the parking desired
+*/
 async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestination){
     _globalRouteDuration = [];
     _globalSelectedRoute = undefined;
@@ -404,6 +464,9 @@ async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestin
     });
 }
 
+/*
+    Hide every other routes except the selected one
+*/
 function selectedRoute(index){
     for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
         _globalDirectionsRenderer[i].setMap(map);
@@ -416,6 +479,9 @@ function selectedRoute(index){
     }
 }
 
+/*
+    Remove all markers from the map and in the data
+*/
 function removeAllMarkers(allMarkers) {
 	allMarkers.forEach((marker) => {
 		marker.setMap(null);
@@ -424,7 +490,9 @@ function removeAllMarkers(allMarkers) {
     allMarkers = [];
 }
 
-
+/*
+    Place a marker on the user's location
+*/
 function placeUserMarker(){
 	let icon = {
 		path: "M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z",
@@ -438,6 +506,9 @@ function placeUserMarker(){
     return placeMarker(userLocation, icon, "Ma position actuelle", null);
 }
 
+/*
+    Place a marker(a blue flag) on the address desired
+*/
 function placeMarkerAddress(coordAddress, address){
 	let icon = {
 		path: "M 0 0 V 15 H 0.5 V 0 H 0 M 0.5 1 L 10 4 L 0.5 8",
@@ -452,6 +523,9 @@ function placeMarkerAddress(coordAddress, address){
 	return placeMarker(coordAddress, icon, "Addresse recherchée", address);
 }
 
+/*
+    General function to place a marker at a position desired
+*/
 function placeMarker(posMarker, icon, title, description){
 	if(posMarker.lat == null || posMarker.lng == null){
 		return null;
@@ -476,6 +550,9 @@ function placeMarker(posMarker, icon, title, description){
     return marker;
 }
 
+/*
+    Function used by a button on the map to locate the suer's position and center the map on it
+*/
 function addLocationToMap(){
 	refreshUserLocation().then(() =>{
 		if(userLocation.lat != null && userLocation.lng != null){
@@ -493,7 +570,10 @@ function addLocationToMap(){
 	});
 }
 
-function createMapButton(action, textContent, title, ) {
+/* 
+    General function to create button with 
+*/
+function createMapButton(action, textContent, title) {
     const controlButton = document.createElement("button");
     controlButton.style.backgroundColor = "#fff";
     controlButton.style.border = "2px solid #fff";
@@ -514,10 +594,14 @@ function createMapButton(action, textContent, title, ) {
 	return (controlButton);
 }
 
-
+/*
+    Find multiple routes and show them on the map
+*/
 function calculateAndDisplayRoute(directionsService, origin, destination/*, allMarkers, map*/) {
     let color;
     removeAllDirectionsRenderer();
+
+    // using google direction service to find multiple routes with parameters
     directionsService
       .route({
         origin: origin,
@@ -527,15 +611,19 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
       })
       .then((result) => {
         for(let i = 0; i < NUMBER_ROUTES; i++){
+            // colors to differentiate between the routes
             if(i%2==0){
                 color = '#00458E';
             }else{
                 color = '#ED1C24';
             }
+            // create a new direction renderer of each route found
             let directionsRenderer = new google.maps.DirectionsRenderer({markerOptions:{visible:false}, polylineOptions:{strokeColor: color, strokeWeight: 10}});
             directionsRenderer.setMap(map);
             directionsRenderer.setDirections(result);
             directionsRenderer.setRouteIndex(i);
+
+            // global array to keep a trace of every renderer to be used in the application
             _globalDirectionsRenderer.push(directionsRenderer);
         }
         /*
@@ -569,6 +657,9 @@ function showSteps(directionResult, allMarkers, map) {
   }
 }
 
+/*
+    Remove every directions renderer of the map and in the data
+*/
 function removeAllDirectionsRenderer(){
     for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
         _globalDirectionsRenderer[i].setMap(null);
