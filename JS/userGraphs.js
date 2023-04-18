@@ -13,12 +13,12 @@ function initialize() {
     button = document.getElementById('refreshDate');
     button.addEventListener("click",function(){refreshDate();});
 
-    sendQueryGraph('./PHP/queryMsqliGet.php?d=expenses&y='+year).then((result) =>{
+    sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=expenses&y='+year).then((result) =>{
         let expensesValues = result;
         expensesGraph = createExpensesGraph(expensesValues);
     });
     
-    sendQueryGraph('./PHP/queryMsqliGet.php?d=visits&y='+year).then((result) =>{
+    sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=visits&y='+year).then((result) =>{
         let visitsValues = result;
         visitsGraph = createVisitsGraph(visitsValues);
     });
@@ -110,12 +110,12 @@ function refreshDate(){
     if(regex.test(tempYear) && tempYearInt >= 2000){
         year = tempYear;
 
-        sendQueryGraph('./PHP/queryMsqliGet.php?d=expenses&y='+year).then((result) =>{
+        sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=expenses&y='+year).then((result) =>{
             let expensesValues = result;
             expensesGraph = createExpensesGraph(expensesValues);
         });
         
-        sendQueryGraph('./PHP/queryMsqliGet.php?d=visits&y='+year).then((result) =>{
+        sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=visits&y='+year).then((result) =>{
             let visitsValues = result;
             visitsGraph = createVisitsGraph(visitsValues);
         });
