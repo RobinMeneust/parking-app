@@ -5,7 +5,6 @@
 <html lang="fr">
     <head>
         <title>Formulaire</title>
-        <link rel="stylesheet" type="text/css" href="coucou.css">
         <?php include_once("head.php"); ?>
     </head>
 
@@ -80,7 +79,7 @@ if(gettype($success) == "string" && (strlen($success)>0))
 <body>
 <div class="contact">
 
- <form action="./php/formCheck.php" method="get"><!--pour pouvoir envoyer a formCheck-->
+ <form action="./PHP/formCheck.php" method="get"><!--pour pouvoir envoyer a formCheck-->
 
     <div class="contactez-nous">
  <h1 style="text-align:center">Demande de contact</h1>

@@ -1,19 +1,6 @@
+<?php session_start();
 
-
-<?php session_start(); ?>
-
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <title>Mail</title>
-    </head>
-
-    <body>
-
-</head>
-<?php
-
-$file =fopen("infoContact.json","a+") or die ("Fail");
+$file =fopen("../data/infoContact.json","a+") or die ("Fail");
 
 $Nom =$_GET['Nom'];
 $Prenom =$_GET['Prenom'];
