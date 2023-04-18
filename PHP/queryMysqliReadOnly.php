@@ -46,13 +46,32 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["start"]) && isset($_GET["
             $row = mysqli_fetch_assoc($resultSQL);
             echo $row["visPark"];
         }
-
-    } else if($data == "allExpensesByMonth") {
-		$query = "SELECT YEAR(dateVisited) AS yearVisited, MONTH(dateVisited) AS monthVisited, SUM(expenses) AS expenses FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" AND dateVisited BETWEEN CAST(\"".$start."\" AS DATE) AND CAST(\"".$end."\" AS DATE) GROUP BY YEAR(dateVisited), MONTH(dateVisited);";
-        $result = array();
+	} else if($data == "firstDateWithData") {
+		$query = "SELECT YEAR(dateVisited) AS yearVisited, MONTH(dateVisited) AS monthVisited FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" ORDER BY YEAR(dateVisited), MONTH(dateVisited) ASC LIMIT 1;";
+		
+		if($resultSQL = mysqli_query($link,$query)) {
+            $row = mysqli_fetch_assoc($resultSQL);		
+			return $row;
+        }
+	}else if($data == "allExpensesByMonthMean") {
+		$query = "SELECT MONTH(dateVisited) as monthVisited, AVG(expenses) AS expenses FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" GROUP BY MONTH(dateVisited);";
+        $result = array_fill(1, 12, 0.0);
         if($resultSQL = mysqli_query($link,$query)) {
             while($row = mysqli_fetch_assoc($resultSQL)){
-				array_push($result,$row);
+				$result[$row["monthVisited"]] = floatval(number_format((float) $row["expenses"], 2, '.', '')); // convert string to float with a 0.01 precision
+				
+			}
+			
+			if(!empty($result)){
+				echo json_encode($result);
+			}
+        }
+	} else if($data == "allExpensesByMonthInRange") {
+		$query = "SELECT MONTH(dateVisited) AS monthVisited, SUM(expenses) AS expenses FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" AND dateVisited BETWEEN STR_TO_DATE(\"".$start."\", \"%Y-%m-%d\") AND STR_TO_DATE(\"".$end."\", \"%Y-%m-%d\") GROUP BY MONTH(dateVisited) ORDER BY monthVisited ASC;";
+		$result = array();
+        if($resultSQL = mysqli_query($link,$query)) {
+			while($row = mysqli_fetch_assoc($resultSQL)){
+				array_push($result, floatval(number_format((float) $row["expenses"], 2, '.', ''))); // convert string to float with a 0.01 precision
 			}
 			
 			if(!empty($result)){
