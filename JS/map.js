@@ -17,6 +17,7 @@ let _globalDirectionsService = undefined;
 let _globalDirectionsRenderer = [];
 let _globalRouteDuration = [];
 let _globalSelectedRoute = undefined;
+let _globalIndexSelectedDirection = undefined;
 
 // Default value for the search with the API
 let userLocation = {lat:null,lng:null};
@@ -447,6 +448,7 @@ async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestin
     Hide every other routes except the selected one
 */
 function selectedRoute(index){
+    _globalIndexSelectedDirection = index;
     for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
         _globalDirectionsRenderer[i].setMap(map);
     }
@@ -588,7 +590,7 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
         provideRouteAlternatives: true,
       })
       .then((result) => {
-        for(let i = 0; i < NUMBER_ROUTES; i++){
+        for(let i = 0; i < _globalRouteDuration.length; i++){
             // colors to differentiate between the routes
             if(i%2==0){
                 color = '#00458E';
