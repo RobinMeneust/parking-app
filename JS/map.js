@@ -387,27 +387,12 @@ function displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map){
 /*
     Function that process the duration of the travel and show the route on the map
 */
-const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestination) {
+function goTo (latOrigin, lngOrigin, latDestination, lngDestination) {
     const origin = new google.maps.LatLng(latOrigin, lngOrigin);
     const destination = new google.maps.LatLng(latDestination, lngDestination);
     calculateAndDisplayRoute(_globalDirectionsService, origin, destination);
 };
 
-/*
-    Hide every other routes except the selected one
-*/
-function selectedRoute(index){
-    _globalIndexSelectedDirection = index;
-    for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
-        _globalDirectionsRenderer[i].setMap(map);
-    }
-    _globalSelectedRoute = _globalDirectionsRenderer[index];
-    for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
-        if(_globalDirectionsRenderer[i] != _globalSelectedRoute){
-            _globalDirectionsRenderer[i].setMap(null);
-        }
-    }
-}
 
 /*
     Remove all markers from the map and in the data
@@ -570,6 +555,9 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
       });
 }
 
+/*
+    Create selection button to select a route to follow
+*/
 function routesSelectionButton(directionResult){
     let text = '<br>';
 
@@ -590,6 +578,21 @@ function routesSelectionButton(directionResult){
     _selectedMarkerInfoWindow.setContent(_selectedMarkerAddress + text);
 }
 
+/*
+    Hide every other routes except the selected one
+*/
+function selectedRoute(index){
+    _globalIndexSelectedDirection = index;
+    for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
+        _globalDirectionsRenderer[i].setMap(map);
+    }
+    _globalSelectedRoute = _globalDirectionsRenderer[index];
+    for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
+        if(_globalDirectionsRenderer[i] != _globalSelectedRoute){
+            _globalDirectionsRenderer[i].setMap(null);
+        }
+    }
+}
 
 function showSteps(directionResult, allMarkers, map) {
     const myRoute = directionResult.routes[0].legs[0];
