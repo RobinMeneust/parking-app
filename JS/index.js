@@ -100,3 +100,20 @@ function toggleMenuVisibility(){
 	element.classList.toggle("visible");
 	element.classList.toggle("hidden");
 }
+
+function displayRouteInstructions(table){
+    let instructionTable = document.getElementsByClassName('instruction');
+
+    for (let i = 0; i < table.length; i++) {
+        let tr = document.createElement('tr');
+        let thInstruction = document.createElement('th');
+        let thDistance = document.createElement('th');
+
+        thInstruction.innerHTML = table[i].instruction;
+        thDistance.innerHTML = table[i].distance;
+
+        tr.appendChild(thInstruction);
+        tr.appendChild(thDistance);
+        instructionTable[0].appendChild(tr);
+    }
+}

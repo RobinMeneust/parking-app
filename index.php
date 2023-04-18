@@ -55,7 +55,7 @@
 			<div class="row">
 				<div class="column" id="map"></div>
 				<span id="searchMsgBox"></span>
-				<div class="column" id="searchDetailsSideBar">				
+				<div class="row" id="searchDetailsSideBar">				
 					<h2>Détails du parking sélectionné</h2>
 					<table id="selectedParkingTable">
 						<tr>
@@ -71,6 +71,28 @@
 							<td id="paymentSelectedParking" data-label="Paiement"></td>
 						</tr>
 					</table>
+                    
+
+                    <table class="row" cellspacing="0" cellpadding="0" border="0" width="325">
+                        <tr>
+                            <td>
+                            <table cellspacing="0" cellpadding="1" border="1" width="300" >
+                                <tr>
+                                    <th>Instruction</th>
+                                    <th>Distance</th>
+                                </tr>
+                            </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <div style="width:320px; height:300px; overflow:auto;">
+                                <table class="instruction" cellspacing="0" cellpadding="1" border="1" width="300" >
+                                </table>  
+                            </div>
+                            </td>
+                        </tr>
+                    </table>
 				</div>
 			</div>
 		</div>

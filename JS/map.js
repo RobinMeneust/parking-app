@@ -16,7 +16,7 @@ let _selectedMarkerAddress = "undefined";
 let _globalDirectionsService = undefined;
 let _globalDirectionsRenderer = [];
 let _globalSelectedRoute = undefined;
-let _globalIndexSelectedDirection = undefined;
+let _globalDirectionsResult = undefined;
 
 // Default value for the search with the API
 let userLocation = {lat:null,lng:null};
@@ -540,6 +540,7 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
 
             // global array to keep a trace of every renderer to be used in the application
             _globalDirectionsRenderer.push(directionsRenderer);
+            _globalDirectionsResult = result;
         }
 
         routesSelectionButton(result);
@@ -582,7 +583,6 @@ function routesSelectionButton(directionResult){
     Hide every other routes except the selected one
 */
 function selectedRoute(index){
-    _globalIndexSelectedDirection = index;
     for (let i = 0; i < _globalDirectionsRenderer.length; i++) {
         _globalDirectionsRenderer[i].setMap(map);
     }
@@ -592,6 +592,19 @@ function selectedRoute(index){
             _globalDirectionsRenderer[i].setMap(null);
         }
     }
+    stepsSelectedRoute(index);
+}
+
+function stepsSelectedRoute(routeIndex){
+    let tableInstructionDuration = [];
+
+    let route = _globalDirectionsResult.routes[routeIndex];
+    for (let i = 0; i < route.legs[0].steps.length; i++) {
+        let instruction = route.legs[0].steps[i].instructions;
+        let distance =  route.legs[0].steps[i].distance.text;
+        tableInstructionDuration.push({instruction, distance});
+    }
+    displayRouteInstructions(tableInstructionDuration);
 }
 
 function showSteps(directionResult, allMarkers, map) {
