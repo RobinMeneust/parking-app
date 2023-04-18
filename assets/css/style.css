@@ -286,9 +286,10 @@ hr {
 
 
 .menuButton{
+    text-align: center;
     border-radius: 100%;
-    border:#e94560 solid 1px;
-    color:white;
+    border:black solid 1px;
+    color: black;
     background-color: rgba(0, 0, 0, 0);
     width: 30px;
     height: 30px;
@@ -299,17 +300,18 @@ hr {
 }
 
 .menuButton:hover{
-    border:#e94560 solid 1px;
-    color:#e94560;
+    border: green solid 1px;
+    color: green;
     background-color: rgba(53, 53, 53, 0);
-    width: 32px;
-    height: 32px;
+    /*width: 32px;
+    height: 32px;*/
+    font-weight: bold;
     transition: all 0.2s;
 	cursor:pointer;
 }
 
 .horizontalMenu {
-	background-color: #22202f;
+	background-color: white;
 	height: 65px;
 	border-radius: 15px;
 	width: 350px;
@@ -380,6 +382,7 @@ hr {
 }
 
 .graphsContainer{
+    display: flexbox;
 	width: 800px;
 	margin: auto;
 }
@@ -395,7 +398,103 @@ hr {
 
 /* Profil */
 
+.navProfile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+}
 
+.navProfileTime {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+}
+
+#profileTitle {
+    text-decoration-line: underline;
+}
+
+#signOutProfile:hover {
+    opacity: 0.5;
+}
+
+#profileTable {
+    display: flex;
+    width: 100%;
+    margin-top: 5%;
+    border-style: inset;
+}
+
+#profileTable tbody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#profileTable tbody tr {
+    display: flex;
+    justify-content: space-between;
+    margin: 1%;
+    align-items: center;
+}
+
+#profileTable tbody tr th {
+    display: flex;
+    width: 33%;
+    align-items: center;
+    justify-content: center;
+    padding: auto;
+}
+
+#profileTableRowData {
+    display: flex;
+    justify-content: space-between;
+    margin: 1%;
+    align-items: center;
+}
+
+#profileTableRowData td {
+    display: flex;
+    width: 33%;
+    align-items: center;
+    justify-content: center;
+    padding: auto;
+}
+
+#profileTableLink {
+    display: flex;
+    justify-content: space-between;
+    margin: 1%;
+    align-items: center;
+}
+
+#profileTableLink td {
+    display: flex;
+    width: 33%;
+    align-items: center;
+    justify-content: center;
+    padding: auto;
+    text-decoration-line: underline;
+    color: black;
+    font-weight: bold;
+}
+
+#profileTableLink td a {
+    color: black;
+}
+
+#linkDetailledProfile {
+    display: flex;
+    width: 100%;
+    padding: 1% 0% 0% 0%;
+    justify-content: right;
+}
+
+#linkDetailledProfile a {
+    color: black;
+    text-decoration-line: underline;
+    font-weight: bold;
+}
 
 /* Fin Profil */
 

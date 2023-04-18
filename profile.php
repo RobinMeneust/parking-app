@@ -20,20 +20,20 @@ if(!isset($_SESSION['VAR_profil'])){
         <div class="content">
             <div class="navProfile">
                 <div class="navProfileTime">
-                    <input id="yearProfile" name="yearProfile" style="text-align:center;" class="menuButton rectangular" type="number" value="2023" min="1900" max="2023">
-                    <button id="refreshDateProfile" style="text-align:center;" class="menuButton rectangular">Valider</button>
+                    <input id="yearProfile" name="yearProfile" class="menuButton rectangular" type="number" value="2023" min="1900" max="2023">
+                    <button id="refreshDateProfile" class="menuButton rectangular">Valider</button>
                 </div>
                 <h1 id="profileTitle">HISTORIQUE</h1>
                 <form action="PHP/signOut.php" methode="POST">
-                    <input type="submit" name="deconnecte" value="Se deconnecter" id="profileLink"/> 
+                    <input type="submit" name="deconnecte" value="Se deconnecter" id="signOutProfile"/> 
                 </form>
             </div>
             
             <table id="profileTable">
                 <tr>
-                    <th>VOUS AVEZ DEPENSE AU TOTAL</th>
-                    <th>VOTRE PARKING FAVORI</th>
-                    <th>VOUS VOUS ETES GARE</th>
+                    <th>DEPENSES TOTALES</th>
+                    <th>PARKING FAVORI</th>
+                    <th>NOMBRE DE STATIONNEMENTS</th>
                 </tr>
                 <tr id="profileTableRowData">
                     <td id="expensesProfileTable"></td>
@@ -47,7 +47,7 @@ if(!isset($_SESSION['VAR_profil'])){
                 </tr>
 			</table>
 
-            <div class="footerProfile">
+            <div id="linkDetailledProfile">
                 <!--Mettre le lien de la page-->
                 <a href="#">HISTORIQUE DETAILLE</a>
             </div>
