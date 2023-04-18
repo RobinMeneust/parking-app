@@ -6,7 +6,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 		exit;
 	}
 
-	// Connexion à la base de données MySQL
+	// Connect to database
 	$host = 'db';
 	$user = 'MYSQL_USER';
 	$pass = 'MYSQL_ROOT_PASSWORD';
@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 
 	$link = mysqli_connect($host,'root', $pass, $database);
 
-	// Vérification de la connexion
+	// Check connection
 	if (!$link) {
 		die("Erreur de connexion à la base de données : " . mysqli_connect_error());
 	}

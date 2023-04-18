@@ -47,14 +47,16 @@ CREATE TABLE IF NOT EXISTS ParkingVisite(
 INSERT INTO Addresses VALUES(NULL,'12 bis','rue du test', 'VilleTest', 'France', 99999, 0.0, 0.0);
 INSERT INTO Addresses VALUES(NULL,'145','avenue test', 'VilleJS', 'France', 00000, 1.0, -1.0);
 
-INSERT INTO Users VALUES(NULL,"adresseDeTest@test.fr", 'Meneust', 'Robin', '023gf46dfs41fgf54f_#(à)');
+INSERT INTO Users VALUES(NULL,"a@a.fr", 'Meneust', 'Robin', '$2y$10$vHaaNO6oH26q62ZWjv/5NedtNvq9ydh1mctHvq/P27UzZlsTW3Y46');
 
 INSERT INTO Parking VALUES(NULL, 1, 'Parking du port');
 INSERT INTO Parking VALUES(NULL, 1, 'Parking souterrain');
 INSERT INTO Parking VALUES(NULL, 2, NULL);
 
 INSERT INTO ParkingVisite VALUES(NULL,1, 1, '2023-04-10', 7.0);
+INSERT INTO ParkingVisite VALUES(NULL,1, 1, '2023-04-10', 1.5);
+INSERT INTO ParkingVisite VALUES(NULL,1, 3, '2023-04-01', 5.0);
+INSERT INTO ParkingVisite VALUES(NULL,1, 2, '2023-03-15', 8.0);
 INSERT INTO ParkingVisite VALUES(NULL,1, 1, '2018-09-24', 7.0);
 INSERT INTO ParkingVisite VALUES(NULL,1, 1, '2018-09-25', 7.0);
 INSERT INTO ParkingVisite VALUES(NULL,1, 2, '2019-09-24', 0.0);
-INSERT INTO ParkingVisite VALUES(NULL,1, 3, '2023-04-01', 5.0);

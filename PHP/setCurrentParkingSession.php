@@ -1,8 +1,8 @@
 <?php session_start();
 
-$parking = Array();
-$pos = Array();
-$address = Array();
+$parking = array();
+$pos = array();
+$address = array();
 
 $pos["lat"] = $_GET["lat"];
 $pos["lng"] = $_GET["lng"];

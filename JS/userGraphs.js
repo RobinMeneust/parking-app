@@ -89,7 +89,7 @@ async function sendQueryGraph(url){
         throw new Error(response.statusText);
     })
     .then(function(response) {
-        if(response == "0"){
+        if(response == ""){
             alert("Vous n'êtes pas connecté");
         } else{
             for(let i=0; i<response.length; i++){

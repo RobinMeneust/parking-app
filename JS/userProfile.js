@@ -12,7 +12,7 @@ async function getDataProfile(startDate, endDate, dataProfile) {
         throw new Error(response.statusText);
     })
     .then(function(response) {
-        if(response == "0"){
+        if(response == ""){
             alert("Vous n'êtes pas connecté !");
         } else {
             return response;

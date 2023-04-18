@@ -12,10 +12,10 @@ if(!isset($_SESSION['VAR_profil'])){
 	<title>Détails Profil</title>
 	<?php include_once("head.php"); ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-	<script src="JS/userGraphs.js"></script>
+	<script src="JS/predictExpenses.js"></script>
 </head>
 
-<body class="light" onload="initialize()">
+<body class="light" onload="predict()">
 	<?php include_once("Header.php"); ?>
 
 	<div class="content">

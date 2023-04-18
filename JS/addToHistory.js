@@ -13,7 +13,7 @@ function getUserId(){
         throw new Error(response.statusText);
     })
     .then(function(response) {
-        if(response == "0"){
+        if(response == ""){
             alert("Vous n'êtes pas connecté");
 			throw new Error("Connection required");
         } else{

@@ -1,10 +1,10 @@
 <?php session_start();
 
-$VAR_profil = Array();
+$VAR_profil = array();
 
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 
-    // Connexion à la base de données MySQL
+    // Connect to database
     $host = 'db';
     $user = 'MYSQL_USER';
     $pass = 'MYSQL_ROOT_PASSWORD';
@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
     
     $link = mysqli_connect($host,'root', $pass, $database);
     
-    // Vérification de la connexion
+    // Check connection
     if (!$link) {
         die("Erreur de connexion à la base de données : " . mysqli_connect_error());
     }

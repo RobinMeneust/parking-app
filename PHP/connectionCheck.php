@@ -10,7 +10,7 @@ if(!isset($_POST['email']) || empty($_POST['email']) || !isset($_POST['passwd'])
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 
 	
-	// Connexion à la base de données MySQL
+	// Connect to database
 	$host = 'db';
 	$user = 'MYSQL_USER';
 	$pass = 'MYSQL_ROOT_PASSWORD';
@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 
 	$link = mysqli_connect($host,'root', $pass, $database);
 
-	// Vérification de la connexion
+	// Check connection
 	if (!$link) {
 		die("Erreur de connexion à la base de données : " . mysqli_connect_error());
 	}
@@ -33,7 +33,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 	if($resultSQL = mysqli_query($link,"SELECT lastName, firstName, passwd, email FROM Users;")) {
 		while($tab = mysqli_fetch_assoc($resultSQL)){
 			if($identifiant == $tab["email"] &&  password_verify($passwd, $tab["passwd"])) {
-				$VAR_profil = Array();
+				$VAR_profil = array();
 				// Remplir les informations de la session
 				$VAR_profil['lastName'] = $tab["lastName"];
 				$VAR_profil['firstName'] = $tab["firstName"];
