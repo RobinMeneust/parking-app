@@ -104,6 +104,7 @@ span {
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: transform 0.8s ease-in;
+    cursor: pointer;
 }
 
 .checkmark {
@@ -233,11 +234,23 @@ p {
 .label {
     position: absolute;
     left: 10px;
-    top: 24px;
+    top: 3px;
     transition: all 0.2s;
     padding: 0 2px;
     z-index: 1;
     color: #b3b3b3;
+    font-size: 14px;
+}
+
+.label::before{
+    content: "";
+    height: 15px;
+    background-color: white;
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 100%;
+    z-index: -1;
 }
 
 .text-input {
@@ -262,17 +275,6 @@ textarea::placeholder {
     color: #b3b3b3;
 }
 
-.label::before{
-    content: "";
-    height: 15px;
-    background-color: white;
-    position: absolute;
-    left: 0;
-    top: 5px;
-    width: 100%;
-    z-index: -1;
-}
-
 .text-input:focus {
     border: 2px solid #fd7f0a;
 }
@@ -280,13 +282,6 @@ textarea::placeholder {
 .text-input:focus + .label {
     top: -4px;
     color: #fd7f0a;
-    font-size: 14px;
-}
-
-.text-input:focus+label,
-.text-input:valid+label{
-    top: -4px;
-    color: grey;
     font-size: 14px;
 }
 

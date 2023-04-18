@@ -45,15 +45,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
     }
     $VAR_profil["email"] = $_SESSION["email"];
     
-    if(isset($_POST["postalCode"]) && !empty($_POST["postalCode"])){
-        if(preg_match("/^[0-9][0-9]*$/", $_POST["postalCode"])) {
-            $_SESSION["postalCode"] = $_POST["postalCode"];
-        } else {
-            $_SESSION["postalCode"] = "error"; 
-        }
-        $VAR_profil["postalCode"] = $_SESSION["postalCode"];
-    }
-    
     if(!isset($_POST["valid_conditions"]) || empty($_POST["valid_conditions"]) || $_POST["valid_conditions"] != "on") {
         $_SESSION["valid_conditions"] = "error"; 
         $VAR_profil["valid_conditions"] = $_SESSION["valid_conditions"];

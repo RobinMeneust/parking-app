@@ -52,17 +52,6 @@
                             <label for="mdp" class="label">Mot de passe</label>
                         </div>
 
-                        <div class="input-container">
-                        <textarea name="adresse" class="text-input" rows="1" cols="26" placeholder=" Adresse" required><?= isset($_SESSION["VAR_profil"]["adresse"]) && $_SESSION["VAR_profil"]["adresse"] != "error" ? $_SESSION["VAR_profil"]["adresse"] : "" ;?></textarea>
-                            <label for="adresse" class="label">Adresse</label>
-                        </div>
-
-
-                        <div class="input-container">
-                            <input id="codePostal" type="text" name="postalCode" class="text-input" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["postalCode"]) && $_SESSION["VAR_profil"]["postalCode"] != "error" ? $_SESSION["VAR_profil"]["postalCode"] : "";?>" required >
-                            <label  id="label_CodePostal" for="code_postal" class="label">Code Postal</label>
-                        </div>
-
                         <input type="checkbox" name="valid_conditions" required>
                         <span class="checkmark">Agreed to terms and conditions</span>
                         <input type="submit"  name="submit" value="Register" class="btn">
@@ -72,17 +61,12 @@
                 <div class="form-container sign-in-container">
                     <form action="./PHP/connectionCheck.php" method="POST" class="form"> 
                         <h1>Se connecter</h1>
-                        <div class="social-container">
-                            <a href="#" class="social"><i class="fa-brands fa-google-plus-g fa-bounce"></i></a>
-                            <a href="#" class="social"><i class="fa-brands fa-facebook-f fa-bounce"></i></a>
-                        </div>
-                        <span>Ou utilisez votre compte pour vous inscrire</span>
                         <div class="input-container">
                             <input type="email" name="email" class="text-input"id="mail" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["email"]) && $_SESSION["VAR_profil"]["email"] != "error" ? $_SESSION["VAR_profil"]["email"] : "";?>" required >
                             <label for="email" class="label">adresse-mail</label>
                         </div>
                         <div class="input-container">
-                            <input type="password" name="passwd" class="text-input"id="mdp" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["passwd"]) && $_SESSION["VAR_profil"]["passwd"] != "error" ? $_SESSION["VAR_profil"]["passwd"] : "";?>"  required>
+                            <input type="password" name="passwd" class="text-input"id="mdp" placeholder="" value=""  required>
                             <label for="passwd" class="label">Mot de passe</label>
                         </div>
                         <input type="submit"  name="submit" value="Se connecter" class="btn">
