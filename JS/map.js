@@ -15,7 +15,6 @@ let _selectedMarkerInfoWindow = undefined;
 let _selectedMarkerAddress = "undefined";
 let _globalDirectionsService = undefined;
 let _globalDirectionsRenderer = [];
-let _globalRouteDuration = [];
 let _globalSelectedRoute = undefined;
 let _globalIndexSelectedDirection = undefined;
 
@@ -391,58 +390,8 @@ function displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map){
 const goTo = async function (latOrigin, lngOrigin, latDestination, lngDestination) {
     const origin = new google.maps.LatLng(latOrigin, lngOrigin);
     const destination = new google.maps.LatLng(latDestination, lngDestination);
-    processTravelTime(latOrigin, lngOrigin, latDestination, lngDestination);
     calculateAndDisplayRoute(_globalDirectionsService, origin, destination);
 };
-
-
-/*
-    Fetch the duration for a route from the user's location to the parking desired
-*/
-async function processTravelTime(latOrigin, lngOrigin, latDestination, lngDestination){
-    _globalRouteDuration = [];
-    _globalSelectedRoute = undefined;
-
-    let headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    headers.append("X-Goog-Api-Key", "AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M");
-    headers.append("X-Goog-FieldMask", "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline");
-
-    let myRequest = { method: 'POST',
-    headers: headers,
-    body: JSON.stringify({origin:{location:{latLng:{latitude: latOrigin,longitude: lngOrigin}}},destination:{location:{latLng:{latitude: latDestination,longitude: lngDestination}}},travelMode: "DRIVE",computeAlternativeRoutes: true,languageCode: "en-US",units: "METRIC"}),
-    };
-
-    const response = await fetch("https://routes.googleapis.com/directions/v2:computeRoutes", myRequest);
-    const jsonResponse = response.json();
-    jsonResponse.then((out) => {
-        if(out.routes.length > 1 ){
-            for (let i = 0; i < NUMBER_ROUTES; i++) {
-                const date = new Date(parseInt(out.routes[i].duration) * 1000).toISOString().substring(11, 16);
-                _globalRouteDuration.push(date);
-            }
-        }else{
-            const date = new Date(parseInt(out.routes[0].duration) * 1000).toISOString().substring(11, 16);
-            _globalRouteDuration.push(date);
-        }
-
-        let text = '<br>';
-        let j = 1;
-        for (let i = 0; i < NUMBER_ROUTES; i++) {
-            if(i%2==0){
-                color = '#00458E';
-            }else{
-                color = '#ED1C24';
-            }
-            j = j + i;  
-            if(_globalRouteDuration[i] != undefined){
-            	text = text + '<label><mark style="color: white; background-color:'+color+'";>'+'Trajet'+ j + " : </mark></label>" + _globalRouteDuration[i] + '<button onClick="selectedRoute('+i+');">Sélectionner</button><br>';
-            }
-        }
-		text += '<br> <a href="addToHistory.php" class="map-button">Ajouter</a>';
-        _selectedMarkerInfoWindow.setContent(_selectedMarkerAddress + text);
-    });
-}
 
 /*
     Hide every other routes except the selected one
@@ -588,9 +537,10 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
         destination: destination,
         travelMode: google.maps.TravelMode.DRIVING,
         provideRouteAlternatives: true,
+        language: "fr-FR",
       })
       .then((result) => {
-        for(let i = 0; i < _globalRouteDuration.length; i++){
+        for(let i = 0; i < result.routes.length && i < 2; i++){
             // colors to differentiate between the routes
             if(i%2==0){
                 color = '#00458E';
@@ -606,6 +556,9 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
             // global array to keep a trace of every renderer to be used in the application
             _globalDirectionsRenderer.push(directionsRenderer);
         }
+
+        routesSelectionButton(result);
+
         /*
         document.getElementById("warnings-panel").innerHTML =
           "<b>" + result.routes[0].warnings + "</b>";
@@ -615,6 +568,26 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
       .catch((e) => {
         window.alert("Directions request failed due to " + e);
       });
+}
+
+function routesSelectionButton(directionResult){
+    let text = '<br>';
+
+    for (let i = 0; i < directionResult.routes.length && i < 2; i++) {
+        let route = directionResult.routes[i];
+        let legs = route.legs[0];
+
+        let j = 1;
+        if(i%2==0){
+            color = '#00458E';
+        }else{
+            color = '#ED1C24';
+        }
+        j = j + i;  
+        text = text + '<label><mark style="color: white; background-color:'+color+'";>'+'Trajet'+ j + " : </mark></label>" + legs.duration.text + '<button onClick="selectedRoute('+i+');">Sélectionner</button><br>';
+    }
+    text += '<br> <a href="addToHistory.php" class="map-button">Ajouter</a>';
+    _selectedMarkerInfoWindow.setContent(_selectedMarkerAddress + text);
 }
 
 
