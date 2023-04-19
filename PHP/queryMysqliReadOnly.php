@@ -67,11 +67,28 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["start"]) && isset($_GET["
 			}
         }
 	} else if($data == "allExpensesByMonthInRange") {
-		$query = "SELECT MONTH(dateVisited) AS monthVisited, SUM(expenses) AS expenses FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" AND dateVisited BETWEEN STR_TO_DATE(\"".$start."\", \"%Y-%m-%d\") AND STR_TO_DATE(\"".$end."\", \"%Y-%m-%d\") GROUP BY MONTH(dateVisited) ORDER BY monthVisited ASC;";
-		$result = array();
+		$query = "SELECT MONTH(dateVisited) AS monthVisited, COALESCE(SUM(expenses),0) AS expenses FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" AND dateVisited BETWEEN STR_TO_DATE(\"".$start."\", \"%Y-%m-%d\") AND STR_TO_DATE(\"".$end."\", \"%Y-%m-%d\") GROUP BY MONTH(dateVisited) ORDER BY monthVisited ASC;";
         if($resultSQL = mysqli_query($link,$query)) {
+			$startMonth = intval(idate("n", strtotime($start)));
+			$startYear = intval(idate("y", strtotime($start)));
+			$endMonth = intval(idate("n", strtotime($end)));
+			$endYear = intval(idate("y", strtotime($end)));
+			$sizeResult = 0;
+			if($endYear == $startYear){
+				$sizeResult = $endMonth - $startMonth;
+			} else {
+				$sizeResult += 12 * ($endYear - $startYear - 2);
+				$sizeResult += $endMonth;
+			}
+
+			if($sizeResult == 0){
+				exit;
+			}
+			$result = array_fill(0,$sizeResult, 0.0);
+			$i = 0;
 			while($row = mysqli_fetch_assoc($resultSQL)){
-				array_push($result, floatval(number_format((float) $row["expenses"], 2, '.', ''))); // convert string to float with a 0.01 precision
+				$result[$i] = floatval(number_format((float) $row["expenses"], 2, '.', '')); // convert string to float with a 0.01 precision
+				$i++;
 			}
 			
 			if(!empty($result)){

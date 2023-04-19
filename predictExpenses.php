@@ -22,11 +22,10 @@ if(!isset($_SESSION['VAR_profil'])){
 		<!-- <div class="horizontalMenu">
 			<input id="yearGraph" name="yearGraph" style="text-align:center;" class="menuButton rectangular" type="number" value="2023" min="1900" max="2050">
 			<button id="refreshDate" style="text-align:center;" class="menuButton rectangular">Valider</button>
-		</div>
+		</div>-->
 		<div class="graphsContainer">
-			<canvas id="visits"></canvas>
-			<canvas id="expenses"></canvas>
-		</div> -->
+			<canvas id="expensesPredict"></canvas>
+		</div>
 	</div>
 
 	<?php include_once("Footer.php"); ?>
