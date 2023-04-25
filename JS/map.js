@@ -229,6 +229,8 @@ function initMap() {
             for (let i = 0; i < _globalAllMarkers.length; i++) {
                 if(_globalAllMarkers[i].getMap() == null && _globalAllMarkers[i] != _selectedMarker){
                     _globalAllMarkers[i].setMap(map);
+                    removeInstructions();
+                    hideInstructions();
                 }
             }
         }
@@ -264,6 +266,8 @@ function initMap() {
 function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 	if(prevInfoWindow != null){
 		prevInfoWindow.close();
+        removeInstructions();
+        hideInstructions();
 	}
 	infoWindow.open({
 		anchor: marker,
@@ -369,6 +373,8 @@ function displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map){
             if(allMarkers[i].getMap() == null){
                 allMarkers[i].setMap(map);
                 infoWindow.close();
+                removeInstructions();
+                hideInstructions();
             }else{
                 openInfoWindow(infoWindow, prevInfoWindow, marker, map);
                 allMarkers[i].setMap(null);
@@ -514,6 +520,7 @@ function createMapButton(action, textContent, title) {
 function calculateAndDisplayRoute(directionsService, origin, destination/*, allMarkers, map*/) {
     let color;
     removeAllDirectionsRenderer();
+    removeInstructions();
 
     // using google direction service to find multiple routes with parameters
     directionsService
@@ -604,6 +611,8 @@ function stepsSelectedRoute(routeIndex){
         let distance =  route.legs[0].steps[i].distance.text;
         tableInstructionDuration.push({instruction, distance});
     }
+    showInstructions();
+    removeOldInstructions();
     displayRouteInstructions(tableInstructionDuration);
 }
 

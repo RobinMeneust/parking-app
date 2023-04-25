@@ -110,10 +110,34 @@ function displayRouteInstructions(table){
         let thDistance = document.createElement('th');
 
         thInstruction.innerHTML = table[i].instruction;
+        thInstruction.style.width = "85%";
+
         thDistance.innerHTML = table[i].distance;
+        thDistance.style.width = "15%";
 
         tr.appendChild(thInstruction);
         tr.appendChild(thDistance);
         instructionTable[0].appendChild(tr);
     }
+}
+
+function removeInstructions() {
+    let instructionTable = document.getElementsByClassName('instruction');
+    instructionTable[0].innerHTML = '';
+}
+
+function hideInstructions(){
+    let instructionWrapper = document.getElementsByClassName('instruction-wrapper');
+    instructionWrapper[0].style.visibility = "hidden";
+}
+
+function showInstructions() {
+    let instructionWrapper = document.getElementsByClassName('instruction-wrapper');
+    instructionWrapper[0].style.visibility = "visible";
+}
+
+function removeOldInstructions(){
+    let instructionTable = document.getElementsByClassName('instruction');
+
+    instructionTable[0].innerHTML = '';
 }
