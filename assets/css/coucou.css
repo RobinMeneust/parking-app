@@ -1,0 +1,39 @@
+
+.contactez-nous {
+width: 700px;
+margin: auto;
+border: 1px solid;
+border-radius: 8px;
+padding: 0 50px 0 50px;
+background: #faf5ef;
+}
+
+.contactez-nous > h1 {
+font-weight: 500;
+}
+
+.contactez-nous > p {
+font-weight: 300;
+}
+
+.erreur {
+width: 700px;
+margin: auto;
+border: 1px solid;
+border-radius: 8px;
+padding: 0 50px 0 50px;
+background: #e3002d;
+}
+
+.success {
+width: 700px;
+margin: auto;
+border: 1px solid;
+border-radius: 8px;
+padding: 0 50px 0 50px;
+background: #5bbc4b;
+}
+
+.overall{
+background: #ffffff
+}

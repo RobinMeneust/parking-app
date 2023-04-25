@@ -5,6 +5,7 @@
 <html lang="fr">
     <head>
         <title>Formulaire</title>
+        <link rel="stylesheet" type="text/css" href="./assets/css/coucou.css">
         <?php include_once("head.php"); ?>
     </head>
 
@@ -16,8 +17,8 @@
 <?php
 $erreur =$_GET['erreur']?? false;
 $success = $_GET['Message']?? false;
-
-if(gettype($erreur) == "string" && (strlen($erreur)>0))
+echo'<div class=Overall>';
+if(gettype($erreur) == "string" && (strlen($erreur)>0))//if we get redirected here with an error, we print it
 {
     echo'<div class="erreur">';
     $pos = strrpos($erreur,',',0);
@@ -30,10 +31,10 @@ if(gettype($erreur) == "string" && (strlen($erreur)>0))
     else{
         echo "Veuiller remplir correctement le champ ".$erreur;
     }
-    echo'</div">';
+    echo'</div>';
 }
 
-if(gettype($success) == "string" && (strlen($success)>0))
+if(gettype($success) == "string" && (strlen($success)>0))//if the form was a success, we print it
 {
     echo'<div class="success">';
     echo $success;
@@ -41,45 +42,12 @@ if(gettype($success) == "string" && (strlen($success)>0))
 }
 
 
-
-
-/*<script>
-    if(/[?&]erreur/.test(window.location.search))
-    {  
-        if(/_/.test(window.location.search))
-        { 
-            
-            a = window.location.search.slice(8).split("_");
-            erreur = "";
-            for(i of a)
-            {
-                if(i != a.slice(-1)){
-                    if(erreur.slice(-1) == "," || i == ",")
-                        erreur=erreur+i;
-                    else
-                        erreur=erreur+" "+i;
-                }
-                else{
-                    if(erreur.slice(-1) == "," || i == ",")
-                        erreur=erreur.substring(0, erreur.length-1)+" et";
-                    erreur=erreur+" "+i+".";
-                }
-            }
-        }
-        else
-        {
-            a = window.location.search.slice(8);
-        }
-        document.getElementById("erreur").innerHTML= ( "Veuiller remplir correctement les champs "+ erreur);
-    }
-  </script>*/
-
 ?>
 
 <body>
 <div class="contact">
 
- <form action="./PHP/formCheck.php" method="get"><!--pour pouvoir envoyer a formCheck-->
+ <form action="./PHP/formCheck.php" method="get"><!--Send it to formCheck-->
 
     <div class="contactez-nous">
  <h1 style="text-align:center">Demande de contact</h1>
@@ -87,7 +55,7 @@ if(gettype($success) == "string" && (strlen($success)>0))
 
    
 
-<table style="width: 70%;"-->
+<table style="width: 70%;"--><!--form with all the information we need-->
 
  <tr>
           <td>Date du message</td>
@@ -160,7 +128,8 @@ if(gettype($success) == "string" && (strlen($success)>0))
     
       </p>
   </form>
-      <?php include_once("Footer.php"); ?>
+</div>
+</div>
+<?php include_once("Footer.php"); ?>
   </body>
-  <
 </html>
