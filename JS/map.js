@@ -622,7 +622,7 @@ function stepsSelectedRoute(routeIndex){
         tableInstructionDuration.push({instruction, distance});
     }
     showInstructions();
-    removeOldInstructions();
+    removeInstructions();
     displayRouteInstructions(tableInstructionDuration);
 }
 

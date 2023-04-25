@@ -101,6 +101,9 @@ function toggleMenuVisibility(){
 	element.classList.toggle("hidden");
 }
 
+/*
+    Fill the table of instructions with the instructions to follow to go to the selected marker
+*/
 function displayRouteInstructions(table){
     let instructionTable = document.getElementsByClassName('instruction');
 
@@ -121,23 +124,26 @@ function displayRouteInstructions(table){
     }
 }
 
+/*
+    Remove existing instructions in the table
+*/
 function removeInstructions() {
     let instructionTable = document.getElementsByClassName('instruction');
     instructionTable[0].innerHTML = '';
 }
 
+/*
+    Hide the table of instructions to follow
+*/
 function hideInstructions(){
     let instructionWrapper = document.getElementsByClassName('instruction-wrapper');
     instructionWrapper[0].style.visibility = "hidden";
 }
 
+/*
+    Show the table of instructions to follow
+*/
 function showInstructions() {
     let instructionWrapper = document.getElementsByClassName('instruction-wrapper');
     instructionWrapper[0].style.visibility = "visible";
-}
-
-function removeOldInstructions(){
-    let instructionTable = document.getElementsByClassName('instruction');
-
-    instructionTable[0].innerHTML = '';
 }
