@@ -72,14 +72,13 @@
 						</tr>
 					</table>
                     
-
-                    <table class="instruction-wrapper" cellspacing="0" cellpadding="0" border="0" style="width:100%">
+                    <table class="instruction-wrapper" cellspacing="0" cellpadding="0" border="0" style="width:720px">
                         <tr>
                             <td>
-                            <table cellspacing="0" cellpadding="1" border="1">
+                            <table cellspacing="0" cellpadding="1" border="1" style="width:720px">
                                 <tr>
-                                    <th style="width: 85%;">Instruction</th>
-                                    <th style="width: 15%;">Distance</th>
+                                    <th style="width: 635px;">Instruction</th>
+                                    <th style="width: 85px;">Distance</th>
                                 </tr>
                             </table>
                             </td>

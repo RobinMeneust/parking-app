@@ -110,10 +110,10 @@ function displayRouteInstructions(table){
         let thDistance = document.createElement('th');
 
         thInstruction.innerHTML = table[i].instruction;
-        thInstruction.style.width = "85%";
+        thInstruction.style.width = "635px";
 
         thDistance.innerHTML = table[i].distance;
-        thDistance.style.width = "15%";
+        thDistance.style.width = "85px";
 
         tr.appendChild(thInstruction);
         tr.appendChild(thDistance);
