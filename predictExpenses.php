@@ -11,7 +11,7 @@ if(!isset($_SESSION['VAR_profil'])){
 <head>
 	<title>Détails Profil</title>
 	<?php include_once("head.php"); ?>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script src="JS/predictExpenses.js"></script>
 </head>
 
@@ -24,10 +24,13 @@ if(!isset($_SESSION['VAR_profil'])){
 			<button id="refreshDate" style="text-align:center;" class="menuButton rectangular">Valider</button>
 		</div>-->
 		<div class="graphsContainer">
+			<div id="graphLegend">
+				<b style="color:blue; font-size:40px">-</b> : Valeurs réelles<br>
+				<b style="color:red; font-size:40px"">-</b>  : Valeurs prédites
+			</div>
 			<canvas id="expensesPredict"></canvas>
 		</div>
 	</div>
-
 	<?php include_once("Footer.php"); ?>
 </body>
 </html>

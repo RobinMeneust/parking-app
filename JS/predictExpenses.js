@@ -109,68 +109,61 @@ async function predict() {
 		}
 	}
 
-	ind = lastMonths.length;
 	compare * 0.1;
-
-	predictionResult[lastMonths.length-1] = lastMonths[lastMonths.length-1]; // last month expenses, to get a curve connected to the other one
-	for(let i=0; i<lastMonths.length-1; i++){
-		predictionResult[i] = null;
-	}
+	avg += compare; // to count the iteration with i=0
 	
-	for(let i=1; i<=predictionLength; i++){
-		predictionResult[ind] = compare * i + avg; 
-		ind++;
+	for(let i=0; i<predictionLength; i++){
+		predictionResult[i] = compare * i + avg;
 	}
 	// Average by month to see if there are some habits (for instance during week-end or holidays those number might change)
-	
 	let month = startPredicted.month;
-	ind = lastMonths.length;
-	for(let i=1; i<=predictionLength; i++){
+	for(let i=0; i<predictionLength; i++){
 		if(month >= 12){
 			month = 0;
 		}
-		predictionResult[ind] += meanMonths[month];
+		predictionResult[i] += meanMonths[month];
 		// avg of the 2 predicted value
-		predictionResult[ind] /= 2;
+		predictionResult[i] /= 2;
 		month++;
-		ind++;
 	}
-	console.log(predictionResult);
+	console.log("mean=",meanMonths);
+	console.log("last=",lastMonths);
+	console.log("predict=",predictionResult);
 	
+	let yAxis = yAxisKnown.concat(predictionResult);
+	console.log(yAxis);
 
-	return new Chart("expensesPredict", {
+	console.log(lastMonths.length );
+	
+	// The color of the predicted curve is set to red
+	const red = (ctx, value) => ctx.p1.parsed.x >= lastMonths.length ? value : undefined;
+
+	new Chart("expensesPredict", {
         type: "line",
         data:{
             labels:xAxis,
             datasets: [{
-                data: yAxisKnown ,
+                data: yAxis ,
                 borderColor: "blue",
                 backgroundColor: "black",
+				label : 'Prediction',
                 fill: false,
-				label: "Dépenses passées"
-            }, {
-				data: predictionResult ,
-                borderColor: "red",
-                backgroundColor: "black",
-                fill: false,
-				label: "Dépenses estimées"
-			}]
+				cubicInterpolationMode: 'monotone',
+				segment: {
+					borderColor : ctx => red(ctx, "red"),
+				}
+            }]
         },
         options:{
-            responsive: true,
-            legend: {display: true},
-            title: {
-                display: true,
-                text: "Prédiction des dépenses mensuelles"
-            },
-            scales: {
-                yAxes: [{
-                    display: true,
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
+			plugins: {
+				legend: {
+					display: false,
+				},
+				title: {
+					display: true,
+					text: "Prédiction des dépenses mensuelles"
+				}
+			}
         }
     });
 }
