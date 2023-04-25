@@ -1,6 +1,6 @@
-<?php session_start();
+<?php session_start(); 
 
-$file =fopen("../data/infoContact.json","a+") or die ("Fail");
+$file =fopen("../data/infoContact.json","a+") or die ("Fail");//we open a file to write the informations on it if we can't send a mail
 
 $Nom =$_GET['Nom'];
 $Prenom =$_GET['Prenom'];
@@ -12,8 +12,10 @@ $typeMessage =$_GET['typeMessage'];
 $sujet =$_GET['sujet'];
 $contenu =$_GET['contenu'];
 $erreur="erreur=";
-//VERIFICATIONS VALIDITE ELEMENTS :
+//We get all the data we need from the url :
 
+
+//we check if all the data is correct
 if(!(gettype($Nom) == "string" && (strlen($Nom)>0 && strlen($Nom)<40))) {
     $erreur=$erreur . "Nom";
 }
@@ -74,31 +76,10 @@ if(!(gettype($contenu) == "string" && (strlen($contenu)>0 && strlen($contenu)<40
     $erreur=$erreur . "Contenu+" . $contenu;
 }
 
-//RENVOI ERREUR / VALIDATION
+//redirect if an error occur
 if($erreur != "erreur="){
    header('location:../form.php?' . $erreur);
 }
-
-/*//MESSAGE RETENU
-echo "<br><br>Info remplies dans le formulaire précédent :";
-echo "<br>Nom = ";
-echo $Nom;
-echo "<br>Prenom = ";
-echo $Prenom;
-echo "<br>Date de Contact = ";
-echo $datecontact;
-echo "<br>Adresse Mail = ";
-echo $email;
-echo "<br>Genre = ";
-echo $gender;
-echo "<br>Date de Naissance =";
-echo $naissance;
-echo "<br>Type du Message = ";
-echo $typeMessage;
-echo "<br>Sujet = ";
-echo $sujet;
-echo "<br>Contenu du Mail : <br>";
-echo $contenu;*/
 
 // Import PHPMailer classes into the global namespace 
 use PHPMailer\PHPMailer\PHPMailer; 
@@ -114,23 +95,19 @@ require 'PHPMailer/SMTP.php';
 $mail = new PHPMailer; 
  
 // Server settings 
-//$mail->SMTPDebug = SMTP::DEBUG_SERVER;    //Enable verbose debug output 
 $mail->isSMTP();                            // Set mailer to use SMTP 
 $mail->Host = 'smtp.gmail.com';           // Specify main and backup SMTP servers 
 $mail->SMTPAuth = true;                     // Enable SMTP authentication 
 $mail->Username = 'baat01.p@gmail.com';       // SMTP username 
 $mail->Password = 'irrufbegunznzfjb';         // SMTP password 
-$mail->SMTPSecure = 'ssl';                  // Enable TLS encryption, `ssl` also accepted 
+$mail->SMTPSecure = 'ssl';                  // Enable TLS encryption
 $mail->Port = 465;                          // TCP port to connect to 
  
 // Sender info 
 $mail->setFrom('parkotop@app.com', 'ParkOTop'); 
  
 // Add a recipient 
-$mail->addAddress('baat01.p@gmail.com'); //adresse de reception
- 
-//$mail->addCC('cc@example.com'); 
-//$mail->addBCC('bcc@example.com'); 
+$mail->addAddress('baat01.p@gmail.com'); //receiving address
  
 // Set email format to HTML 
 $mail->isHTML(true); 
@@ -145,7 +122,7 @@ $bodyContent .=  '<br><p> Message envoyé par '. $Nom ." " . $Prenom ." (". $nai
 $mail->Body    = $bodyContent; 
  
 // Send email 
-if(!$mail->send()) { 
+if(!$mail->send()) { //we write the informations on a json file if we can't send a mail
     fwrite($file, $Nom.";".$Prenom.";".$datecontact.";".$email.";".$gender.";".$naissance.";".$typeMessage.";".$sujet.";".$contenu.";".$email->ErrorInfo."\r\n");
     fclose($file);
     header('location:../form.php?Message=' . "<br>Merci pour votre confiance monsieur ".$Nom. "! Votre message est enregistré et nos équipes vont l'examiner pour vous contacter dans les plus brefs délais. ");
@@ -155,5 +132,3 @@ if(!$mail->send()) {
 
 
 ?>
-
-
