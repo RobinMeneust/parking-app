@@ -107,7 +107,9 @@ function getPaymentMethod(data){
 */
 
 async function getAddressFromPos(pos){
-	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470");
+	const response = await fetch("https://api.opencagedata.com/geocode/v1/json?q="+pos.lat+"+"+pos.lng+"&key=6ed462e0c4a54f39a14230ff783fc470").catch((err)=>{
+        console.error(err)
+    });
 	const json = await response.json();
 
 	let street = "";
@@ -193,7 +195,7 @@ async function getParkingsData(searchPos, userPos, areaParams, maxDistance, maxE
 
 	try{
 		msgBox.innerHTML="Récupération des données..."; // Used to display in a span a message to the user
-		const response = await fetch(url)
+		const response = await fetch(url);
 		const out = await response.json();
 		let nbParkings = out.elements.length;
 		if(areaParams!=""){

@@ -17,6 +17,8 @@ async function getDataProfile(startDate, endDate, dataProfile) {
         } else {
             return response;
         }
+    }).catch((err)=>{
+        console.error(err);
     });
 }
 
@@ -29,11 +31,17 @@ function refreshDate() {
     
     getDataProfile(startDate, endDate, 'expensesProfile').then((response)=> {
         expenses.innerHTML = response;
+    }).catch((err)=>{
+        console.error(err);
     });
     getDataProfile(startDate, endDate, 'visitedProfile').then((response)=> {
         favorite.innerHTML = response;
+    }).catch((err)=>{
+        console.error(err);
     });
     getDataProfile(startDate, endDate, 'favoriteProfile').then((response)=> {
         visited.innerHTML = response;
+    }).catch((err)=>{
+        console.error(err);
     });
 }

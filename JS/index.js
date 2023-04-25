@@ -27,7 +27,9 @@ function initializeForms(){
 
 async function setCurrentParkingInSession(parking){
 	let url  = "./PHP/setCurrentParkingSession.php?lat="+parking.pos.lat+"&lng="+parking.pos.lng+"&name="+parking.name+"&nb="+parking.address.houseNumber+"&street="+parking.address.street+"&city="+parking.address.city+"&country="+parking.address.country+"&postal="+parking.address.postalCode;
-	await fetch(url);
+	await fetch(url).catch((err)=>{
+        console.error(err);
+    });
 }
 
 /*
