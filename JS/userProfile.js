@@ -9,6 +9,7 @@ async function getDataProfile(startDate, endDate, dataProfile) {
         if(response.status >= 200 && response.status < 300) {
             return response.text();
         }
+        console.log("sdfs" + response.statusText);
         throw new Error(response.statusText);
     })
     .then(function(response) {
@@ -29,8 +30,12 @@ function refreshDate() {
     let Start_input_Date = document.getElementById('Start_date');
     let End_input_Date = document.getElementById('End_date');
 
-    let startDate = new Date(Start_input_Date.value).toLocaleDateString("fr-FR"); 
-    let endDate = new Date(End_input_Date.value).toLocaleDateString("fr-FR");
+
+    let startDate = new Date(Start_input_Date.value).toISOString().split('T')[0];
+    let endDate = new Date(End_input_Date.value).toISOString().split('T')[0];
+
+    console.log(startDate);
+    console.log(endDate);
     
     getDataProfile(startDate, endDate, 'expensesProfile').then((response)=> {
         expenses.innerHTML = response;

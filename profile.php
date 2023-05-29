@@ -17,7 +17,7 @@ if(!isset($_SESSION['VAR_profil'])){
     <body class="light" onload="refreshDate()">
         <?php include_once("Header.php"); ?>
 
-        <div class="content">
+        <div class="contentProfil">
             <h1 id="profileTitle">HISTORIQUE</h1>
             <div class="navProfile">
                 <div id="navProfileTime">
@@ -39,19 +39,17 @@ if(!isset($_SESSION['VAR_profil'])){
                         const date_input = document.getElementsByClassName('date_input')
                         const errorMessage = document.getElementById('date_error_message');
 
-                        console.log('start/end input date html');
-                        console.log(Start_input_Date);
+                        //console.log('start/end input date html');
+                        //console.log(Start_input_Date);
 
                         for(let i = 0; i < date_input.length; i++){
                             date_input[i].addEventListener('change', function() {
                             const selected_Start_Date = new Date(Start_input_Date.value);
                             const selected_End_Date = new Date(End_input_Date.value);
-                            console.log('start/end input date js');
-                            console.log(selected_Start_Date.toLocaleDateString("en-EN"));
-                            console.log(selected_End_Date.toLocaleDateString("fr-FR"));
+                            //console.log('start/end input date js');
 
                             const date_Limit = new Date(2010, 0, 1); // janvier est le mois 0
-                            consol.log(date_Limit);
+                            //console.log(date_Limit);
 
                             if (selected_End_Date < selected_Start_Date) {
                                 errorMessage.style.display = 'block';
@@ -66,11 +64,6 @@ if(!isset($_SESSION['VAR_profil'])){
                     </script>
 
                 </div>
-
-
-                <form action="PHP/signOut.php" methode="POST">
-                    <input type="submit" name="deconnecte" value="Se deconnecter" id="signOutProfile"/> 
-                </form>
             </div>
             
             <table id="profileTable">
@@ -85,9 +78,9 @@ if(!isset($_SESSION['VAR_profil'])){
                     <td id="visitedProfileTable"></td>
                 </tr>
                 <tr id="profileTableLink">
-                    <td><a href="userGraphs.php">DETAIL GRAPHIQUE<a></td>
+                    <td><a href="userGraphs.php" class="detailsButtons" style="--clr:#1e9bff"><span>DETAIL GRAPHIQUE</span><i></i></a></td>
                     <td></td>
-                    <td><a href="userGraphs.php">DETAIL HISTOGRAMME<a></td>
+                    <td><a href="userGraphs.php" class="detailsButtons" style="--clr:#6eff3e"><span>DETAIL HISTOGRAMME</span><i></i></a></td>
                 </tr>
 			</table>
 
