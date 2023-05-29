@@ -26,8 +26,11 @@ function refreshDate() {
     let expenses = document.getElementById('expensesProfileTable');
     let favorite = document.getElementById('favoriteParkingProfileTable');
     let visited = document.getElementById('visitedProfileTable');
-    let startDate = "2023-02-28";
-    let endDate = "2024-04-17";
+    let Start_input_Date = document.getElementById('Start_date');
+    let End_input_Date = document.getElementById('End_date');
+
+    let startDate = new Date(Start_input_Date.value).toLocaleDateString("fr-FR"); 
+    let endDate = new Date(End_input_Date.value).toLocaleDateString("fr-FR");
     
     getDataProfile(startDate, endDate, 'expensesProfile').then((response)=> {
         expenses.innerHTML = response;
