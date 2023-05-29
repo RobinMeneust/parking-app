@@ -65,6 +65,7 @@ header {
     padding: 10px;
     background-color: #fff;
     box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+    position: relative;
 }
 
 .logo a {
@@ -73,6 +74,263 @@ header {
     text-decoration: none;
     color: #000;
 }
+
+#user_logo {
+    width: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.sub-menu-wrap {
+    position: absolute;
+    top: 100%;
+    left: 78%;
+    width: 320px;
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.5s;
+    color: white;
+}
+
+.sub-menu-wrap.open-menu {
+    max-height: 400px;
+}
+
+.user-info{
+    display: flex;
+    align-items: center;
+}
+
+.user-info h2 {
+    font-weight: 500;
+    color: white;
+}
+
+.user-info img {
+    width: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.sub-menu {
+    background: #212f3d;
+    padding: 20px;
+    margin: 10px;
+}
+
+.sub-menu hr {
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px;
+}
+
+.sub-menu-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 12px 0;
+}
+
+.sub-menu-link p{
+    width: 100%;
+    color: white;
+}
+
+.sub-menu-link img {
+    width: 40px;
+    background: #e5e5e5;
+    border-radius: 50%;
+    padding: 8px;
+    margin-right: 15px;
+}
+
+.sub-menu-link span {
+    font-size: 22px;
+    transition: transform 0.5s;
+}
+
+.sub-menu-link:hover span {
+    transform: translateX(5px);
+    color: #e74c3c;
+}
+
+.sub-menu-link:hover p {
+    font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+    .sub-menu-wrap {
+        position: absolute;
+        top: 100%;
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 700px) {
+    .sub-menu-wrap {
+        position: absolute;
+        top: 100%;
+        transform: translateX(-70%);
+    }
+}
+
+#connectButton {
+    position: relative;
+    background-color: #27282c;
+    color: #27282c;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.7em;
+    letter-spacing: 0.1em;
+    padding: 10px 15px;
+    transition: 0.5s;
+}
+
+#connectButton:hover {
+    background: var(--clr);
+    color: var(--clr);
+    letter-spacing: 0.23em;
+    box-shadow: 0 0 20px var(--clr);
+}
+
+#connectButton::before{
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: #fff;
+}
+
+#connectButton span {
+    position: relative;
+    z-index: 1;
+}
+
+#connectButton i {
+    position: absolute;
+    inset: 0;
+    display: block;
+}
+
+#connectButton i::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 80%;
+    width: 10px;
+    height: 4px;
+    background-color: #fff;
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+#connectButton:hover i::before {
+    width: 20px;
+    left: 20%;
+}
+
+#connectButton i::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    width: 10px;
+    height: 4px;
+    background-color: #fff;
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+#connectButton:hover i::after {
+    width: 20px;
+    left: 80%;
+}
+
+#disconnectButton {
+    position: relative;
+    background-color: #fff;
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 5px;
+    transition: 0.5s;
+}
+
+#disconnectButton:hover {
+    background: var(--clr);
+    color: var(--clr);
+    letter-spacing: 0.23em;
+    border: 3px;
+    box-shadow: 0 0 20px var(--clr);
+}
+
+#disconnectButton::before{
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: #27282c;
+}
+
+#disconnectButton span {
+    position: relative;
+    font-size: 1em;
+    padding: 2px 5px 2px 5px;
+    letter-spacing: 0.2em;
+    z-index: 1;
+    transition: letter-spacing 0.5s;
+}
+
+#disconnectButton:hover span {
+    position: relative;
+    font-size: 1em;
+    padding: 2px 5px 2px 5px;
+    letter-spacing: 0.34em;
+    z-index: 1;
+}
+
+#disconnectButton i {
+    position: absolute;
+    inset: 0;
+    display: block;
+}
+
+#disconnectButton i::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 80%;
+    width: 10px;
+    height: 4px;
+    background-color: #27282c;
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+#disconnectButton:hover i::before {
+    width: 20px;
+    left: 20%;
+}
+
+#disconnectButton i::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    width: 10px;
+    height: 4px;
+    background-color: #27282c;
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+#disconnectButton:hover i::after {
+    width: 20px;
+    left: 80%;
+}
+
 
 .search-bar {
     flex: 1;
@@ -102,7 +360,7 @@ header {
   
 .account a {
     text-decoration: none;
-    color: #333;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -404,10 +662,15 @@ hr {
     align-items: center;    
 }
 
-.navProfileTime {
+#navProfileTime {
     display: flex;
-    justify-content: space-between;
-    align-items: center;    
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.date_input {
+    padding: 4px;
 }
 
 #profileTitle {
@@ -654,4 +917,126 @@ A 343px, mettre tous en colonne droit A PROPOS - AIDE - NOTRE GROUPE avec displa
         margin-bottom: 1rem;
     }
 }
+
+
+#whoAreWe {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "poppins", sans-serif;
+    color: #fff;
+}
+
+#whoAreWe .container {
+    width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.card_container {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    width: 100%;
+    padding: 1.5rem 0;
+    margin: 2rem 0;
+    grid-gap: 2rem;
+}
+
+.card_data {
+    display: flex;
+    background-color: #212f3d;
+    padding: 3rem;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.6);
+    transition: all 0.7s ease-in-out;
+}
+
+.card_data:hover {
+    transform: translateY(-10px);
+}
+
+.card_data img {
+    border-radius: 5%;
+    width: 50%;
+    height: 100%;
+}
+
+.pro_content {
+    padding-left: 1rem;
+    font-size: 0.9rem;
+}
+
+.pro_content h2 {
+    font-size: 1.3rem;
+    color: #e74c3c;
+}
+
+#whoAreWe .position {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+#whoAreWe .position::after {
+    content: "";
+    background: #ccc;
+    position: absolute;
+    width: 40%;
+    height: 2px;
+    top: 20px;
+    left: 0;
+}
+
+.socials_icons {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    width: 80%;
+}
+
+.socials_icons span {
+    background: #f3f5fa;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.socials_icons span i {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    cursor: pointer;
+    color: #212f3d;
+    transition: all 0.3s;
+    padding-top: 0.5rem;
+}
+
+.socials_icons span i:hover {
+    background: #212f3d;
+    color: #fff;
+    border-radius: 50%;
+}
+
+@media (max-width: 1100px){
+    .container{
+        max-width: 980px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 962px){
+    .container{
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    .card_container {
+        grid-template-columns: repeat(1,1fr);
+    }
+}
+
+
+
+/*############ DROP DOWN MENU ###########*/
 
