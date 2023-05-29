@@ -17,7 +17,7 @@ if(!isset($_SESSION['VAR_profil'])){
     <body class="light" onload="refreshDate()">
         <?php include_once("Header.php"); ?>
 
-        <div class="content">
+        <div class="contentProfil">
             <h1 id="profileTitle">HISTORIQUE</h1>
             <div class="navProfile">
                 <div id="navProfileTime">

@@ -374,11 +374,8 @@ a {
 }
 
 .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 5% 10%;
+    padding: 125px 50px 50px;
+    flex-grow: 1;
 }
 
 footer {
@@ -857,6 +854,14 @@ hr {
     font-weight: 400;
     text-transform: uppercase;
     box-shadow: 0 4px 20px rgba(3, 44, 41, 0.226);
+}
+
+.contentProfil {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5% 10%;
 }
 
 /* End of Profil */
