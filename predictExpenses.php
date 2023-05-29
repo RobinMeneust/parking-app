@@ -19,16 +19,12 @@ if(!isset($_SESSION['VAR_profil'])){
 	<?php include_once("Header.php"); ?>
 
 	<div class="content">
-		<!-- <div class="horizontalMenu">
-			<input id="yearGraph" name="yearGraph" style="text-align:center;" class="menuButton rectangular" type="number" value="2023" min="1900" max="2050">
-			<button id="refreshDate" style="text-align:center;" class="menuButton rectangular">Valider</button>
-		</div>-->
 		<div class="graphsContainer">
 			<div id="graphLegend">
 				<b style="color:blue; font-size:40px">-</b> : Valeurs réelles<br>
-				<b style="color:red; font-size:40px"">-</b>  : Valeurs prédites
+				<b style="color:red; font-size:40px">-</b>  : Valeurs prédites
 			</div>
-			<canvas id="expensesPredict"></canvas>
+			<canvas id="expensesPredict" style="height:500px;width:800px"></canvas>
 		</div>
 	</div>
 	<?php include_once("Footer.php"); ?>

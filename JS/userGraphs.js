@@ -92,7 +92,6 @@ async function sendQueryGraph(url){
         if(response != ""){
             for(let i=0; i<response.length; i++){
                 result[parseInt(response[i]["d"])-1] = parseInt(response[i]["n"]);
-                console.log(result);
             }
             return result;
         }
