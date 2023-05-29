@@ -77,8 +77,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["start"]) && isset($_GET["
 			if($endYear == $startYear){
 				$sizeResult = $endMonth - $startMonth;
 			} else {
-				$sizeResult += 12 * ($endYear - $startYear - 2);
-				$sizeResult += $endMonth;
+				$sizeResult += max(12 * ($endYear - $startYear - 2),0);
+				$sizeResult += 12 - $startMonth + $endMonth;				
 			}
 
 			if($sizeResult == 0){
