@@ -97,6 +97,8 @@ async function sendQueryGraph(url){
             }
             return result;
         }
+    }).catch((err)=>{
+        console.error(err);
     });
 }
 
@@ -113,11 +115,15 @@ function refreshDate(){
         sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=expenses&y='+year).then((result) =>{
             let expensesValues = result;
             expensesGraph = createExpensesGraph(expensesValues);
+        }).catch((err)=>{
+            console.error(err);
         });
         
         sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=visits&y='+year).then((result) =>{
             let visitsValues = result;
             visitsGraph = createVisitsGraph(visitsValues);
+        }).catch((err)=>{
+            console.error(err);
         });
     } else{
         document.getElementById('yearGraph').value = "2023";

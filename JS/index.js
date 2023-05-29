@@ -27,7 +27,9 @@ function initializeForms(){
 
 async function setCurrentParkingInSession(parking){
 	let url  = "./PHP/setCurrentParkingSession.php?lat="+parking.pos.lat+"&lng="+parking.pos.lng+"&name="+parking.name+"&nb="+parking.address.houseNumber+"&street="+parking.address.street+"&city="+parking.address.city+"&country="+parking.address.country+"&postal="+parking.address.postalCode;
-	await fetch(url);
+	await fetch(url).catch((err)=>{
+        console.error(err);
+    });
 }
 
 /*
@@ -101,6 +103,9 @@ function toggleMenuVisibility(){
 	element.classList.toggle("hidden");
 }
 
+/*
+    Fill the table of instructions with the instructions to follow to go to the selected marker
+*/
 function displayRouteInstructions(table){
     let instructionTable = document.getElementsByClassName('instruction');
 
@@ -110,10 +115,37 @@ function displayRouteInstructions(table){
         let thDistance = document.createElement('th');
 
         thInstruction.innerHTML = table[i].instruction;
+        thInstruction.style.width = "635px";
+
         thDistance.innerHTML = table[i].distance;
+        thDistance.style.width = "85px";
 
         tr.appendChild(thInstruction);
         tr.appendChild(thDistance);
         instructionTable[0].appendChild(tr);
     }
+}
+
+/*
+    Remove existing instructions in the table
+*/
+function removeInstructions() {
+    let instructionTable = document.getElementsByClassName('instruction');
+    instructionTable[0].innerHTML = '';
+}
+
+/*
+    Hide the table of instructions to follow
+*/
+function hideInstructions(){
+    let instructionWrapper = document.getElementsByClassName('instruction-wrapper');
+    instructionWrapper[0].style.visibility = "hidden";
+}
+
+/*
+    Show the table of instructions to follow
+*/
+function showInstructions() {
+    let instructionWrapper = document.getElementsByClassName('instruction-wrapper');
+    instructionWrapper[0].style.visibility = "visible";
 }

@@ -50,7 +50,9 @@ function centerMapToUserPos(){
 			console.error("position is required but could not be fetched");
 			alert("Votre position est requise");
 		}
-	});
+	}).catch((err)=>{
+        window.alert("La position n'a pas pu être rafraichi.\nERROR:"+err);
+    });
 }
 
 
@@ -104,7 +106,9 @@ async function searchNearUser(){
 	try{
 		getParkingsData(userLocation, userLocation, areaParams, searchRadius, nbMaxResults).then((data) =>{
 			onFetchAddMarkers(data, allMarkers, null, null);
-		});
+		}).catch((err)=>{
+            window.alert("Les données des parkings n'ont pas pu être récupéré.\nERROR:"+err);
+        });
 	} catch(err){
 		msgBox.innerHTML="";
 		console.error("Data could not be fetched or parsed from Overpass API");
@@ -151,7 +155,9 @@ async function getSearchFilters() {
 		try{
 			getParkingsData(userLocation, userLocation, 'area[name="' + areaParams + '"];', searchRadius, nbMaxResults).then((data) =>{
 				onFetchAddMarkers(data, allMarkers, null, null);
-			});
+			}).catch((err)=>{
+                window.alert("Les données des parkings n'ont pas pu être récupéré.\nERROR:"+err);
+            });
 		} catch(err){
 			msgBox.innerHTML="";
 			console.error("Data could not be fetched or parsed from Overpass API");
@@ -202,7 +208,9 @@ async function getParkingsNearAddress(address){
 	getCoordFromAddress(address).then((coord) =>{
 		getParkingsData(coord, userLocation, areaParams, document.getElementById("distanceSlider").value, 100).then((data) =>{
 			onFetchAddMarkers(data, allMarkers, coord, address);
-		});
+		}).catch((err)=>{
+            window.alert("Les données des parkings n'ont pas pu être récupéré.\nERROR:"+err);
+        });
 	}).catch((err) => {
 		msgBox.innerHTML="";
 		let searchBox = document.getElementById("search-address-text");
@@ -229,6 +237,8 @@ function initMap() {
             for (let i = 0; i < _globalAllMarkers.length; i++) {
                 if(_globalAllMarkers[i].getMap() == null && _globalAllMarkers[i] != _selectedMarker){
                     _globalAllMarkers[i].setMap(map);
+                    removeInstructions();
+                    hideInstructions();
                 }
             }
         }
@@ -264,6 +274,8 @@ function initMap() {
 function openInfoWindow(infoWindow, prevInfoWindow, marker, map){
 	if(prevInfoWindow != null){
 		prevInfoWindow.close();
+        removeInstructions();
+        hideInstructions();
 	}
 	infoWindow.open({
 		anchor: marker,
@@ -369,6 +381,8 @@ function displayMarker(allMarkers, infoWindow, prevInfoWindow, marker, map){
             if(allMarkers[i].getMap() == null){
                 allMarkers[i].setMap(map);
                 infoWindow.close();
+                removeInstructions();
+                hideInstructions();
             }else{
                 openInfoWindow(infoWindow, prevInfoWindow, marker, map);
                 allMarkers[i].setMap(null);
@@ -481,7 +495,9 @@ function addLocationToMap(){
 			console.error("position is required but could not be fetched");
 			alert("Votre position est requise");
 		}
-	});
+	}).catch((err)=>{
+        window.alert("La position n'a pas pu être rafraichi.\nERROR:"+err);
+    });
 }
 
 /* 
@@ -514,6 +530,7 @@ function createMapButton(action, textContent, title) {
 function calculateAndDisplayRoute(directionsService, origin, destination/*, allMarkers, map*/) {
     let color;
     removeAllDirectionsRenderer();
+    removeInstructions();
 
     // using google direction service to find multiple routes with parameters
     directionsService
@@ -604,6 +621,8 @@ function stepsSelectedRoute(routeIndex){
         let distance =  route.legs[0].steps[i].distance.text;
         tableInstructionDuration.push({instruction, distance});
     }
+    showInstructions();
+    removeInstructions();
     displayRouteInstructions(tableInstructionDuration);
 }
 

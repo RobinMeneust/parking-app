@@ -72,22 +72,21 @@
 						</tr>
 					</table>
                     
-
-                    <table class="row" cellspacing="0" cellpadding="0" border="0" width="325">
+                    <table class="instruction-wrapper" cellspacing="0" cellpadding="0" border="0" style="width:720px">
                         <tr>
                             <td>
-                            <table cellspacing="0" cellpadding="1" border="1" width="300" >
+                            <table cellspacing="0" cellpadding="1" border="1" style="width:720px">
                                 <tr>
-                                    <th>Instruction</th>
-                                    <th>Distance</th>
+                                    <th style="width: 635px;">Instruction</th>
+                                    <th style="width: 85px;">Distance</th>
                                 </tr>
                             </table>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                            <div style="width:320px; height:300px; overflow:auto;">
-                                <table class="instruction" cellspacing="0" cellpadding="1" border="1" width="300" >
+                            <div style="height:300px; overflow:auto;">
+                                <table class="instruction" cellspacing="0" cellpadding="1" border="1" >
                                 </table>  
                             </div>
                             </td>
