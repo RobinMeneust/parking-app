@@ -92,6 +92,7 @@ header {
     overflow: hidden;
     transition: max-height 0.5s;
     color: white;
+    z-index: 2;
 }
 
 .sub-menu-wrap.open-menu {
@@ -373,8 +374,11 @@ a {
 }
 
 .content {
-    padding: 125px 50px 50px;
-    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5% 10%;
 }
 
 footer {
@@ -757,6 +761,102 @@ hr {
     color: black;
     text-decoration-line: underline;
     font-weight: bold;
+}
+
+ 
+
+.detailsButtons {
+    position: relative;
+    background-color: #27282c;
+    color: #27282c;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.7em;
+    letter-spacing: 0.1em;
+    padding: 10px 15px;
+    transition: 0.5s;
+}
+
+.detailsButtons:hover {
+    background: var(--clr);
+    color: var(--clr);
+    letter-spacing: 0.23em;
+    box-shadow: 0 0 20px var(--clr);
+}
+
+.detailsButtons::before{
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: #fff;
+}
+
+.detailsButtons span {
+    position: relative;
+    z-index: 1;
+}
+
+.detailsButtons i {
+    position: absolute;
+    inset: 0;
+    display: block;
+}
+
+.detailsButtons i::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 80%;
+    width: 10px;
+    height: 4px;
+    background-color: #fff;
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+.detailsButtons:hover i::before {
+    width: 20px;
+    left: 20%;
+}
+
+.detailsButtons i::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    width: 10px;
+    height: 4px;
+    background-color: #fff;
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+.detailsButtons:hover i::after {
+    width: 20px;
+    left: 80%;
+}
+
+
+#Start_date {
+    background: linear-gradient(to right, #ff4b2b, #fffb85);
+}
+
+#End_date {
+    background: linear-gradient(to right, #fffb85, #ff4b2b);
+}
+
+.date_input {
+    width: 150px;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    border: 0;
+    font-size: 12px;
+    color: #000;
+    letter-spacing: 3px;
+    font-weight: 400;
+    text-transform: uppercase;
+    box-shadow: 0 4px 20px rgba(3, 44, 41, 0.226);
 }
 
 /* End of Profil */
