@@ -8,7 +8,7 @@
 		<script src="./JS/global.js"></script>
 		<script src="./JS/map.js"></script>
 		<script src="./JS/getParkingData.js"></script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M&callback=initMap&v=weekly"	defer></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATRnNNrouwTPPFjX_C5u3MRivuWj2P22M&callback=initMap&v=weekly"	defer></script>
 	</head>
 
 	<body class="light" onload="initializeForms();">

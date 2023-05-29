@@ -27,8 +27,12 @@ A web app that searches for nearby parking lots (in France)
 
 ### How to build the containers
 
-
 Run the following command in the root of this project (parking-app/): `docker-compose up -d`
+
+
+### How to stop the containers
+
+Run the following command in the root of this project (parking-app/): `docker-compose down`
 
 
 #### If you get an error:

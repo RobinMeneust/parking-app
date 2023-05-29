@@ -36,25 +36,35 @@ function getMonthsArrayFromDateRanges(start, end){
 	return result;
 }
 
+function fixDate(date) {
+	while(date.month>12) {
+		date.year++;
+		date.month -= 12;
+	}
+	while(date.month<=0) {
+		date.year--;
+		date.month += 12;
+	}
+}
+
+function dateToString(year, month, day) {
+	return year+"-"+month+"-"+day;
+}
+
 async function predict() {
-/*
-	To predict the next expenses:
-	- Use data of the previous year if there is any
-	- Use the previous months to get the slope expected
-	- Display it on the same graph ?
-
-*/
 	// Last months fetched
-	let startDate = "2023-01-01";
-    let endDate = "2023-04-31"; // if there are only 29 or 30 days it doesn"t matter, it'll still be correct since we'll be just checking a range with no values in the database
+	let currentDate = new Date();
 
+	let knownLength = 5;
 	let predictionLength = 5;
 
-	// Month values are between 0 and 11
-
 	// Date ranges used for the prediction
-	let startKnown = {month:parseInt(startDate.slice(5, 7))-1, year:parseInt(startDate.slice(0,4))};
-	let endKnown = {month:parseInt(endDate.slice(5, 7))-1, year:parseInt(endDate.slice(0,4))};
+	let endKnown = {month:currentDate.getMonth()+1, year:currentDate.getFullYear()}; // +1 because months are index from 0
+	let startKnown = {month:endKnown.month-knownLength, year:endKnown.year};
+	fixDate(startKnown);
+
+	let startKnownStr = dateToString(startKnown.year, startKnown.month,1);
+	let endKnownStr = dateToString(endKnown.year, endKnown.month,31);
 
 	// Date ranges where is done the prediction
 	let startPredicted = {month:endKnown.month+1, year:endKnown.year};
@@ -81,7 +91,7 @@ async function predict() {
 		meanMonths = JSON.parse(responseMeanMonths);
 	}
 
-	let responseLastMonths = await getDataProfile(startDate, endDate, 'allExpensesByMonthInRange');
+	let responseLastMonths = await getDataProfile(startKnownStr, endKnownStr, 'allExpensesByMonthInRange');
 	if(responseLastMonths == "") {
 		console.log("There is not enough data to make a prediction");
 		return;
