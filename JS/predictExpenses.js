@@ -36,17 +36,17 @@ function getMonthsArrayFromDateRanges(start, end){
 	return result;
 }
 
-async function predict() {
-/*
-	To predict the next expenses:
-	- Use data of the previous year if there is any
-	- Use the previous months to get the slope expected
-	- Display it on the same graph ?
+function dateToString(date) {
+	if(date != null && date.getFullYear() != null && date.getMonth() != null && date.getDate() != null)
+	 	return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+}
 
-*/
+async function predict() {
 	// Last months fetched
-	let startDate = "2023-01-01";
-    let endDate = "2023-04-31"; // if there are only 29 or 30 days it doesn"t matter, it'll still be correct since we'll be just checking a range with no values in the database
+	let currentDate = new Date();
+	let startDate = dateToString(currentDate);
+    let endDate = currentDate
+	console.log(startDate);
 
 	let predictionLength = 5;
 

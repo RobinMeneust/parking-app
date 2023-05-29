@@ -89,11 +89,13 @@ async function sendQueryGraph(url){
         throw new Error(response.statusText);
     })
     .then(function(response) {
+        console.log(response)
         if(response == ""){
             alert("Vous n'êtes pas connecté");
         } else{
             for(let i=0; i<response.length; i++){
-                result[parseInt(response[i]["d"])] = parseInt(response[i]["n"]);
+                result[parseInt(response[i]["d"])-1] = parseInt(response[i]["n"]);
+                console.log(result);
             }
             return result;
         }

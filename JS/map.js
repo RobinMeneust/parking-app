@@ -655,8 +655,3 @@ function removeAllDirectionsRenderer(){
     }
     _globalDirectionsRenderer = [];
 }
-
-
-/*
-curl -L -X GET 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=49.023079%2C2.047221&destinations=48.8566%2C2.3522&units=metric&key=AIzaSyCSd09yCGbrayGGablBGR4JaFP04nTfP5M'
-*/
