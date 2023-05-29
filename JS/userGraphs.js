@@ -89,10 +89,7 @@ async function sendQueryGraph(url){
         throw new Error(response.statusText);
     })
     .then(function(response) {
-        console.log(response)
-        if(response == ""){
-            alert("Vous n'êtes pas connecté");
-        } else{
+        if(response != ""){
             for(let i=0; i<response.length; i++){
                 result[parseInt(response[i]["d"])-1] = parseInt(response[i]["n"]);
                 console.log(result);
@@ -116,6 +113,9 @@ function refreshDate(){
 
         sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=expenses&y='+year).then((result) =>{
             let expensesValues = result;
+            if(expensesGraph != null){
+                expensesGraph.destroy();
+            }
             expensesGraph = createExpensesGraph(expensesValues);
         }).catch((err)=>{
             console.error(err);
@@ -123,12 +123,15 @@ function refreshDate(){
         
         sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=visits&y='+year).then((result) =>{
             let visitsValues = result;
+            if(visitsGraph != null){
+                visitsGraph.destroy();
+            }
             visitsGraph = createVisitsGraph(visitsValues);
         }).catch((err)=>{
             console.error(err);
         });
     } else{
-        document.getElementById('yearGraph').value = "2023";
+        alert("Mauvais format de date");
     }
 }
 
