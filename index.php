@@ -20,7 +20,7 @@
 				include("./PHP/errorMessage.php");
 			}
 		?>
-
+		
 		<div class="content">	
 			<br>
 			<button class="menuButton" style="position:absolute;" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
@@ -56,7 +56,7 @@
 				<div class="column" id="map"></div>
 				<span id="searchMsgBox"></span>
 				<div class="row" id="searchDetailsSideBar">				
-					<h2>Détails du parking sélectionné</h2>
+					<h2 id="titleParkSelected">Détails du parking sélectionné</h2>
 					<table id="selectedParkingTable">
 						<tr>
 							<th>Adresse</th>
@@ -72,10 +72,10 @@
 						</tr>
 					</table>
                     
-                    <table class="instruction-wrapper" cellspacing="0" cellpadding="0" border="0" style="width:720px">
+                    <table class="instruction-wrapper" cellspacing="0" cellpadding="0" border="0" style="width:100%;">
                         <tr>
                             <td>
-                            <table cellspacing="0" cellpadding="1" border="1" style="width:720px">
+                            <table cellspacing="0" cellpadding="1" border="1" style="width:100%;">
                                 <tr>
                                     <th style="width: 635px;">Instructions</th>
                                     <th style="width: 85px;">Distance</th>
