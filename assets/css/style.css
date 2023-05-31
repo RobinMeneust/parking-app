@@ -885,9 +885,13 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     
 }
 
-#expensesProfileTable {
-    background-color: #828282;
+.cells {
+    background-color: #dddfe1;
     border-radius: 20px;
+}
+
+.hideBorderCells {
+    border: none;
 }
 
 /* End of Profil */

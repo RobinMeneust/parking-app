@@ -79,18 +79,14 @@ if(!isset($_SESSION['VAR_profil'])){
                     <td id="visitedProfileTable"></td>
                 </tr>
                 <tr id="profileTableLink">
-                    <td><a href="userGraphs.php" class="detailsButtons" style="--clr:#1e9bff"><span>DETAIL GRAPHIQUE</span><i></i></a></td>
-                    <td></td>
-                    <td><a href="userGraphs.php" class="detailsButtons" style="--clr:#6eff3e"><span>DETAIL HISTOGRAMME</span><i></i></a></td>
+                    <td class="hideBorderCells"><a href="userGraphs.php" class="detailsButtons" style="--clr:#1e9bff"><span>DETAIL GRAPHIQUE</span><i></i></a></td>
+                    <td class="hideBorderCells"><a href="predictExpenses.php" class="detailsButtons" style="--clr:#ffba42"><span>Prédiction des dépenses</span><i></i></a></td></td>
+                    <td class="hideBorderCells"><a href="userGraphs.php" class="detailsButtons" style="--clr:#6eff3e"><span>DETAIL HISTOGRAMME</span><i></i></a></td>
                 </tr>
 			</table>
 
             <div id="linkDetailledProfile">
                 <a href="#">HISTORIQUE DETAILLE</a>
-            </div>
-
-            <div>
-                <a href="predictExpenses.php" class="detailsButtons" style="--clr:#ffba42"><span>Prédiction des dépenses</span><i></i></a></td>
             </div>
         </div>
         

@@ -43,12 +43,12 @@ function refreshDate() {
         console.error(err);
     });
     getDataProfile(startDate, endDate, 'visitedProfile').then((response)=> {
-        favorite.innerHTML = response ? response : "Aucun pour l'instant ;)";
+        visited.innerHTML = response ? response : "0";
     }).catch((err)=>{
         console.error(err);
     });
     getDataProfile(startDate, endDate, 'favoriteProfile').then((response)=> {
-        visited.innerHTML = response ? response : "0";
+        favorite.innerHTML = response ? response : "Aucun pour l'instant ;)";
     }).catch((err)=>{
         console.error(err);
     });
