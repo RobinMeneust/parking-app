@@ -376,6 +376,23 @@ a {
 .content {
     padding: 125px 50px 50px;
     flex-grow: 1;
+	background-color: white;
+}
+
+.dark-mode .content {
+	background-color: #39364b;
+}
+
+.dark-mode header {
+	background-color: #22202f;
+}
+
+.dark-mode header a {
+	color: white;
+}
+
+.dark-mode #div_error {
+	background-color: #22202f;
 }
 
 footer {
@@ -435,6 +452,12 @@ footer {
     color: #fff;
     font-size: 22px;
 }
+
+.sideBar.light-mode {
+    background-color: rgb(247, 247, 247);
+    color:black;
+}
+
 
 .desc_area {
     max-width: 320px;
@@ -542,7 +565,7 @@ hr {
     height: 524px;
 }
 
-.sideBar{
+.sideBar {
     position: absolute;
     width: 90px;
 	left:0;
@@ -550,28 +573,40 @@ hr {
     z-index: 2;
 }
 
+.sideBar.column{
+    position: absolute;
+    width: 90px;
+	left:0;
+    background-color: transparent;
+    z-index: 2;
+}
 
-.menuButton{
+.menuButton {
     text-align: center;
-    border-radius: 100%;
-    border:orange solid 1px;
-    color: orange;
-    background-color: rgba(0, 0, 0, 0);
-    width: 30px;
-    height: 30px;
-    margin-top: 5px;
-    margin-left: 5px;
+    position: absolute;
+    left:0;
+    width: 50px;
+    border-radius: 0px 30px 30px 0px;
+    padding-top: 13px;
+    height: 50px;
+    font-size: 20px;
     font-weight: bold;
     z-index: 3;
     transition: all 0.2s;
+    color: black;
+    background-color: rgb(243, 243, 243);
+    border: transparent solid 2px;
 }
 
 .menuButton:hover{
-    border: white solid 1px;
-    color: white;
-    background-color: rgba(53, 53, 53, 0);
+    width: 80px;
     transition: all 0.2s;
 	cursor:pointer;
+}
+
+.dark-mode .menuButton{
+    color: white;
+    background-color: #22202f;
 }
 
 .horizontalMenu {
@@ -599,12 +634,18 @@ hr {
 #sideBarContent{
     padding: 50px 15px 15px 15px;
 	width: 250px;
-    height:524px;
-    color:white;
+    height: 524px;
+    background-color: rgb(248, 248, 248);
+    color:black;
+}
+
+.dark-mode #sideBarContent{
+	color: white;
+    background-color: #22202f;
 }
 
 .visible{
-    left:30px;
+    left:0px;
     transition: left ease-out 0.5s;
 }
 
@@ -770,9 +811,15 @@ hr {
     text-decoration: none;
     text-transform: uppercase;
     font-size: 0.7em;
+	margin: 5px;
     letter-spacing: 0.1em;
     padding: 10px 15px;
     transition: 0.5s;
+}
+
+.dark-mode .detailsButtons {
+	background-color: white;
+    color: white;
 }
 
 .detailsButtons:hover {
@@ -780,6 +827,7 @@ hr {
     color: var(--clr);
     letter-spacing: 0.23em;
     box-shadow: 0 0 20px var(--clr);
+	cursor: pointer;
 }
 
 .detailsButtons::before{
@@ -789,9 +837,20 @@ hr {
     background: #fff;
 }
 
-.detailsButtons span {
+.dark-mode .detailsButtons::before {
+	background-color: #22202f;
+}
+
+.detailsButtons span, .detailsButtons input {
     position: relative;
+	color: black;
     z-index: 1;
+	background-color: transparent;
+	border: none;
+}
+
+.dark-mode .detailsButtons span, .dark-mode .detailsButtons input {
+	color: white;
 }
 
 .detailsButtons i {
@@ -812,13 +871,18 @@ hr {
     transition: 0.5s;
 }
 
+.dark-mode .detailsButtons i::before{
+    background-color: black;
+}
+
 .detailsButtons:hover i::before {
     width: 20px;
     left: 20%;
 }
 
+
 .detailsButtons i::after{
-    content: '';
+	content: '';
     position: absolute;
     bottom: 0;
     left: 20%;
@@ -827,6 +891,10 @@ hr {
     background-color: #fff;
     transform: translateX(-50%) skewX(325deg);
     transition: 0.5s;
+}
+
+.dark-mode .detailsButtons i::after{
+	background-color: black;
 }
 
 .detailsButtons:hover i::after {

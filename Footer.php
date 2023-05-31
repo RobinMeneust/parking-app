@@ -6,7 +6,7 @@
                     <img src="./assets/img/logo3.png" alt="">
                     <span class="logo_name">PARK'O TOP</span>
                     <button class="dark-mode" id="moon"><i class="fa-solid fa-moon"></i></button>
-                    <button class="light-mode" id="sun hide"><i class="fa-solid fa-sun"></i></button>
+                    <button class="light-mode" id="sun"><i class="fa-solid fa-sun"></i></button>
                 </div>
 
                 <div class="desc_area">
@@ -45,7 +45,7 @@
 
 <script>
     const darkMode = document.getElementById("moon");
-    const lightMode = document.getElementById('sun hide');
+    const lightMode = document.getElementById("sun");
 
     darkMode.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');

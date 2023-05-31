@@ -14,7 +14,7 @@ if(session_status() != PHP_SESSION_ACTIVE){
   <div class="search-bar">
     <form id="search-address-form" action="index.php" method="post">
       <input id="search-address-text" name="search-address-text" type="text" placeholder="Rechercher sur Park'O Top">
-      <input type="submit" name="submit" value="Rechercher">
+      <a class="detailsButtons"><input type="submit" name="submit" value="Rechercher"><i></i><a>
     </form>
   </div>
 

@@ -20,13 +20,11 @@
 				include("./PHP/errorMessage.php");
 			}
 		?>
-
 		<div class="content">	
-			<br>
-			<button class="menuButton" style="position:absolute;" onclick="toggleMenuVisibility()"><i class="fa-solid fa-filter"></i></button>
 			
+			<i class="fa-solid fa-bars menuButton" onclick="toggleMenuVisibility()"></i>
 			<div class="sideBar column">
-				<div class="sideBar hidden" id="sideBarContent">
+				<div class="sideBar hidden light-mode" id="sideBarContent">
 					<h2>Filtres</h2>
 					<br>
 					<form>
@@ -48,7 +46,7 @@
 						<output>1</output>
 					</form>
 					<br>
-					<button class="menuButton rectangular" style="position:absolute;" onclick="getSearchFilters()">Appliquer mes filtres</button>
+					<a class="detailsButtons" style="position:absolute; color:black; --clr:#1e9bff" onclick="getSearchFilters()"><span>Appliquer mes filtres</span><i></i></a>
 				</div>
 			</div>
 
