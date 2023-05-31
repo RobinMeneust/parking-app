@@ -27,7 +27,7 @@
                 </ul>
                 <ul class="service_header_last">
                     <li class="service_name">NOTRE GROUPE</li>
-                    <li><a href="./whoAreWe.php">Qui sommes-nous</a></li>
+                    <li><a href="./aboutUs.php">Qui sommes-nous</a></li>
                 </ul>
             </div>
         </div>

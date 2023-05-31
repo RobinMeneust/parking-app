@@ -64,7 +64,7 @@ header {
     align-items: center;
     padding: 10px;
     background-color: #fff;
-    box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 16px 70px -8px rgba(0, 0, 0, 0.25);
     position: relative;
 }
 
@@ -532,6 +532,10 @@ hr {
     margin-left: 30px;
 }
 
+.row h2 {
+    justify-content: center;
+}
+
 .column{
     display: table-cell;
     height: 524px;
@@ -648,17 +652,22 @@ hr {
 
 /* Profil */
 
+/* A supprimier apres
 .navProfile {
     display: flex;
     justify-content: space-between;
     align-items: center;    
-}
+}*/ 
 
 #navProfileTime {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    background-color: rgb(19, 164, 89);
+    border-radius: 20px;
+    width: 50%;
+    padding: 20px 20px;
 }
 
 .date_input {
@@ -826,11 +835,15 @@ hr {
 
 
 #Start_date {
-    background: linear-gradient(to right, #ff4b2b, #fffb85);
+    background: linear-gradient(to right, lightblue, #fffb85);
+}
+
+input[type=date]::-webkit-calendar-picker-indicator:hover {
+    cursor: pointer;
 }
 
 #End_date {
-    background: linear-gradient(to right, #fffb85, #ff4b2b);
+    background: linear-gradient(to right, #fffb85, lightblue);
 }
 
 .date_input {
@@ -853,6 +866,23 @@ hr {
     justify-content: center;
     align-items: center;
     margin: 5% 10%;
+}
+
+#bandeau {
+    background-color: #22202f;
+    margin: 0;
+    padding: 50px 50%;
+    color: rgb(167, 198, 207);
+    
+}
+
+.cells {
+    background-color: #dddfe1;
+    border-radius: 20px;
+}
+
+.hideBorderCells {
+    border: none;
 }
 
 /* End of Profil */
@@ -1150,3 +1180,27 @@ A 343px, mettre tous en colonne droit A PROPOS - AIDE - NOTRE GROUPE avec displa
 
 /*############ DROP DOWN MENU ###########*/
 
+table {
+	border-collapse: collapse;
+    font-family: Tahoma, Geneva, sans-serif;
+}
+table td {
+	padding: 15px;
+}
+table thead td {
+	background-color: #54585d;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 13px;
+	border: 1px solid #54585d;
+}
+table tbody td {
+	color: #636363;
+	border: 1px solid #dddfe1;
+}
+table tbody tr {
+	background-color: #f9fafb;
+}
+table tbody tr:nth-child(odd) {
+	background-color: #ffffff;
+}
