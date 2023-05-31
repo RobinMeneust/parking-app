@@ -31,6 +31,10 @@
     color:#22202f;
 }
 
+.fa-sun{
+    color:white;
+}
+
 *, ::before, ::after {
     padding: 0%;
     margin: 0%;
@@ -453,16 +457,9 @@ footer {
     cursor: pointer;
 }
 
-.logo_area .light-mode {
-    color: #fff;
+.logo_area {
     font-size: 22px;
 }
-
-.sideBar.light-mode {
-    background-color: rgb(247, 247, 247);
-    color:black;
-}
-
 
 .desc_area {
     max-width: 320px;
@@ -610,11 +607,27 @@ hr {
     width: 80px;
     transition: all 0.2s;
 	cursor:pointer;
+	background-color: rgb(255, 255, 255);
 }
 
 .dark-mode .menuButton{
     color: white;
     background-color: #22202f;
+}
+
+.dark-mode .menuButton:hover{
+    background-color: #302e3a;
+}
+
+.dark-mode .instruction-wrapper td, .dark-mode .instruction-wrapper th {
+	background-color: #22202f;
+	color: white;
+}
+
+.dark-mode #selectedParkingTable td, .dark-mode #selectedParkingTable th {
+	background-color: #22202f;
+	color: white;
+	border-color: white;
 }
 
 .horizontalMenu {

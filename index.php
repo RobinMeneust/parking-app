@@ -23,7 +23,7 @@
 		<div class="content">	
 			<i class="fa-solid fa-bars menuButton" onclick="toggleMenuVisibility()"></i>
 			<div class="sideBar column">
-				<div class="sideBar hidden light-mode" id="sideBarContent">
+				<div class="sideBar hidden" id="sideBarContent">
 					<h2>Filtres</h2>
 					<br>
 					<form>
