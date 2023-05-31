@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="keywords" content="parking app,park'o top,projet web,parking,recherche parking,stationnement,localisation,voiture,place parking,trajet parking,itineraire parking"/>
-<meta name="description" content="Ce site internet aide les automobilistes de la route à trouver un place de parking facilement et rapidement."/>
+<meta name="description" content="Ce site internet aide les automobilistes à trouver une place de parking facilement et rapidement."/>
 <meta name="author" content="MENEUST Robin, ETRILLARD Yann, KUSMIDER David, BARRÉ Romain, RUELLAN Baptiste"/>
 
 <!-- Font awesome icon (links) -->

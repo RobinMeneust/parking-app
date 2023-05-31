@@ -231,6 +231,9 @@ function initMap() {
 		},
 		zoom: 8,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		mapTypeControlOptions : {
+			style:google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+		},
 	});
 	map.addListener('click', () => {
         if(_globalAllMarkers != undefined || _globalAllMarkers.length != 0){

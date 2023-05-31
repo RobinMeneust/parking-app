@@ -14,7 +14,7 @@ async function getDataProfile(startDate, endDate, dataProfile) {
     })
     .then(function(response) {
         if(response == ""){
-            alert("Vous n'êtes pas connecté !");
+            
         } else {
             return response;
         }
@@ -38,17 +38,17 @@ function refreshDate() {
     console.log(endDate);
     
     getDataProfile(startDate, endDate, 'expensesProfile').then((response)=> {
-        expenses.innerHTML = response;
+        expenses.innerHTML = response ? response : "0€";
     }).catch((err)=>{
         console.error(err);
     });
     getDataProfile(startDate, endDate, 'visitedProfile').then((response)=> {
-        favorite.innerHTML = response;
+        visited.innerHTML = response ? response : "0";
     }).catch((err)=>{
         console.error(err);
     });
     getDataProfile(startDate, endDate, 'favoriteProfile').then((response)=> {
-        visited.innerHTML = response;
+        favorite.innerHTML = response ? response : "Aucun pour l'instant ;)";
     }).catch((err)=>{
         console.error(err);
     });
