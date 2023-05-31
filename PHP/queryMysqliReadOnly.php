@@ -12,7 +12,7 @@ class valueWithDate {
 	}
 }
 
-if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
+if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["data"])){
 	if(!isset($_SESSION["VAR_profil"]["email"])){
 		exit;
 	}
@@ -25,6 +25,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 
 	$link = mysqli_connect($host,'root', $pass, $database);
 
+	$data=$_GET["data"];
+
 	// Check connection
 	if (!$link) {
 		die("Erreur de connexion à la base de données : " . mysqli_connect_error());
@@ -33,9 +35,9 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 	$result = array();
 
 	if(isset($_GET["y"])){
-		if($_GET['d'] == "expenses"){
+		if($data == "expenses"){
 			$query = "SELECT MONTH(dateVisited) AS m, SUM(expenses) AS n FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" AND YEAR(dateVisited) = \"".$_GET["y"]."\" GROUP BY MONTH(dateVisited);";
-		} else if($_GET['d'] == "visits"){
+		} else if($data == "visits"){
 			$query = "SELECT MONTH(dateVisited) AS m, COUNT(dateVisited) AS n FROM ParkingVisite p JOIN Users u ON p.idUser = u.idUser WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" AND YEAR(dateVisited) = \"".$_GET["y"]."\" GROUP BY MONTH(dateVisited);";
 		} else {
 			exit;
@@ -48,7 +50,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 			}
 			echo json_encode($result);
 		}
-	} else if($_GET['d'] == "idUser"){
+	} else if($data == "idUser"){
 		$query = "SELECT idUser FROM Users WHERE email = \"".$_SESSION['VAR_profil']['email']."\";";
 		if($resultSQL = mysqli_query($link,$query)) {
 			$row = mysqli_fetch_assoc($resultSQL);
@@ -64,15 +66,6 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["d"])){
 
 		$start=$_GET["start"];
 		$end=$_GET["end"];
-		$data=$_GET["data"];
-
-		// Connect to database
-		$host = 'db';
-		$user = 'MYSQL_USER';
-		$pass = 'MYSQL_ROOT_PASSWORD';
-		$database = 'usersdata';
-
-		$link = mysqli_connect($host,'root', $pass, $database);
 
 		// Check connection
 		if (!$link) {

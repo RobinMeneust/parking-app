@@ -13,11 +13,11 @@ function initialize() {
     button = document.getElementById('refreshDate');
     button.addEventListener("click",function(){refreshDate();});
 
-    sendQueryGraph('./PHP/queryMysqliReadOnly.php?d=expenses&y='+year).then((result) =>{
+    sendQueryGraph('./PHP/queryMysqliReadOnly.php?data=expenses&y='+year).then((result) =>{
         expensesGraph = createExpensesGraph(result);
     });
     
-    sendQueryGraph('./PHP/queryMysqliReadOnly.php?d=visits&y='+year).then((result) =>{
+    sendQueryGraph('./PHP/queryMysqliReadOnly.php?data=visits&y='+year).then((result) =>{
 		console.log(result);
         visitsGraph = createVisitsGraph(result);
     });
@@ -113,7 +113,7 @@ function refreshDate(){
     if(regex.test(tempYear) && tempYearInt >= 2000){
         year = tempYear;
 
-        sendQueryGraph('./PHP/queryMysqliReadOnly.php?d=expenses&y='+year).then((result) =>{
+        sendQueryGraph('./PHP/queryMysqliReadOnly.php?data=expenses&y='+year).then((result) =>{
             if(expensesGraph != null){
                 expensesGraph.destroy();
             }
@@ -122,7 +122,7 @@ function refreshDate(){
             console.error(err);
         });
         
-        sendQueryGraph('./PHP/queryMysqliReadOnly.php?d=visits&y='+year).then((result) =>{
+        sendQueryGraph('./PHP/queryMysqliReadOnly.php?data=visits&y='+year).then((result) =>{
             if(visitsGraph != null){
                 visitsGraph.destroy();
             }

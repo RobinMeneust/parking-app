@@ -115,7 +115,7 @@ async function predict() {
 	}
 	
 	let responseLastMonths = await getDataProfile(startKnownStr, endKnownStr, 'allExpensesByMonthInRange');
-	if(responseLastMonths == "") {
+	if(responseLastMonths == "" && responseMeanMonths == "") {
 		console.error("There is not enough data to make a prediction");
 		return;
 	}
