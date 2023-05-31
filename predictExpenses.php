@@ -15,7 +15,7 @@ if(!isset($_SESSION['VAR_profil'])){
 	<script src="JS/predictExpenses.js"></script>
 </head>
 
-<body class="light" onload="predict()">
+<body onload="predict()">
 	<?php include_once("Header.php"); ?>
 
 	<div class="content">

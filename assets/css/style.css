@@ -383,6 +383,10 @@ a {
 	background-color: #39364b;
 }
 
+body.dark-mode {
+	background-color: #39364b;
+}
+
 .dark-mode header {
 	background-color: #22202f;
 }

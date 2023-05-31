@@ -11,7 +11,7 @@
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATRnNNrouwTPPFjX_C5u3MRivuWj2P22M&callback=initMap&v=weekly"	defer></script>
 	</head>
 
-	<body class="light" onload="initializeForms();">
+	<body onload="initializeForms();">
 		<?php include_once("Header.php"); ?>
 
 		<?php 
