@@ -520,7 +520,9 @@ hr {
 
 #map {
 	height: 524px;
-	width: 950px;  
+	width: 1000px;
+    min-height: 524px;
+	min-width: 1000px;
 }
 
 .row{
@@ -547,24 +549,22 @@ hr {
 .menuButton{
     text-align: center;
     border-radius: 100%;
-    border:black solid 1px;
-    color: black;
+    border:orange solid 1px;
+    color: orange;
     background-color: rgba(0, 0, 0, 0);
     width: 30px;
     height: 30px;
     margin-top: 5px;
     margin-left: 5px;
+    font-weight: bold;
     z-index: 3;
     transition: all 0.2s;
 }
 
 .menuButton:hover{
-    border: green solid 1px;
-    color: green;
+    border: white solid 1px;
+    color: white;
     background-color: rgba(53, 53, 53, 0);
-    /*width: 32px;
-    height: 32px;*/
-    font-weight: bold;
     transition: all 0.2s;
 	cursor:pointer;
 }
@@ -584,21 +584,12 @@ hr {
 	margin: 10px;
 }
 
-.horizontalMenu .menuButton:hover{
-	width: 53px;
-    height: 53px;
-}
-
 .rectangular {
 	border-radius:0;
-	width:125px !important;
-	height:40px !important;
+	width:155px !important;
+	height:50px !important;
 }
 
-.rectangular:hover {
-	width:127px !important;
-	height:42px !important;
-}
 
 #sideBarContent{
     padding: 50px 15px 15px 15px;
@@ -1128,6 +1119,13 @@ A 343px, mettre tous en colonne droit A PROPOS - AIDE - NOTRE GROUPE avec displa
         max-width: 980px;
         margin: 0 auto;
     }
+
+    #map {
+        height: 524px;
+        width: 800px;
+        min-height: 524px;
+	    min-width: 800px;
+    }
 }
 
 @media (max-width: 962px){
@@ -1138,6 +1136,13 @@ A 343px, mettre tous en colonne droit A PROPOS - AIDE - NOTRE GROUPE avec displa
 
     .card_container {
         grid-template-columns: repeat(1,1fr);
+    }
+
+    #map {
+        height: 524px;
+        width: 430px;
+        min-height: 524px;
+	    min-width: 430px;
     }
 }
 
