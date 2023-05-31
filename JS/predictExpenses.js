@@ -1,7 +1,7 @@
 const months=["null","janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-let year = "2023";
-let button = null;
-const regex = new RegExp('^([0-9]{4})$'); // used to check if the given date (year) is correct
+
+
+// Get data about a specific user (profile)
 
 async function getDataProfile(startDate, endDate, dataProfile) {
 	let url = "./PHP/queryMysqliReadOnly.php?start="+startDate+"&end="+endDate+"&data="+dataProfile;
@@ -13,9 +13,13 @@ async function getDataProfile(startDate, endDate, dataProfile) {
     });
 }
 
+// Get an array of months in a string format from a start date and an end date
+
 function getMonthsArrayFromDateRanges(start, end){
 	return applyFunctionOnDateRange(start, end, function(month, year, data) {return months[month]+" "+year});
 }
+
+// Apply the given function to a date range and use the given data if any
 
 function applyFunctionOnDateRange(start, end, f, data) {
 	let result = [];
@@ -39,6 +43,8 @@ function applyFunctionOnDateRange(start, end, f, data) {
 	return result;
 }
 
+// Get expenses at the given date from an array of objects containing those data
+
 function getExpensesFromJSONObject(month, year, data) {
 	for(let i = 0; i<data.length; i++) {
 		if(data[i].month == month && data[i].year == year) {
@@ -47,6 +53,8 @@ function getExpensesFromJSONObject(month, year, data) {
 	}
 	return 0;
 }
+
+// Adjust the given date (month and year) so that it becomes valid
 
 function fixDate(date) {
 	while(date.month>12) {
@@ -58,6 +66,8 @@ function fixDate(date) {
 		date.month += 12;
 	}
 }
+
+// Convert a date to ther string format YYYY-MM-DD
 
 function dateToString(year, month, day) {
 	return year+"-"+month+"-"+day;
@@ -71,6 +81,7 @@ function getAverageOfArray(array) {
 	return avg / array.length;
 }
 
+// Predict the next expenses and create a graph to show it
 
 async function predict() {
 	// Last months fetched

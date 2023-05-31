@@ -85,8 +85,11 @@ if(!isset($_SESSION['VAR_profil'])){
 			</table>
 
             <div id="linkDetailledProfile">
-                <!--Mettre le lien de la page-->
                 <a href="#">HISTORIQUE DETAILLE</a>
+            </div>
+
+            <div>
+                <a href="predictExpenses.php" class="detailsButtons" style="--clr:#1e9bff"><span>Prédiction des dépenses</span><i></i></a></td>
             </div>
         </div>
         
