@@ -111,17 +111,20 @@ function displayRouteInstructions(table){
 
     for (let i = 0; i < table.length; i++) {
         let tr = document.createElement('tr');
-        let thInstruction = document.createElement('th');
-        let thDistance = document.createElement('th');
+        let tdInstruction = document.createElement('td');
+        let tdDistance = document.createElement('td');
 
-        thInstruction.innerHTML = table[i].instruction;
-        thInstruction.style.width = "635px";
+        tdInstruction.innerHTML = table[i].instruction;
+        tdInstruction.style.width = "635px";
+        //tdInstruction.style.padding = "50px 10px 20px 30px";
 
-        thDistance.innerHTML = table[i].distance;
-        thDistance.style.width = "85px";
+        tdDistance.innerHTML = table[i].distance;
+        tdDistance.style.width = "95px";
+        //tdDistance.style.padding = "50px 10px 20px 30px"; 
 
-        tr.appendChild(thInstruction);
-        tr.appendChild(thDistance);
+        tr.style.padding = "50px";
+        tr.appendChild(tdInstruction);
+        tr.appendChild(tdDistance);
         instructionTable[0].appendChild(tr);
     }
 }

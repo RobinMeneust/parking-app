@@ -577,7 +577,7 @@ function calculateAndDisplayRoute(directionsService, origin, destination/*, allM
     Create selection button to select a route to follow
 */
 function routesSelectionButton(directionResult){
-    let text = '<br>';
+    let text = '<br><div style="margin-top:0%; margin-bottom:0%">';
 
     for (let i = 0; i < directionResult.routes.length && i < 2; i++) {
         let route = directionResult.routes[i];
@@ -590,9 +590,9 @@ function routesSelectionButton(directionResult){
             color = '#ED1C24';
         }
         j = j + i;  
-        text = text + '<label><mark style="color: white; background-color:'+color+'";>'+'Trajet'+ j + " : </mark></label>" + legs.duration.text + '<button onClick="selectedRoute('+i+');">Sélectionner</button><br>';
+        text = text + '<div style="margin-top:5%"><label><mark style="color: white; background-color:'+color+'; margin-right: 3%;">'+'Trajet'+ j + " : </mark></label>" + legs.duration.text + '<button style="margin-left:5%;" onClick="selectedRoute('+i+');">Sélectionner</button></div>';
     }
-    text += '<br> <a href="addToHistory.php" class="map-button">Ajouter</a>';
+    text += '</div><br> <a href="addToHistory.php" class="map-button">Ajouter</a>';
     _selectedMarkerInfoWindow.setContent(_selectedMarkerAddress + text);
 }
 
