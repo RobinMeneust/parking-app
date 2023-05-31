@@ -48,7 +48,7 @@ function applyFunctionOnDateRange(start, end, f, data) {
 function getExpensesFromJSONObject(month, year, data) {
 	for(let i = 0; i<data.length; i++) {
 		if(data[i].month == month && data[i].year == year) {
-			return data[i].expenses;
+			return data[i].value;
 		}
 	}
 	return 0;
@@ -179,7 +179,7 @@ async function predict() {
                 data: yAxis ,
                 borderColor: "blue",
                 backgroundColor: "black",
-				label : 'Prediction',
+				label : 'Montant',
                 fill: false,
 				cubicInterpolationMode: 'monotone',
 				segment: {

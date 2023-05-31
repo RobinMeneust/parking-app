@@ -13,14 +13,13 @@ function initialize() {
     button = document.getElementById('refreshDate');
     button.addEventListener("click",function(){refreshDate();});
 
-    sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=expenses&y='+year).then((result) =>{
-        let expensesValues = result;
-        expensesGraph = createExpensesGraph(expensesValues);
+    sendQueryGraph('./PHP/queryMysqliReadOnly.php?d=expenses&y='+year).then((result) =>{
+        expensesGraph = createExpensesGraph(result);
     });
     
-    sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=visits&y='+year).then((result) =>{
-        let visitsValues = result;
-        visitsGraph = createVisitsGraph(visitsValues);
+    sendQueryGraph('./PHP/queryMysqliReadOnly.php?d=visits&y='+year).then((result) =>{
+		console.log(result);
+        visitsGraph = createVisitsGraph(result);
     });
 }
 
@@ -90,9 +89,13 @@ async function sendQueryGraph(url){
     })
     .then(function(response) {
         if(response != ""){
-            for(let i=0; i<response.length; i++){
-                result[parseInt(response[i]["d"])-1] = parseInt(response[i]["n"]);
-            }
+			let result = new Array;
+			for(let i=0; i<12; i++)
+				result[i] = 0;
+			for(let i=0; i<response.length; i++) {
+				if(response[i].month-1 >= 0) // -1 because here 0 is for January
+				result[response[i].month-1] = response[i].value;
+			}
             return result;
         }
     }).catch((err)=>{
@@ -110,22 +113,20 @@ function refreshDate(){
     if(regex.test(tempYear) && tempYearInt >= 2000){
         year = tempYear;
 
-        sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=expenses&y='+year).then((result) =>{
-            let expensesValues = result;
+        sendQueryGraph('./PHP/queryMysqliReadOnly.php?d=expenses&y='+year).then((result) =>{
             if(expensesGraph != null){
                 expensesGraph.destroy();
             }
-            expensesGraph = createExpensesGraph(expensesValues);
+            expensesGraph = createExpensesGraph(result);
         }).catch((err)=>{
             console.error(err);
         });
         
-        sendQueryGraph('./PHP/queryMysqliWriteRead.php?d=visits&y='+year).then((result) =>{
-            let visitsValues = result;
+        sendQueryGraph('./PHP/queryMysqliReadOnly.php?d=visits&y='+year).then((result) =>{
             if(visitsGraph != null){
                 visitsGraph.destroy();
             }
-            visitsGraph = createVisitsGraph(visitsValues);
+            visitsGraph = createVisitsGraph(result);
         }).catch((err)=>{
             console.error(err);
         });
