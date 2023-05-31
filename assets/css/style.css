@@ -530,6 +530,10 @@ hr {
     margin-left: 30px;
 }
 
+.row h2 {
+    justify-content: center;
+}
+
 .column{
     display: table-cell;
     height: 524px;
@@ -1145,3 +1149,27 @@ A 343px, mettre tous en colonne droit A PROPOS - AIDE - NOTRE GROUPE avec displa
 
 /*############ DROP DOWN MENU ###########*/
 
+table {
+	border-collapse: collapse;
+    font-family: Tahoma, Geneva, sans-serif;
+}
+table td {
+	padding: 15px;
+}
+table thead td {
+	background-color: #54585d;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 13px;
+	border: 1px solid #54585d;
+}
+table tbody td {
+	color: #636363;
+	border: 1px solid #dddfe1;
+}
+table tbody tr {
+	background-color: #f9fafb;
+}
+table tbody tr:nth-child(odd) {
+	background-color: #ffffff;
+}

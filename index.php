@@ -77,7 +77,7 @@
                             <td>
                             <table cellspacing="0" cellpadding="1" border="1" style="width:720px">
                                 <tr>
-                                    <th style="width: 635px;">Instruction</th>
+                                    <th style="width: 635px;">Instructions</th>
                                     <th style="width: 85px;">Distance</th>
                                 </tr>
                             </table>
