@@ -64,7 +64,7 @@ header {
     align-items: center;
     padding: 10px;
     background-color: #fff;
-    box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 16px 70px -8px rgba(0, 0, 0, 0.25);
     position: relative;
 }
 
@@ -411,7 +411,8 @@ footer {
 }
 
 .profil .logo_area img{
-    border-radius: 25%;
+    width : 40px;
+    height: 40px;
     border: 1px solid var(--primary-color);
 }
 
@@ -520,7 +521,9 @@ hr {
 
 #map {
 	height: 524px;
-	width: 950px;  
+	width: 1000px;
+    min-height: 524px;
+	min-width: 1000px;
 }
 
 .row{
@@ -551,24 +554,22 @@ hr {
 .menuButton{
     text-align: center;
     border-radius: 100%;
-    border:black solid 1px;
-    color: black;
+    border:orange solid 1px;
+    color: orange;
     background-color: rgba(0, 0, 0, 0);
     width: 30px;
     height: 30px;
     margin-top: 5px;
     margin-left: 5px;
+    font-weight: bold;
     z-index: 3;
     transition: all 0.2s;
 }
 
 .menuButton:hover{
-    border: green solid 1px;
-    color: green;
+    border: white solid 1px;
+    color: white;
     background-color: rgba(53, 53, 53, 0);
-    /*width: 32px;
-    height: 32px;*/
-    font-weight: bold;
     transition: all 0.2s;
 	cursor:pointer;
 }
@@ -588,21 +589,12 @@ hr {
 	margin: 10px;
 }
 
-.horizontalMenu .menuButton:hover{
-	width: 53px;
-    height: 53px;
-}
-
 .rectangular {
 	border-radius:0;
-	width:125px !important;
-	height:40px !important;
+	width:155px !important;
+	height:50px !important;
 }
 
-.rectangular:hover {
-	width:127px !important;
-	height:42px !important;
-}
 
 #sideBarContent{
     padding: 50px 15px 15px 15px;
@@ -661,17 +653,22 @@ hr {
 
 /* Profil */
 
+/* A supprimier apres
 .navProfile {
     display: flex;
     justify-content: space-between;
     align-items: center;    
-}
+}*/ 
 
 #navProfileTime {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    background-color: rgb(19, 164, 89);
+    border-radius: 20px;
+    width: 50%;
+    padding: 20px 20px;
 }
 
 .date_input {
@@ -839,11 +836,15 @@ hr {
 
 
 #Start_date {
-    background: linear-gradient(to right, #ff4b2b, #fffb85);
+    background: linear-gradient(to right, lightblue, #fffb85);
+}
+
+input[type=date]::-webkit-calendar-picker-indicator:hover {
+    cursor: pointer;
 }
 
 #End_date {
-    background: linear-gradient(to right, #fffb85, #ff4b2b);
+    background: linear-gradient(to right, #fffb85, lightblue);
 }
 
 .date_input {
@@ -866,6 +867,23 @@ hr {
     justify-content: center;
     align-items: center;
     margin: 5% 10%;
+}
+
+#bandeau {
+    background-color: #22202f;
+    margin: 0;
+    padding: 50px 50%;
+    color: rgb(167, 198, 207);
+    
+}
+
+.cells {
+    background-color: #dddfe1;
+    border-radius: 20px;
+}
+
+.hideBorderCells {
+    border: none;
 }
 
 /* End of Profil */
@@ -1132,6 +1150,13 @@ A 343px, mettre tous en colonne droit A PROPOS - AIDE - NOTRE GROUPE avec displa
         max-width: 980px;
         margin: 0 auto;
     }
+
+    #map {
+        height: 524px;
+        width: 800px;
+        min-height: 524px;
+	    min-width: 800px;
+    }
 }
 
 @media (max-width: 962px){
@@ -1142,6 +1167,13 @@ A 343px, mettre tous en colonne droit A PROPOS - AIDE - NOTRE GROUPE avec displa
 
     .card_container {
         grid-template-columns: repeat(1,1fr);
+    }
+
+    #map {
+        height: 524px;
+        width: 430px;
+        min-height: 524px;
+	    min-width: 430px;
     }
 }
 

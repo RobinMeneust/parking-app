@@ -3,14 +3,14 @@
         <div class="content_footer">
             <div class="profil">
                 <div class="logo_area">
-                    <img src="./assets/img/logo.png" alt="">
+                    <img src="./assets/img/logo3.png" alt="">
                     <span class="logo_name">PARK'O TOP</span>
                     <button class="dark-mode" id="moon"><i class="fa-solid fa-moon"></i></button>
                     <button class="light-mode" id="sun hide"><i class="fa-solid fa-sun"></i></button>
                 </div>
 
                 <div class="desc_area">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo laborum ipsa natus, qui aliquid magnam aut reprehenderit, dolorem quos, debitis nesciunt est placeat asperiores et impedit aliquam consectetur maiores quaerat.</p>
+                    <p> L'application Park'O Top vous permet de chercher un parking pour stationner votre véhicule, en utilisant des technologies de géolocalisation. Via cette application, vous avez accès au routage et des propositions d'itinéraires partout en France, ainsi qu'une carte consultable pendant votre voyage. </p>
                 </div>
             </div>
 
