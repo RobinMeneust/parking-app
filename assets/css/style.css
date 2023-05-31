@@ -393,6 +393,7 @@ a {
 
 .dark-mode #div_error {
 	background-color: #22202f;
+    display: flex;
 }
 
 footer {
@@ -544,13 +545,15 @@ hr {
 
 #map {
 	height: 524px;
-	width: 1000px;
+	width: 55%;
     min-height: 524px;
-	min-width: 1000px;
+	min-width: 50%;
 }
 
 .row{
-    display: table;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     border-collapse: separate;
     border-spacing: 10px 0;
     margin-left: 30px;
@@ -562,7 +565,8 @@ hr {
 
 .column{
     display: table-cell;
-    height: 524px;
+    height: 75%;
+    width: 100%;
 }
 
 .sideBar {
@@ -630,6 +634,18 @@ hr {
 	height:50px !important;
 }
 
+#titleParkSelected {
+    text-align: center;
+    border: solid 4px black;
+    border-radius: 20px;
+    background-color: #212f3d;
+    padding: 10px 10px;
+    margin-bottom: 5px;
+    margin: 10px auto;
+    color: white;
+    box-shadow: 0 0 20px #d52b18;
+}
+
 
 #sideBarContent{
     padding: 50px 15px 15px 15px;
@@ -656,6 +672,7 @@ hr {
 
 #searchDetailsSideBar{
     visibility : collapse;
+    width: 30%;
 }
 
 #selectedParkingTable{
@@ -700,6 +717,23 @@ hr {
     justify-content: space-between;
     align-items: center;    
 }*/ 
+
+
+@keyframes animationProfileTime {
+    0% {
+        box-shadow: none;
+    }
+    50% {
+        box-shadow: 10px 10px 0px #f5b027;
+    }
+    100% {
+        box-shadow: none;
+    }
+}
+
+#navProfileTime {
+    animation: animationProfileTime 2s infinite;
+}
 
 #navProfileTime {
     display: flex;
@@ -952,6 +986,15 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 
 .hideBorderCells {
     border: none;
+}
+
+
+#expensesProfileTable {
+}
+
+#expensesProfileTable:hover {
+    box-shadow: 0 0 20px #f5b027;
+    transition: box-shadow 1s;
 }
 
 /* End of Profil */
