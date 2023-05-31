@@ -5,7 +5,7 @@ let currentParking = null;
 */
 
 function getUserId(){
-	let url  = "./PHP/queryMysqliWriteRead.php?d=idUser";
+	let url  = "./PHP/queryMysqliReadOnly.php?d=idUser";
 	return fetch(url).then(function(response) {
         if(response.status >= 200 && response.status < 300) {
             return response.text();
