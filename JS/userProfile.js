@@ -23,19 +23,25 @@ async function getDataProfile(startDate, endDate, dataProfile) {
     });
 }
 
-function refreshDate() {
+// Convert a date to ther string format YYYY-MM-DD
+
+function dateToString(year, month, day) {
+	let m = month;
+	let d = day;
+
+	if(month<10) {
+		m = "0"+month;
+	}
+	if(day<10) {
+		d = "0"+day;
+	}
+	return year+"-"+m+"-"+d;
+}
+
+function searchData(startDate, endDate) {
     let expenses = document.getElementById('expensesProfileTable');
     let favorite = document.getElementById('favoriteParkingProfileTable');
-    let visited = document.getElementById('visitedProfileTable');
-    let Start_input_Date = document.getElementById('Start_date');
-    let End_input_Date = document.getElementById('End_date');
-
-
-    let startDate = new Date(Start_input_Date.value).toISOString().split('T')[0];
-    let endDate = new Date(End_input_Date.value).toISOString().split('T')[0];
-
-    console.log(startDate);
-    console.log(endDate);
+    let visited = document.getElementById('visitedProfileTable');   
     
     getDataProfile(startDate, endDate, 'expensesProfile').then((response)=> {
         expenses.innerHTML = response ? response : "0€";
@@ -48,8 +54,38 @@ function refreshDate() {
         console.error(err);
     });
     getDataProfile(startDate, endDate, 'favoriteProfile').then((response)=> {
-        favorite.innerHTML = response ? response : "Aucun pour l'instant ;)";
+        favorite.innerHTML = response ? response : "Aucun parking favori";
     }).catch((err)=>{
         console.error(err);
     });
+}
+
+function refreshDate() {
+    const Start_input_Date = document.getElementById("Start_date");
+    const End_input_Date = document.getElementById("End_date");
+    const selected_Start_Date = new Date(Start_input_Date.value);
+    const selected_End_Date = new Date(End_input_Date.value);
+    const errorMessage = document.getElementById('date_error_message');
+    
+    if(isNaN(selected_Start_Date) || isNaN(selected_End_Date)) {
+        return;
+    }
+
+    let startDate = dateToString(selected_Start_Date.getFullYear(), selected_Start_Date.getMonth()+1, selected_Start_Date.getDate());
+    let endDate = dateToString(selected_End_Date.getFullYear(), selected_End_Date.getMonth()+1, selected_End_Date.getDate());
+
+    const date_Limit = new Date(2010, 0, 1);
+
+    if (selected_End_Date < selected_Start_Date) {
+        errorMessage.style.display = 'block';
+        return;
+    } else if (selected_Start_Date < date_Limit) {
+        errorMessage.style.display = 'block';
+        return;
+    } else {
+        errorMessage.style.display = 'none';
+    }
+
+    // It's valid
+    searchData(startDate, endDate);
 }

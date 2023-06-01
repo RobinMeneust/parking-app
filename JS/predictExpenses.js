@@ -103,7 +103,16 @@ function fixDate(date) {
 // Convert a date to ther string format YYYY-MM-DD
 
 function dateToString(year, month, day) {
-	return year+"-"+month+"-"+day;
+	let m = month;
+	let d = day;
+
+	if(month<10) {
+		m = "0"+month;
+	}
+	if(day<10) {
+		d = "0"+day;
+	}
+	return year+"-"+m+"-"+d;
 }
 
 function getAverageOfArray(array) {

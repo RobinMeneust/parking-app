@@ -1,5 +1,5 @@
 let currentParking = null;
-
+let popup = null;
 /*
 	Get the user id of the current connected user from the database
 */
@@ -138,19 +138,30 @@ async function addToHistory(){
 	let city = document.getElementById('city').value;
 	let country = document.getElementById('country').value;
 	let postalCode = document.getElementById('postalCode').value;
+	let infoBox = document.getElementById('infoBox');
+	
+	infoBox.style.color = "red";
 
+	if(expenses<0) {
+		infoBox.innerText = "Le montant dépensé ne peut pas être négatif";
+		return;
+	}
+	
 	try{
 		let idUser = await getUserId();
 		let idAddress = await addOrGetAddress(houseNumber, street, city, country, postalCode, currentParking.pos.lat, currentParking.pos.lng);
 		let idParking = await addOrGetParking(idAddress, name);
 		
-		let infoBox = document.getElementById('infoBox');
 		if(addParkingVisite(idUser, idParking, dateVisited, expenses)){
-			infoBox.innerText = "Le parking a bien été ajouté à votre historique";
-			infoBox.style.color = "green";
+			popup = document.getElementById("popupAddToHistory");
+			let closePopupButton = document.getElementById("btnClosePopup");
+			popup.classList.add("open-popupAddToHistory");
+
+			closePopupButton.addEventListener('click',() => {
+				popup.classList.remove("open-popupAddToHistory")
+			})
 		} else{
 			infoBox.innerText = "Une erreur est survenue, l'opération n'a pas été enregistrée";
-			infoBox.style.color = "red";
 		}
 	} catch(err){
 		console.error(err);
