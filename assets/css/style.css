@@ -733,7 +733,52 @@ hr {
     text-align: center;
 }
 
-/* Profil */
+/* Profile */
+
+.contentProfilPage {
+    background: var(--primary-color);
+    margin: 5% 10% 5% 10%;
+}
+
+.contentPage {
+    width: 50%;
+}
+
+.dataProfile h2 {
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin: 5% 0 0% 0;
+}
+
+#lastNameProfile {
+    color: var(--secondary-color);
+    border-bottom: 1px solid #3fB6A8;
+    margin: 2% 0 2% 0;
+    width: 50%;
+    font-size: 18px;
+}
+
+#firstNameProfile {
+    color: var(--secondary-color);
+    border-bottom: 1px solid #3fB6A8;
+    margin: 2% 0 2% 0;
+    width: 50%;
+    font-size: 18px;
+}
+
+#emailProfile {
+    color: var(--secondary-color);
+    border-bottom: 1px solid #3fB6A8;
+    margin: 2% 0 2% 0;
+    width: 50%;
+    font-size: 18px;
+}
+
+/* End of Profile */
+
+/* History */
 
 /* A supprimier apres
 .navProfile {
@@ -748,7 +793,7 @@ hr {
         box-shadow: none;
     }
     50% {
-        box-shadow: 10px 10px 0px #f5b027;
+        box-shadow: 10px 10px 0px #e74c3c;
     }
     100% {
         box-shadow: none;
@@ -764,10 +809,15 @@ hr {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background-color: rgb(19, 164, 89);
+    background-color:#212f3d;
     border-radius: 20px;
     width: 50%;
     padding: 20px 20px;
+}
+
+
+#navProfileTime label {
+    color: #fff;
 }
 
 .date_input {
@@ -775,7 +825,7 @@ hr {
 }
 
 #profileTitle {
-    text-decoration-line: underline;
+    color : white;
 }
 
 #signOutProfile:hover {
@@ -858,6 +908,10 @@ hr {
     color: black;
     text-decoration-line: underline;
     font-weight: bold;
+}
+
+.dark-mode #linkDetailledProfile a {
+    color: #fff;
 }
 
 #contentFullHistory {
@@ -1001,7 +1055,6 @@ hr {
     left: 20%;
 }
 
-
 .detailsButtons i::after{
 	content: '';
     position: absolute;
@@ -1022,7 +1075,6 @@ hr {
     width: 20px;
     left: 80%;
 }
-
 
 #Start_date {
     background: linear-gradient(to right, lightblue, #fffb85);
@@ -1061,8 +1113,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 #bandeau {
     background-color: #22202f;
     margin: 0;
-    padding: 50px 50%;
-    color: rgb(167, 198, 207);
+    padding: 50px 50%;    
 }
 
 .cells {
@@ -1075,9 +1126,14 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 
-/* End of Profil */
+#expensesProfileTable:hover {
+    box-shadow: 0 0 20px #f5b027;
+    transition: box-shadow 1s;
+}
 
-/* Personnal Data and Legal Mention */
+/* End of History */
+
+/* Personnal Data */
 
 .helpcontent {
     padding: 0 30px 0;
@@ -1086,7 +1142,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 .helpcontent h1 {
-    color: #f5b027;
+    color: var(--secondary-color);
     text-align: center;
     font-size: 2.7em;
     font-weight: bold;
@@ -1094,6 +1150,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 .helpcontent .titlehelp {
+    color: var(--secondary-color);
     font-size : 1.5em;
     font-weight: bold;
     margin: 20px;
@@ -1122,10 +1179,11 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     font-size: 20px;
     border-radius: 5px;
     background-color: #f5b027;
-    color: white;
+    color: var(--secondary-color);
     padding: 0.5em 1.25em;
     text-decoration: none;
     line-height: 1.1;
+
 }
 
 .helpcontent .idz_btn_fix .chat-cta-label {
@@ -1134,9 +1192,10 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 .helpcontent p {
+    color: var(--secondary-color);
     font-size: 1em;
     line-height: 1.5em;
-    margin: 0 20px 10px 20px;
+    margin: 10px 20px 10px 20px;
     text-align: justify;
 }
 
@@ -1145,6 +1204,12 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 .helpcontent a {
+    color: #333333;
+    text-decoration: underline;
+}
+
+.dark-mode .helpcontent a {
+    color: #fff;
     text-decoration: underline;
 }
 
@@ -1154,9 +1219,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     margin-top:50px;
 }
 
-/* End of Personnal Data and Legal Mention */
-
-
+/* End Legal Mention */
 
 @media screen and (max-width: 768px) {
     .content_footer {
@@ -1363,9 +1426,20 @@ table {
 	border-collapse: collapse;
     font-family: Tahoma, Geneva, sans-serif;
 }
+
+.dark-mode table{
+    background-color: #22202f;
+}
+
 table td {
 	padding: 15px;
 }
+
+.dark-mode table td {
+    border-color: black;
+    background-color: #22202f;
+}
+
 table thead td {
 	background-color: #54585d;
 	color: #ffffff;
@@ -1373,15 +1447,42 @@ table thead td {
 	font-size: 13px;
 	border: 1px solid #54585d;
 }
+
+.dark-mode table thead td{
+    color: black;
+    background-color: #22202f;
+    background-color: black;
+}
+
 table tbody td {
 	color: #636363;
 	border: 1px solid #dddfe1;
 }
+
+.dark-mode table tbody td{
+    color: #fff;
+    background-color: #22202f;
+    border-color: #3b3852;
+}
+
 table tbody tr {
 	background-color: #f9fafb;
 }
+
+.dark-mode table tbody tr {
+    color: black;
+    background-color: #22202f;
+    border-color: black;
+}
+
+
 table tbody tr:nth-child(odd) {
 	background-color: #ffffff;
+}
+
+.dark-mode table tbody tr:nth-child(odd) {
+	background-color: #22202f;
+    color: #fff;
 }
 
 /*#######################" ADD TO HISTORY PAGE  #########################*/

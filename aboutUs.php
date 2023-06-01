@@ -15,7 +15,6 @@
             <div class="container">
                 <div class="card_container">
                     <div class="card_data">
-                        <img src="./assets/img/user_picture.jpg" alt=""/>
                         <div class="pro_content">
                             <h2>Romain Barré</h2>
                             <p class="position">Développeur</p>
@@ -30,7 +29,6 @@
                         </div>
                     </div>
                     <div class="card_data">
-                        <img src="./assets/img/user_picture.jpg" alt=""/>
                         <div class="pro_content">
                             <h2>Yann Etrillard</h2>
                             <p class="position">Développeur</p>
@@ -45,7 +43,6 @@
                         </div>
                     </div>
                     <div class="card_data">
-                        <img src="./assets/img/user_picture.jpg" alt=""/>
                         <div class="pro_content">
                             <h2>David KUSMIDER</h2>
                             <p class="position">Développeur</p>
@@ -60,7 +57,6 @@
                         </div>
                     </div>
                     <div class="card_data">
-                        <img src="./assets/img/user_picture.jpg" alt=""/>
                         <div class="pro_content">
                             <h2>Robin MENEUST</h2>
                             <p class="position">Développeur</p>
@@ -75,7 +71,6 @@
                         </div>
                     </div>
                     <div class="card_data">
-                        <img src="./assets/img/user_picture.jpg" alt=""/>
                         <div class="pro_content">
                             <h2>Baptiste RUELLAN</h2>
                             <p class="position">Développeur</p>
