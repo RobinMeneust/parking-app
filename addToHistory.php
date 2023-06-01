@@ -13,35 +13,39 @@ if(!isset($_SESSION['VAR_profil'])){
 	<body>
 		<?php include_once("Header.php"); ?>
 		<div class="contentAddToHistory">
-			<h2>Ajouter ce parking à votre historique</h2>
+			
+
+			<div id="bandeauAddToHistory" >
+				<h1 id="titleAddHistory">Ajouter ce parking à votre historique</h1>
+        	</div>
 			<form>
-				<div class="inputBox">
-					<span>Argent dépensé (€)</span><br /> 
-					<input required id="expenses" type="number" class="inputField" name="expenses" value="0" min="0", max="100", step="0.01">
+				<div class="input-container">
+					<input required id="expenses" type="number" class="text-input" name="expenses" value="0" min="0", max="100", step="0.01">
+					<label for="expenses" class="label">Argent dépensé (€)</label>
 				</div>
-				<div class="inputBox">
-					<span>Nom</span><br /> 
-					<input required id="name" type="text" class="inputField" name="name" <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["name"]) && $_SESSION["currentParking"]["name"] != "" && $_SESSION["currentParking"]["name"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["name"] ."\" readonly";} else {echo "value=\"\" placeholder=\"Nom du parking\"";} ?> >
+				<div class="input-container">
+					<input required id="name" type="text" class="text-input" name="name" <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["name"]) && $_SESSION["currentParking"]["name"] != "" && $_SESSION["currentParking"]["name"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["name"] ."\" readonly";} else {echo "value=\"\" placeholder=\"\"";} ?> >
+					<label for="nom" class="label">Nom du parking</label>
 				</div>
-				<div class="inputBox">
-					<span>N° de rue</span><br /> 
-					<input id="houseNumber" type="text" class="inputField" name="houseNumber" <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["houseNumber"]) && $_SESSION["currentParking"]["address"]["houseNumber"] != "" && $_SESSION["currentParking"]["address"]["houseNumber"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["houseNumber"] ."\" readonly";} else {echo "value=\"\" placeholder=\"N° de rue\"";} ?> >
+				<div class="input-container">
+					<input id="houseNumber" type="text" class="text-input" name="houseNumber" <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["houseNumber"]) && $_SESSION["currentParking"]["address"]["houseNumber"] != "" && $_SESSION["currentParking"]["address"]["houseNumber"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["houseNumber"] ."\" readonly";} else {echo "value=\"\" placeholder=\"\"";} ?> >
+					<label for="houseNumber" class="label">N° de rue</label>
 				</div>
-				<div class="inputBox">
-					<span>Nom de rue</span><br /> 
-					<input id="street" type="text" class="inputField" name="street" <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["street"]) && $_SESSION["currentParking"]["address"]["street"] != "" && $_SESSION["currentParking"]["address"]["street"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["street"] ."\" readonly";} else {echo "value=\"\" placeholder=\"Nom de rue\"";} ?> >
+				<div class="input-container">
+					<input id="street" type="text" class="text-input" name="street" <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["street"]) && $_SESSION["currentParking"]["address"]["street"] != "" && $_SESSION["currentParking"]["address"]["street"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["street"] ."\" readonly";} else {echo "value=\"\" placeholder=\"\"";} ?> >
+					<label for="street" class="label">Nom de rue</label>
 				</div>
-				<div class="inputBox">
-					<span>Ville</span><br /> 
-					<input id="city" type="text" class="inputField" name="city" <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["city"]) && $_SESSION["currentParking"]["address"]["city"] != "" && $_SESSION["currentParking"]["address"]["city"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["city"] ."\" readonly";} else {echo "value=\"\" placeholder=\"Ville\"";} ?> >
+				<div class="input-container">
+					<input id="city" type="text" class="text-input" name="city" <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["city"]) && $_SESSION["currentParking"]["address"]["city"] != "" && $_SESSION["currentParking"]["address"]["city"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["city"] ."\" readonly";} else {echo "value=\"\" placeholder=\"\"";} ?> >
+					<label for="city" class="label">Ville</label>
 				</div>
-				<div class="inputBox">
-					<span>Pays</span><br /> 
-					<input id="country" type="text" class="inputField" name="country"  <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["country"]) && $_SESSION["currentParking"]["address"]["country"] != "" && $_SESSION["currentParking"]["address"]["country"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["country"] ."\" readonly";} else {echo "value=\"\" placeholder=\"Pays\"";} ?> >
+				<div class="input-container">
+					<input id="country" type="text" class="text-input" name="country"  <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["country"]) && $_SESSION["currentParking"]["address"]["country"] != "" && $_SESSION["currentParking"]["address"]["country"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["country"] ."\" readonly";} else {echo "value=\"\" placeholder=\"\"";} ?> >
+					<label for="country" class="label">Pays</label>
 				</div>
-				<div class="inputBox">
-					<span>Code postal</span><br /> 
-					<input id="postalCode" type="number" min="0" max="99999" class="inputField" name="postalCode"  <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["postalCode"]) && $_SESSION["currentParking"]["address"]["postalCode"] != "" && $_SESSION["currentParking"]["address"]["postalCode"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["postalCode"] ."\" readonly";} else {echo "value=\"\" placeholder=\"Code postal\"";} ?> >
+				<div class="input-container">
+					<input id="postalCode" type="number" min="0" max="99999" class="text-input" name="postalCode"  <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["postalCode"]) && $_SESSION["currentParking"]["address"]["postalCode"] != "" && $_SESSION["currentParking"]["address"]["postalCode"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["postalCode"] ."\" readonly";} else {echo "value=\"\" placeholder=\"\"";} ?> >
+					<label for="postalCode" class="label">Code postal</label>
 				</div>
 			</form>
 			

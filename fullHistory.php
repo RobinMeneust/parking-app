@@ -18,7 +18,11 @@ if(!isset($_SESSION['VAR_profil'])){
 <body>
 	<?php include_once("Header.php"); ?>
 
-	<div class="content">
+	<div id="bandeauFullHistory" >
+		<h1 id="titleAddHistory">Liste détaillé des parkings utilisés</h1>
+	</div>
+
+	<div id="contentFullHistory">
 		<table id="tableFullHistory"></table>
 	</div>
 

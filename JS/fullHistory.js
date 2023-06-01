@@ -39,14 +39,15 @@ function addElementToHistory(table, parking) {
 
 function addHeader(table) {
 	let newRow = document.createElement("tr");
+	newRow.id="headerTable";
 	addToRow(newRow, "Date de visite", true);
 	addToRow(newRow, "Montant dépensé", true);
 	addToRow(newRow, "Nom", true);
 	addToRow(newRow, "N° de rue", true);
 	addToRow(newRow, "Rue", true);
 	addToRow(newRow, "Ville", true);
-	addToRow(newRow, "Code postal", true);
 	addToRow(newRow, "Pays", true);
+	addToRow(newRow, "Code postal", true);
 	table.appendChild(newRow);
 }
 

@@ -860,7 +860,59 @@ hr {
     font-weight: bold;
 }
 
-#tableFullHistory td, #tableFullHistory th {
+#contentFullHistory {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 100px 250px 100px;
+}
+
+#bandeauFullHistory {
+    background-color: #22202f;
+    width: 100%;
+    color:#fff;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+#tableFullHistory {
+    border-collapse: collapse;
+    width: 80%;
+    height: 80%;
+    border: 1px solid #bdc3c7;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0,0,0,00.23em);
+
+}
+
+#tableFullHistory tr {
+    transition: all 0.2s ease-in;
+    cursor: pointer;
+}
+#tableFullHistory tr:not(#headerTable):hover {
+    background-color: #f5f5f5;
+    transform: scale(1.02);
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0,0,0,00.23em);
+}
+
+#tableFullHistory th,td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+ #headerTable {
+    background-color: #16a085;
+    color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+    #tableFullHistory {
+        width: 90%;
+    }
+}
+
+/* #tableFullHistory td, #tableFullHistory th {
     border: black solid 1px;
     padding: 20px 30px;
     text-align: center;
@@ -868,7 +920,7 @@ hr {
 
 #tableFullHistory {
     border-collapse: collapse;
-}
+} */
 
 .detailsButtons {
     position: relative;
@@ -1009,7 +1061,6 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     margin: 0;
     padding: 50px 50%;
     color: rgb(167, 198, 207);
-    
 }
 
 .cells {
@@ -1342,12 +1393,109 @@ table tbody tr:nth-child(odd) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 70px 10px;
+    margin-bottom: 20px;
+}
+
+#bandeauAddToHistory {
+    background-color: #22202f;
+    width: 100%;
+    color:#fff;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+#titleAddHistory {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: center;
+}
+
+.contentAddToHistory .inputField {
+    outline: none;
+    padding: 5px 5px;
+    margin: 5px 0;
+}
+
+span { 
+    font-size: 12px;
+}
+
+.text-input {
+    background-color: #eee;
+    border: none;
+    text-decoration: none;
+    margin: 12px 0;
+    padding: 12px 15px;
+    width: 100%;
+}
+
+.input-container  {
+    width: 280px;
+    position: relative;
+}
+
+
+.label {
+    position: absolute;
+    left: 10px;
+    top: 3px;
+    transition: all 0.2s;
+    padding: 0 2px;
+    z-index: 1;
+    color: #b3b3b3;
+    font-size: 14px;
+}
+
+.label::before{
+    content: "";
+    height: 15px;
+    background-color: white;
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 100%;
+    z-index: -1;
+}
+
+.text-input {
+    padding: 0.8rem;
+    width: 100%;
+    border: 2px solid #382f26;
+    background-color: white;
+    border-radius: 5px;
+    font-size: 18px;
+    outline: none;
+    transition: all 0.3s;
+    color: black;
+}
+
+.text-input:focus {
+    border: 2px solid #fd7f0a;
+}
+
+.text-input:focus + .label {
+    top: -4px;
+    color: #fd7f0a;
+    font-size: 14px;
+}
+
+.text-input::placeholder {
+    font-size: 16px;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.text-input:focus::placeholder {
+    opacity: 1;
+    animation-delay: 0.2s;
 }
 
 #btnAddToHistory {
     padding: 10px 60px;
-    background-color: #fff;
+    background-color: #212f3d;
+    color: white;
     border: 0;
     outline: 0;
     cursor: pointer;
@@ -1370,9 +1518,11 @@ table tbody tr:nth-child(odd) {
     visibility: hidden;
     transition: all 0.4s;
     border: black solid 3px;
+    z-index: 3;
 }
 
 .open-popupAddToHistory {
+    z-index: 3;
     visibility: visible;
     top: 50%;
     transform: translate(-50%,-50%) scale(1);
