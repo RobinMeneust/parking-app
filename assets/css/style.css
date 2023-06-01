@@ -749,33 +749,29 @@ hr {
     text-transform: uppercase;
     font-size: 20px;
     letter-spacing: 1px;
-    margin: 1%;
+    margin: 5% 0 0% 0;
 }
 
 #lastNameProfile {
+    color: var(--secondary-color);
     border-bottom: 1px solid #3fB6A8;
-    margin: 2% 0 2% 1%;
+    margin: 2% 0 2% 0;
     width: 50%;
     font-size: 18px;
 }
 
 #firstNameProfile {
+    color: var(--secondary-color);
     border-bottom: 1px solid #3fB6A8;
-    margin: 2% 0 2% 1%;
+    margin: 2% 0 2% 0;
     width: 50%;
     font-size: 18px;
 }
 
 #emailProfile {
+    color: var(--secondary-color);
     border-bottom: 1px solid #3fB6A8;
-    margin: 2% 0 2% 1%;
-    width: 50%;
-    font-size: 18px;
-}
-
-#passwordProfile {
-    border-bottom: 1px solid #3fB6A8;
-    margin: 2% 0 2% 1%;
+    margin: 2% 0 2% 0;
     width: 50%;
     font-size: 18px;
 }
@@ -817,6 +813,11 @@ hr {
     border-radius: 20px;
     width: 50%;
     padding: 20px 20px;
+}
+
+
+#navProfileTime label {
+    color: #fff;
 }
 
 .date_input {
@@ -907,6 +908,10 @@ hr {
     color: black;
     text-decoration-line: underline;
     font-weight: bold;
+}
+
+.dark-mode #linkDetailledProfile a {
+    color: #fff;
 }
 
 #contentFullHistory {
@@ -1048,7 +1053,6 @@ hr {
     left: 20%;
 }
 
-
 .detailsButtons i::after{
 	content: '';
     position: absolute;
@@ -1069,7 +1073,6 @@ hr {
     width: 20px;
     left: 80%;
 }
-
 
 #Start_date {
     background: linear-gradient(to right, lightblue, #fffb85);
@@ -1203,15 +1206,18 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     text-decoration: underline;
 }
 
+.dark-mode .helpcontent a {
+    color: #fff;
+    text-decoration: underline;
+}
+
 .smallTransparentText {
     color: #666666;
     font-size:10px !important;
     margin-top:50px;
 }
 
-/* End of Personnal Data and Legal Mention */
-
-
+/* End Legal Mention */
 
 @media screen and (max-width: 768px) {
     .content_footer {
