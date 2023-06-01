@@ -20,12 +20,12 @@ if(!isset($_SESSION['VAR_profil'])){
 
 	<div class="content">
 		<div class="horizontalMenu">
-			<input id="yearGraph" name="yearGraph" style="text-align:center;" class="menuButton rectangular" type="number" value="2023" min="1900" max="2050">
-			<button id="refreshDate" style="text-align:center;" class="menuButton rectangular">Valider</button>
+			<input class="date_input" id="yearGraph" name="yearGraph" style="text-align:center;" type="number" value="2023" min="1900" max="2050">
+			<a id="refreshDate" class="detailsButtons" style="text-align:center; color:black; --clr:#1e9bff"><span>Valider</span><i></i></a>
 		</div>
 		<div class="graphsContainer">
-			<canvas id="visits"></canvas>
-			<canvas id="expenses"></canvas>
+			<canvas class="graph" id="visits"></canvas>
+			<canvas class="graph" id="expenses"></canvas>
 		</div>
 	</div>
 

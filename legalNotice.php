@@ -18,24 +18,15 @@
                 <p> <strong> Directeur de la publication : </strong> Yann Etrillard </p>
                 <p> Pour toute demande concernant un produit ou service, pour toutes suggestions, informations, réactions concernant ce site, <a href="./form.php"> cliquez ici </a>. </p>
                 <p>
-                    <strong> L'ensemble des onglets commerciaux présents sur Park'O Top.com sont édités par PARK'O TOP - S.A au capital social : 1 000 € RCS Pontoise XXX XXX XXX - siège social : Chemin des Paradis, 95000 Cergy CEDEX
-                        <br> N° TVA intracommunataire : FR XXXXXXXXXXX
+                    <strong> L'ensemble des onglets commerciaux présents sur Park'O Top.com sont édités par PARK'O TOP
                         <br> Directeur de la publication : Yann Etrillard.
-                        <br> Hébergeur : Compagnie IBM France, 17 avenue de l'Europe, 92275 Bois-Colombes Cedex, RCS 552 118 465
+                        <br> Hébergeur : XXXXXXXXXXXX
                         <br> Téléphone : XX XX XX XX XX
                     </strong>
                 </p>
                 <h3> Sites et pages PARK'O TOP des réseaux sociaux </h3>
                 <p>
                     Les sites ou pages PARK'O TOP des réseaux sociaux (tels que LINKEDIN, FACEBOOK, INSTAGRAM, TWITTER) sont édités par PARK'O TOP.
-                </p>
-                <p>
-                    Siège social :
-                    <br> Chemin des Paradis
-                    <br> 95000 Cergy
-                    <br> Directeur de la publication : Yann Etrillard
-                    <br> Pour tout Contact : <a href="./form.php"> cliquez ici </a>
-                    <br> Teléphone : XX XX XX XX XX
                 </p>
                 <p style="font-size:11px;color:#666;margin-top:50px;">
                     Copyright Park'O Top, tous droits d'auteur des textes et oeuvre réservés.

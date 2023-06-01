@@ -18,7 +18,6 @@ function initialize() {
     });
     
     sendQueryGraph('./PHP/queryMysqliReadOnly.php?data=visits&y='+year).then((result) =>{
-		console.log(result);
         visitsGraph = createVisitsGraph(result);
     });
 }

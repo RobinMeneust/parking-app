@@ -24,7 +24,7 @@ if(!isset($_SESSION['VAR_profil'])){
 				<b style="color:blue; font-size:40px">-</b> : Valeurs réelles<br>
 				<b style="color:red; font-size:40px">-</b>  : Valeurs prédites
 			</div>
-			<canvas id="expensesPredict" style="height:500px;width:800px"></canvas>
+			<canvas class="graph" id="expensesPredict" style="height:500px;width:800px"></canvas>
 		</div>
 	</div>
 	<?php include_once("Footer.php"); ?>

@@ -1,3 +1,4 @@
+<?php if(session_status() != PHP_SESSION_ACTIVE) {session_start();} ?>
 <footer>
     <div class="container">
         <div class="content_footer">
@@ -6,7 +7,7 @@
                     <img src="./assets/img/logo3.png" alt="">
                     <span class="logo_name">PARK'O TOP</span>
                     <button class="dark-mode" id="moon"><i class="fa-solid fa-moon"></i></button>
-                    <button class="light-mode" id="sun"><i class="fa-solid fa-sun"></i></button>
+                    <button class="light-mode hide" id="sun"><i class="fa-solid fa-sun"></i></button>
                 </div>
 
                 <div class="desc_area">
@@ -37,25 +38,84 @@
         <div class="footer_bottom">
             <div class="copy_right">
                 <i class="fa-solid fa-copyright"></i>
-                    <span>2023 PARK'O TOP</span> 
+                <span>2023 PARK'O TOP</span> 
             </div>
         </div>
     </div>
 </footer>
 
 <script>
-    const darkMode = document.getElementById("moon");
-    const lightMode = document.getElementById("sun");
+    const darkModeButton = document.getElementById("moon");
+    const lightModeButton = document.getElementById("sun");
+    const graphs = document.getElementsByClassName("graph");
 
-    darkMode.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        darkMode.classList.toggle('hide');
-        lightMode.classList.remove('hide');
-    })
+    darkModeButton.addEventListener('click', () => { switchThemeEvent(true); });
+    lightModeButton.addEventListener('click', () => { switchThemeEvent(false); });
 
-    lightMode.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        lightMode.classList.toggle('hide');
-        darkMode.classList.remove('hide');
-    })
+    window.onload = refreshTheme;
+
+    async function getCurrentTheme() {
+        let url = "./PHP/theme.php?action=get";
+        
+        return fetch(url).then(function(response) {
+            if(response.status >= 200 && response.status < 300) {
+                return response.text();
+            }
+            throw new Error(response.statusText);
+        }).catch((err)=>{
+            console.error(err);
+        });
+    }
+
+    /*
+        Check what is the current theme and set it to the page
+    */
+    async function refreshTheme() {
+        console.log("refresh");
+        let currentTheme = await getCurrentTheme();
+        if(currentTheme == "dark") {
+            switchThemeEvent(true);
+        } else {
+            switchThemeEvent(false);
+        }
+    }
+
+    /*
+        Get the theme or toggle dark mode
+    */
+    async function switchTheme(){
+        let url = "./PHP/theme.php?action=switch";
+        
+        return fetch(url).then(function(response) {
+            if(response.status >= 200 && response.status < 300) {
+                return response.text();
+            }
+            throw new Error(response.statusText);
+        }).catch((err)=>{
+            console.error(err);
+        });
+    }
+
+    /*
+        Event use to switch the theme mode
+    */
+
+    async function switchThemeEvent(darkModeOn) {
+        if((!document.body.classList.contains('dark-mode') && darkModeOn) || document.body.classList.contains('dark-mode') && !darkModeOn) {
+            let currentTheme = await getCurrentTheme();
+            let newTheme = (darkModeOn ? "dark" : "light");
+            if(currentTheme != newTheme)
+                await switchTheme();
+            document.body.classList.toggle('dark-mode');
+            darkModeButton.classList.toggle('hide');
+            lightModeButton.classList.toggle('hide');
+            
+            if(graphs != null) {
+                for(let i=0; i<graphs.length; i++) {
+                    //graph[i];
+                    //TODO
+                }
+            }
+        }
+    }
 </script>
