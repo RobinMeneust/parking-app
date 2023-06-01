@@ -28,6 +28,6 @@ if(!isset($_SESSION['VAR_profil'])){
 		</div>
 	</div>
 	<?php include_once("Footer.php"); ?>
-	<script>window.onload = async function() { await predict; }</script>
+	<script>window.onload = async function() {await predict(); }</script>
 </body>
 </html>
