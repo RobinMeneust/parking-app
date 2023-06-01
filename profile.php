@@ -14,7 +14,7 @@ if(!isset($_SESSION['VAR_profil'])){
         <script src="JS/userProfile.js"></script>
     </head>
 
-    <body onload="refreshDate()">
+    <body>
         <?php include_once("Header.php"); ?>
 
         <div id="bandeau" class="contentProfil">
@@ -91,5 +91,6 @@ if(!isset($_SESSION['VAR_profil'])){
         </div>
         
         <?php include_once("Footer.php"); ?>
+        <script>window.onload = refreshDate;</script>
     </body>
 </html>

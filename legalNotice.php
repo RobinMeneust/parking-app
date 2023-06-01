@@ -14,12 +14,10 @@
         <div class="content">
             <div class="helpcontent">
                 <h1> Contactez la rédaction </h1>
-                <h2> Le site www.park'otop.com est une publication de Park'O Top, Chemin des Paradis, 95000 Cergy. France </h2>
-                <p> <strong> Directeur de la publication : </strong> Yann Etrillard </p>
+                <h2> Le site www.park'otop.com est une publication de Park'O Top</h2>
                 <p> Pour toute demande concernant un produit ou service, pour toutes suggestions, informations, réactions concernant ce site, <a href="./form.php"> cliquez ici </a>. </p>
                 <p>
                     <strong> L'ensemble des onglets commerciaux présents sur Park'O Top.com sont édités par PARK'O TOP
-                        <br> Directeur de la publication : Yann Etrillard.
                         <br> Hébergeur : XXXXXXXXXXXX
                         <br> Téléphone : XX XX XX XX XX
                     </strong>
@@ -28,7 +26,7 @@
                 <p>
                     Les sites ou pages PARK'O TOP des réseaux sociaux (tels que LINKEDIN, FACEBOOK, INSTAGRAM, TWITTER) sont édités par PARK'O TOP.
                 </p>
-                <p style="font-size:11px;color:#666;margin-top:50px;">
+                <p class="smallTransparentText">
                     Copyright Park'O Top, tous droits d'auteur des textes et oeuvre réservés.
                     <br> Park'O Top ne garantit en aucune façon l'exactitude, la précision, l'exhaustivité ou l'adéquation, des informations mises à disposition sur ses sites, y compris l'ensemble des liens hypertextes ou toute autre liaison informatique utilisée, directement ou indirectement, à partir de ces sites.
                     <br> Les sites sont protégés par le droit d'auteur. L'usage de tout ou partie des sites, notamment par téléchargement, reproduction, transmission ou représentation sur tous supports et par tous procédés, à d'autres fins que pour usage personnel et privé dans un but non commercial est strictement interdit.

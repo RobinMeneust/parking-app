@@ -15,7 +15,7 @@ if(!isset($_SESSION['VAR_profil'])){
 	<script src="JS/userGraphs.js"></script>
 </head>
 
-<body onload="initialize()">
+<body>
 	<?php include_once("Header.php"); ?>
 
 	<div class="content">
@@ -30,5 +30,6 @@ if(!isset($_SESSION['VAR_profil'])){
 	</div>
 
 	<?php include_once("Footer.php"); ?>
+	<script>window.onload = initialize;</script>
 </body>
 </html>

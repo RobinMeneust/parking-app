@@ -11,7 +11,7 @@
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATRnNNrouwTPPFjX_C5u3MRivuWj2P22M&callback=initMap&v=weekly"	defer></script>
 	</head>
 
-	<body onload="initializeForms();">
+	<body>
 		<?php include_once("Header.php"); ?>
 
 		<?php 
@@ -115,5 +115,6 @@
 				echo '</script>'."\n";
 			} 
 		?>
+		<script>window.onload = initializeForms;</script>
 	</body>
 </html>

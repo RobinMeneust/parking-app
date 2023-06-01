@@ -27,7 +27,6 @@ if(session_status() != PHP_SESSION_ACTIVE){
       <div class="sub-menu">
         <div class="user-info">
           <img id="user_logo" src="./assets/img/user_picture.jpg" alt="" />
-          <!--<h2></h2>-->
           <h2><?php echo $_SESSION['VAR_profil']['firstName'] . " " .$_SESSION['VAR_profil']['lastName']?></h2>
         </div>
         <hr/>

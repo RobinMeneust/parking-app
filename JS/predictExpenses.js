@@ -1,4 +1,37 @@
 const months=["null","janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+let graph = null;
+
+// Change the theme of the graph
+
+
+async function switchPredictGraphTheme(theme) {
+    if(graph == null) {
+		await predict();
+    }
+	currentTheme = (graph.options.scales.x.grid.color === "lightgrey" ? "light" : "dark");
+    if (currentTheme != theme) {
+		if(theme == "dark") {
+            graph.options.plugins.title.color = "white";
+
+            graph.options.scales.x.grid.color = "white";
+            graph.options.scales.y.grid.color = "white";
+
+            graph.options.scales.x.ticks.color = "white";
+            graph.options.scales.y.ticks.color = "white";
+        } else {
+			graph.options.plugins.title.color = "black";
+
+            graph.options.scales.x.grid.color = "lightgrey";
+            graph.options.scales.y.grid.color = "lightgrey";
+
+            graph.options.scales.x.ticks.color = "black";
+            graph.options.scales.y.ticks.color = "black";
+        }
+
+        graph.update();
+    }  
+}
+
 
 
 // Get data about a specific user (profile)
@@ -171,14 +204,13 @@ async function predict() {
 	// The color of the predicted curve is set to red
 	const color = (ctx) => ctx.p1.parsed.x >= yAxisKnown.length ? "red" : "blue";
 
-	new Chart("expensesPredict", {
+	graph = new Chart("expensesPredict", {
         type: "line",
         data:{
             labels:xAxis,
             datasets: [{
+				borderWidth: 6,
                 data: yAxis ,
-                borderColor: "blue",
-                backgroundColor: "black",
 				label : 'Montant',
                 fill: false,
 				cubicInterpolationMode: 'monotone',
@@ -188,6 +220,7 @@ async function predict() {
             }]
         },
         options:{
+			maintainAspectRatio: true,
 			responsive: false,
 			plugins: {
 				legend: {
@@ -195,7 +228,29 @@ async function predict() {
 				},
 				title: {
 					display: true,
+					color: "black",
 					text: "Prédiction des dépenses mensuelles"
+				},
+			},
+			scales: {
+				y: {
+					display: true,
+					ticks: {
+						color:"black",
+						beginAtZero: true
+					},
+					grid: {
+						color: "lightgrey"
+					}
+				},
+				x: {
+					display: true,
+					ticks: { 
+						color: "black",
+					},
+					grid: {
+						color: "lightgrey"
+					}
 				}
 			}
         }

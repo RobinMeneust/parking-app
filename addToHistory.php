@@ -10,7 +10,7 @@ if(!isset($_SESSION['VAR_profil'])){
 		<?php include_once("head.php"); ?>
 		<script src="./JS/addToHistory.js"></script>
 	</head>
-	<body onload="getCurrentParkingFromSession();">
+	<body>
 		<?php include_once("Header.php"); ?>
 		<div class="contentAddToHistory">
 			<h2>Ajouter ce parking à votre historique</h2>
@@ -71,8 +71,8 @@ if(!isset($_SESSION['VAR_profil'])){
 			</script>	
 			
 		</div>
-
 		<?php include_once("Footer.php"); ?>
+		<script>window.onload = getCurrentParkingFromSession;</script>
 	</body>
 
 </html>

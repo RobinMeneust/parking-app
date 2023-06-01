@@ -5,6 +5,58 @@ const regex = new RegExp('^([0-9]{4})$'); // used to check if the given date (ye
 
 let visitsGraph = null;
 let expensesGraph = null;
+
+/*
+    Change the theme of the given graph
+*/
+
+function updateGraphTheme(graph, newTheme, borderColor, bgColor) {
+    if(graph == null)
+        return;
+    let currentTheme = (graph.options.scales.xAxes[0].gridLines.color === "lightgrey" ? "light" : "dark");
+    if (currentTheme != newTheme) {
+        if(newTheme == "dark") {
+            graph.options.title.fontColor = "white";
+
+            graph.options.scales.xAxes[0].gridLines.color = "white";
+            graph.options.scales.yAxes[0].gridLines.color = "white";
+
+            graph.options.scales.xAxes[0].ticks.fontColor = "white";
+            graph.options.scales.yAxes[0].ticks.fontColor = "white";
+
+            graph.data.datasets[0].borderColor = borderColor.dark;
+            graph.data.datasets[0].backgroundColor = bgColor.dark;
+        } else {
+            graph.options.title.fontColor = "black";
+
+            graph.options.scales.xAxes[0].gridLines.color = "lightgrey";
+            graph.options.scales.yAxes[0].gridLines.color = "lightgrey";
+
+            graph.options.scales.xAxes[0].ticks.fontColor = "black";
+            graph.options.scales.yAxes[0].ticks.fontColor = "black";
+
+            graph.data.datasets[0].borderColor = borderColor.light;
+            graph.data.datasets[0].backgroundColor = bgColor.light;
+        }
+
+        graph.update();
+    }  
+}
+
+
+/*
+    Change the theme of all the graphs
+*/
+
+function switchUserGraphsTheme(darkModeOn) {
+    if(visitsGraph == null && expensesGraph == null) {
+        initialize();
+    }
+
+    updateGraphTheme(visitsGraph, darkModeOn, {light:"black", dark:"white"}, {light:"blue", dark:"#CD1818"});
+    updateGraphTheme(expensesGraph, darkModeOn, {light:"blue", dark:"#CD1818"}, {light:"black", dark:"white"});
+}
+
 /*
     Initialize the page userGraphs.php
 */
@@ -14,10 +66,16 @@ function initialize() {
     button.addEventListener("click",function(){refreshDate();});
 
     sendQueryGraph('./PHP/queryMysqliReadOnly.php?data=expenses&y='+year).then((result) =>{
+        if(expensesGraph != null){
+            visitsGraph.destroy();
+        }
         expensesGraph = createExpensesGraph(result);
     });
     
     sendQueryGraph('./PHP/queryMysqliReadOnly.php?data=visits&y='+year).then((result) =>{
+        if(visitsGraph != null){
+            visitsGraph.destroy();
+        }
         visitsGraph = createVisitsGraph(result);
     });
 }
@@ -43,14 +101,25 @@ function createGraph(idCanvas, type, yValues, borderColor, bgColor, doFill, titl
             legend: {display: false},
             title: {
                 display: true,
-                text: title
+                text: title,
+                fontColor: "black"
             },
             scales: {
                 yAxes: [{
                     display: true,
                     ticks: {
+                        fontColor:"black",
                         beginAtZero: true
-                    }
+                    },
+                    gridLines: { color: "lightgrey" }
+                }],
+                xAxes: [{
+                    display: true,
+                    ticks: { 
+                        color: "red",
+                        fontColor:"black", 
+                    },
+                    gridLines: { color: "lightgrey" }
                 }]
             }
         }
