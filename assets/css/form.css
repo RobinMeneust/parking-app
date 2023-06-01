@@ -31,9 +31,17 @@ textarea {
     grid-template-columns: repeat(2, 1fr);
 }
 
+.dark-mode .form {
+    background-color: #27282c;
+}
+
 .contact-form {
     background-color: #1a68bc;
     position: relative;
+}
+
+.dark-mode .contact-form {
+    background-color: #1e3388;
 }
 
 .contact-form:before {
@@ -45,6 +53,10 @@ textarea {
     transform: rotate(45deg);
     top: 50px;
     left: -13px;
+}
+
+.dark-mode .contact-form:before {
+    background-color: #1e3388;
 }
 
 #formMsg {
