@@ -77,6 +77,7 @@ header {
     font-weight: bold;
     text-decoration: none;
     color: #000;
+    display: flex;
 }
 
 #user_logo {
@@ -365,10 +366,17 @@ header {
     cursor: pointer;
 }
   
+.account {
+    display: flex;
+    vertical-align: middle;
+}
+
+
 .account a {
     text-decoration: none;
     color: #fff;
     font-weight: bold;
+    
 }
 
 li {
@@ -890,7 +898,6 @@ hr {
     align-items: center;
     justify-content: center;
     padding: auto;
-    text-decoration-line: underline;
     color: black;
     font-weight: bold;
 }
@@ -908,7 +915,6 @@ hr {
 
 #linkDetailledProfile a {
     color: black;
-    text-decoration-line: underline;
     font-weight: bold;
 }
 
@@ -1420,13 +1426,10 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     }
 }
 
-
-
 /*############ DROP DOWN MENU ###########*/
 
 table {
 	border-collapse: collapse;
-    font-family: Tahoma, Geneva, sans-serif;
 }
 
 .dark-mode table{

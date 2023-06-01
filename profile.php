@@ -14,7 +14,7 @@ if(!isset($_SESSION['VAR_profil'])){
         <script src="JS/userProfile.js"></script>
     </head>
 
-    <body onload="profileData()">
+    <body>
         <?php include_once("Header.php"); ?>
 
         <div id="bandeau" class="contentProfil">

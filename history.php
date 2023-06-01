@@ -55,7 +55,7 @@ if(!isset($_SESSION['VAR_profil'])){
 			</table>
 
             <div id="linkDetailledProfile">
-                <a href="fullHistory.php">HISTORIQUE DETAILLE</a>
+                <a href="fullHistory.php" class="detailsButtons" style="--clr:#a98dec"><span>HISTORIQUE DETAILLE</span><i></i></a>
             </div>
         </div>
         

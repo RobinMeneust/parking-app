@@ -14,7 +14,7 @@
         <div class="content">
             <div class="helpcontent">
                 <h1> POLITIQUE DE PROTECTION DES DONNEES PERSONNELLES </h1>
-                <h2 class="titlehelp" style="text-align: center"> Vous voulez exercer vos droits sur vos données personnelles&nbsp;? Contactez nous en&nbsp;cliquant&nbsp;sur&nbsp;le&nbsp;bouton&nbsp;ci-dessous. </h2>
+                <h2 class="titlehelp" style="text-align: center"> Vous voulez exercer vos droits sur vos données personnelles&nbsp;? <br> Contactez nous en&nbsp;cliquant&nbsp;sur&nbsp;le&nbsp;bouton&nbsp;ci-dessous. </h2>
                 <div class="idz_btn_fix">
                     <div id="idzonline">
                         <a href="./form.php" class="chat-cta">
