@@ -6,7 +6,6 @@
     box-sizing: border-box;
 }
 
-body,
 input,
 textarea {
     font-family: "Poppins", sans-serif;
@@ -220,82 +219,6 @@ textarea.input {
     font-size: 0.95rem;
 }
 
-.icon {
-    width: 28px;
-    margin-right: 0.7rem;
-}
-
-.social-media {
-    padding: 2rem 0 0 0;
-}
-
-.social-media p {
-    color: #333;
-}
-
-.social-icons {
-    display: flex;
-    margin-top: 0.5rem;
-}
-
-.social-icons a {
-    width: 35px;
-    height: 35px;
-    border-radius: 5px;
-    background: linear-gradient(45deg, #1a68bc, #149279);
-    color: #fff;
-    text-align: center;
-    line-height: 35px;
-    margin-right: 0.5rem;
-    transition: 0.3s;
-}
-
-.social-icons a:hover {
-    transform: scale(1.05);
-}
-
-.contact-info:before {
-    content: "";
-    position: absolute;
-    width: 110px;
-    height: 100px;
-    border: 22px solid #1a68bc;
-    border-radius: 50%;
-    bottom: -77px;
-    right: 50px;
-    opacity: 0.3;
-}
-
-.big-circle {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: linear-gradient(to bottom, #1cd4af, #159b80);
-    bottom: 50%;
-    right: 50%;
-    transform: translate(-40%, 38%);
-}
-
-.big-circle:after {
-    content: "";
-    position: absolute;
-    width: 360px;
-    height: 360px;
-    background-color: #fafafa;
-    border-radius: 50%;
-    top: calc(50% - 180px);
-    left: calc(50% - 180px);
-}
-
-.square {
-    position: absolute;
-    height: 400px;
-    top: 50%;
-    left: 50%;
-    transform: translate(181%, 11%);
-    opacity: 0.2;
-}
 
 @media (max-width: 850px) {
     .form {

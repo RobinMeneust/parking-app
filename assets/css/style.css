@@ -819,6 +819,11 @@ hr {
     padding: 20px 20px;
 }
 
+
+#navProfileTime label {
+    color: #fff;
+}
+
 .date_input {
     padding: 4px;
 }
@@ -907,6 +912,10 @@ hr {
     color: black;
     text-decoration-line: underline;
     font-weight: bold;
+}
+
+.dark-mode #linkDetailledProfile a {
+    color: #fff;
 }
 
 #contentFullHistory {
@@ -1200,6 +1209,11 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 
 .helpcontent a {
     color: #333333;
+    text-decoration: underline;
+}
+
+.dark-mode .helpcontent a {
+    color: #fff;
     text-decoration: underline;
 }
 
