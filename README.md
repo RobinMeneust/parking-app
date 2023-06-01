@@ -71,6 +71,7 @@ Run the following command in the root of this project (parking-app/): `docker-co
 Go to http://localhost:8000/ in your web browser
 
 You may need to wait a little before using elements using the database, since it needs to load before.
+For instance you may get the warning : `Warning: mysqli_connect(): (HY000/2002)` in that case, just wait a couple of minutes.
 
 ### To edit the database (admin)
 

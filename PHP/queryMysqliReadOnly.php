@@ -13,7 +13,6 @@ class ValueWithDate {
 }
 
 class Parking {
-	public $dateVisited;
 	public $expenses;
 	public $name;
 	public $houseNumber;
@@ -22,8 +21,7 @@ class Parking {
 	public $country;
 	public $postalCode;
 
-	function __construct($d, $e, $n, $h, $s, $ci, $co, $p) {
-		$this->dateVisited = $d;
+	function __construct($e, $n, $h, $s, $ci, $co, $p) {
 		$this->expenses = $e;
 		$this->name = $n;
 		$this->houseNumber = $h;
@@ -31,6 +29,24 @@ class Parking {
 		$this->city = $ci;
 		$this->country = $co;
 		$this->postalCode = $p;
+	}
+}
+
+class ParkingFull extends Parking {
+	public $dateVisited;
+
+	function __construct($d, $e, $n, $h, $s, $ci, $co, $p) {
+		parent::__construct($e, $n, $h, $s, $ci, $co, $p);
+		$this->dateVisited = $d;
+	}
+}
+
+class ParkingGroupBy extends Parking {
+	public $nbVisits;
+
+	function __construct($nbVisits, $e, $n, $h, $s, $ci, $co, $p) {
+		parent::__construct($e, $n, $h, $s, $ci, $co, $p);
+		$this->nbVisits = $nbVisits;
 	}
 }
 
@@ -140,13 +156,23 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["data"])){
 				echo json_encode($result);
 			}
 		}
-	} else if($data == "allVisits") {
-		$query = "SELECT dateVisited AS d, expenses AS e, name AS n, houseNumber AS h, street AS s, city AS ci, country AS co, postalCode AS p FROM ParkingVisite v JOIN Users u ON v.idUser = u.idUser JOIN Parking p  ON p.idParking = v.idParking JOIN Addresses a ON a.idAddress = p.idAddress WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" ORDER BY dateVisited DESC;";
+	} else if($data == "allVisitsFull") {
+		$query = "SELECT dateVisited AS d, expenses AS e, name AS n, houseNumber AS h, street AS s, city AS ci, country AS co, postalCode AS p FROM ParkingVisite v JOIN Users u ON v.idUser = u.idUser JOIN Parking p ON p.idParking = v.idParking JOIN Addresses a ON a.idAddress = p.idAddress WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" ORDER BY dateVisited DESC;";
 
 		if($resultSQL = mysqli_query($link,$query)) {
 			$result = array();
 			while($row = mysqli_fetch_assoc($resultSQL)){
-				array_push($result, new Parking($row["d"], floatval(number_format((float) $row["e"], 2, '.', '')), $row["n"], $row["h"], $row["s"], $row["ci"], $row["co"], $row["p"]));
+				array_push($result, new ParkingFull($row["d"], floatval(number_format((float) $row["e"], 2, '.', '')), $row["n"], $row["h"], $row["s"], $row["ci"], $row["co"], $row["p"]));
+			}
+			echo json_encode($result);
+		}
+	} else if($data == "allVisits") {
+		$query = "SELECT COUNT(p.idParking) AS nb, SUM(expenses) AS e, name AS n, houseNumber AS h, street AS s, city AS ci, country AS co, postalCode AS p FROM ParkingVisite v JOIN Users u ON v.idUser = u.idUser JOIN Parking p ON p.idParking = v.idParking JOIN Addresses a ON a.idAddress = p.idAddress WHERE email = \"".$_SESSION["VAR_profil"]["email"]."\" GROUP BY p.idParking";
+
+		if($resultSQL = mysqli_query($link,$query)) {
+			$result = array();
+			while($row = mysqli_fetch_assoc($resultSQL)){
+				array_push($result, new ParkingGroupBy($row["nb"], floatval(number_format((float) $row["e"], 2, '.', '')), $row["n"], $row["h"], $row["s"], $row["ci"], $row["co"], $row["p"]));
 			}
 			echo json_encode($result);
 		}

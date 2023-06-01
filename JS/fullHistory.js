@@ -1,7 +1,10 @@
-window.onload = createTable;
+window.onload = createFullTable;
+let isFullMode = false;
 
-async function getListOfVisits() {
+async function getListOfVisits(fullMode) {
 	let url = "./PHP/queryMysqliReadOnly.php?&data=allVisits";
+	if(fullMode)
+		url += "Full";
 	return fetch(url).then(function(response) {
 		if(response.status >= 200 && response.status < 300) {
 			return response.json();
@@ -37,29 +40,51 @@ function addElementToHistory(table, parking) {
 	table.appendChild(newRow);
 }
 
-function addHeader(table) {
+function addHeader(table, elements) {
 	let newRow = document.createElement("tr");
-	newRow.id="headerTable";
-	addToRow(newRow, "Date de visite", true);
-	addToRow(newRow, "Montant dépensé", true);
-	addToRow(newRow, "Nom", true);
-	addToRow(newRow, "N° de rue", true);
-	addToRow(newRow, "Rue", true);
-	addToRow(newRow, "Ville", true);
-	addToRow(newRow, "Pays", true);
-	addToRow(newRow, "Code postal", true);
+	newRow.id = "headerTable";
+	for(let i=0; i<elements.length; i++) {
+		addToRow(newRow, elements[i], true);
+	}
 	table.appendChild(newRow);
 }
 
-async function createTable() {
+function clearTable() {
 	let table = document.getElementById('tableFullHistory');
-	let listOfVisits = await getListOfVisits();
-	if(listOfVisits != null) {
-		addHeader(table, listOfVisits[0]);
+	table.removeChild
+	while(table.firstChild != null) {
+		table.removeChild(table.firstChild);
+	}
+}
 
+async function createTable(fullMode) {
+	clearTable();
+	let table = document.getElementById('tableFullHistory');
+	let listOfVisits = await getListOfVisits(fullMode);
+	if(listOfVisits != null && listOfVisits != "") {
+		let first = "";
+		if(fullMode)
+			first = "Date de visite";
+		else
+			first = "Nombre de visites";
+
+		addHeader(table, [first, "Montant dépensé", "Nom", "N° de rue", "Rue", "Ville", "Pays", "Code postal"]);
 		for(let i=0; i<listOfVisits.length; i++) {
 			addElementToHistory(table, listOfVisits[i]);
 		}
 	}
 }
 
+async function createFullTable() {
+	if(!isFullMode) {
+		createTable(true);
+		isFullMode = true;
+	}
+}
+
+async function createTableByParking() {
+	if(isFullMode) {
+		createTable(false);
+		isFullMode = false;
+	}
+}

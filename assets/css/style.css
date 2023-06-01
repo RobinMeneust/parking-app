@@ -868,7 +868,7 @@ hr {
     margin: 50px 100px 250px 100px;
 }
 
-#bandeauFullHistory {
+#bannerFullHistory {
     background-color: #22202f;
     width: 100%;
     color:#fff;
@@ -889,10 +889,12 @@ hr {
     transition: all 0.2s ease-in;
     cursor: pointer;
 }
+
 #tableFullHistory tr:not(#headerTable):hover {
     background-color: #f5f5f5;
     transform: scale(1.02);
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0,0,0,00.23em);
+    cursor: default;
 }
 
 #tableFullHistory th,td {
@@ -1072,11 +1074,6 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     border: none;
 }
 
-
-#expensesProfileTable:hover {
-    box-shadow: 0 0 20px #f5b027;
-    transition: box-shadow 1s;
-}
 
 /* End of Profil */
 

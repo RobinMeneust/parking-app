@@ -18,11 +18,12 @@ if(!isset($_SESSION['VAR_profil'])){
 <body>
 	<?php include_once("Header.php"); ?>
 
-	<div id="bandeauFullHistory" >
-		<h1 id="titleAddHistory">Liste détaillé des parkings utilisés</h1>
+	<div id="bannerFullHistory">
+		<h1 id="titleAddHistory">Liste détaillée des parkings utilisés</h1>
 	</div>
-
 	<div id="contentFullHistory">
+		<a class="detailsButtons" style="--clr:#6eff3e" onclick="createFullTable();"><span>Liste complète</span><i></i></a>
+		<a class="detailsButtons" style="--clr:#6eff3e" onclick="createTableByParking();"><span>Liste par parking</span><i></i></a>
 		<table id="tableFullHistory"></table>
 	</div>
 
