@@ -12,12 +12,13 @@ textarea {
     font-family: "Poppins", sans-serif;
 }
 
-.container {
-    width: 100%;
-    padding: 2rem;
-    overflow: hidden;
+.containerForm {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 20px 10px;
+    z-index: -1s;
 }
 
 .form {
@@ -26,7 +27,6 @@ textarea {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
     overflow: hidden;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -50,7 +50,6 @@ textarea {
 
 form {
     padding: 2.3rem 2.2rem;
-    z-index: 10;
     overflow: hidden;
     position: relative;
 }
@@ -126,7 +125,6 @@ textarea.input {
     font-size: 0.9rem;
     font-weight: 400;
     pointer-events: none;
-    z-index: 1000;
     transition: 0.5s;
 }
 
@@ -163,7 +161,6 @@ textarea.input {
     padding: 0 0.4rem;
     color: transparent;
     pointer-events: none;
-    z-index: 500;
 }
 
 .input-container span:before,

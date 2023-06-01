@@ -12,7 +12,7 @@ if(!isset($_SESSION['VAR_profil'])){
 	</head>
 	<body onload="getCurrentParkingFromSession();">
 		<?php include_once("Header.php"); ?>
-		<div class="content">
+		<div class="contentAddToHistory">
 			<h2>Ajouter ce parking à votre historique</h2>
 			<form>
 				<div class="inputBox">
@@ -44,9 +44,34 @@ if(!isset($_SESSION['VAR_profil'])){
 					<input id="postalCode" type="number" min="0" max="99999" class="inputField" name="postalCode"  <?php if(isset($_SESSION["currentParking"]) && isset($_SESSION["currentParking"]["address"]) && isset($_SESSION["currentParking"]["address"]["postalCode"]) && $_SESSION["currentParking"]["address"]["postalCode"] != "" && $_SESSION["currentParking"]["address"]["postalCode"] != "undefined") {echo "value=\"".$_SESSION["currentParking"]["address"]["postalCode"] ."\" readonly";} else {echo "value=\"\" placeholder=\"Code postal\"";} ?> >
 				</div>
 			</form>
-			<button onclick="addToHistory()">Ajouter</button>
+			
 			<p id="infoBox"></p>
+			<button id="btnAddToHistory" onclick="addToHistory()">Ajouter</button>
+			<div class="popupAddToHistory" id="popupAddToHistory">
+				<img src="./assets/img/iconeCheckAddToHistory.png" alt="" />
+				<h2>L'ajout du parking a été effectué</h2>
+				<p>Vous pouvez retrouver tous vos parkings préférés dans votre historique</p>
+				<button type="button" id="btnClosePopup">OK</button>
+			</div>
+
+			<script>
+
+				let popup = document.getElementById("popupAddToHistory");
+				let popupButton = document.getElementById("btnAddToHistory");
+				let closePopupButton = document.getElementById("btnClosePopup");
+
+				popupButton.addEventListener('click',() => {
+					popup.classList.add("open-popupAddToHistory");
+				})
+
+				closePopupButton.addEventListener('click',() => {
+					popup.classList.remove("open-popupAddToHistory")
+				})
+				
+			</script>	
+			
 		</div>
+
 		<?php include_once("Footer.php"); ?>
 	</body>
 

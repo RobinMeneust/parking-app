@@ -44,7 +44,7 @@
     ?>
 
     <body>
-        <div class="container">
+        <div class="containerForm">
       <div class="form">
         <div class="contact-info">
           <h3 class="title">Demande de contact</h3>
