@@ -48,7 +48,7 @@ textarea {
     left: -13px;
 }
 
-form {
+#formMsg {
     padding: 2.3rem 2.2rem;
     overflow: hidden;
     position: relative;
@@ -126,6 +126,7 @@ textarea.input {
     font-weight: 400;
     pointer-events: none;
     transition: 0.5s;
+    z-index: 1;
 }
 
 .input-container.textarea label {

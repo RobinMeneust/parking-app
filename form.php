@@ -55,7 +55,7 @@
 
         <div class="contact-form">  
 
-        <form action="./PHP/formCheck.php" method="get">
+        <form action="./PHP/formCheck.php" method="get" id="formMsg">
             <h3 class="title">Contactez-nous</h3>
             <div class="input-container">
             <input class="input" type="text" name="datecontact"
