@@ -748,7 +748,7 @@ hr {
         box-shadow: none;
     }
     50% {
-        box-shadow: 10px 10px 0px #f5b027;
+        box-shadow: 10px 10px 0px #e74c3c;
     }
     100% {
         box-shadow: none;
@@ -764,7 +764,7 @@ hr {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background-color: rgb(19, 164, 89);
+    background-color:#212f3d;
     border-radius: 20px;
     width: 50%;
     padding: 20px 20px;
@@ -1366,9 +1366,20 @@ table {
 	border-collapse: collapse;
     font-family: Tahoma, Geneva, sans-serif;
 }
+
+.dark-mode table{
+    background-color: #22202f;
+}
+
 table td {
 	padding: 15px;
 }
+
+.dark-mode table td {
+    border-color: black;
+    background-color: #22202f;
+}
+
 table thead td {
 	background-color: #54585d;
 	color: #ffffff;
@@ -1376,15 +1387,42 @@ table thead td {
 	font-size: 13px;
 	border: 1px solid #54585d;
 }
+
+.dark-mode table thead td{
+    color: black;
+    background-color: #22202f;
+    background-color: black;
+}
+
 table tbody td {
 	color: #636363;
 	border: 1px solid #dddfe1;
 }
+
+.dark-mode table tbody td{
+    color: #fff;
+    background-color: #22202f;
+    border-color: #3b3852;
+}
+
 table tbody tr {
 	background-color: #f9fafb;
 }
+
+.dark-mode table tbody tr {
+    color: black;
+    background-color: #22202f;
+    border-color: black;
+}
+
+
 table tbody tr:nth-child(odd) {
 	background-color: #ffffff;
+}
+
+.dark-mode table tbody tr:nth-child(odd) {
+	background-color: #22202f;
+    color: #fff;
 }
 
 /*#######################" ADD TO HISTORY PAGE  #########################*/
