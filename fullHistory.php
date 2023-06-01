@@ -28,5 +28,6 @@ if(!isset($_SESSION['VAR_profil'])){
 	</div>
 
 	<?php include_once("Footer.php"); ?>
+	<script>window.onload = createFullTable;</script>
 </body>
 </html>

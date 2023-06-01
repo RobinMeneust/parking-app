@@ -34,37 +34,6 @@ if(!isset($_SESSION['VAR_profil'])){
                     
 
                 <p id="date_error_message" style="display: none;"> La date de fin est inférieur à la date de début</p>
-                
-                <script>
-                    const Start_input_Date = document.getElementById('Start_date');
-                    const End_input_Date = document.getElementById('End_date');
-                    const date_input = document.getElementsByClassName('date_input')
-                    const errorMessage = document.getElementById('date_error_message');
-
-                    //console.log('start/end input date html');
-                    //console.log(Start_input_Date);
-
-                    for(let i = 0; i < date_input.length; i++){
-                        date_input[i].addEventListener('change', function() {
-                        const selected_Start_Date = new Date(Start_input_Date.value);
-                        const selected_End_Date = new Date(End_input_Date.value);
-                        //console.log('start/end input date js');
-
-                        const date_Limit = new Date(2010, 0, 1); // janvier est le mois 0
-                        //console.log(date_Limit);
-
-                        if (selected_End_Date < selected_Start_Date) {
-                            errorMessage.style.display = 'block';
-                        } else if (selected_Start_Date < date_Limit) {
-                            errorMessage.style.display = 'block';
-                        } else {
-                            errorMessage.style.display = 'none';
-                        }
-                        });
-                    }
-                    
-                </script>
-
             </div>
             
             <table id="profileTable">
@@ -86,7 +55,7 @@ if(!isset($_SESSION['VAR_profil'])){
 			</table>
 
             <div id="linkDetailledProfile">
-                <a href="#">HISTORIQUE DETAILLE</a>
+                <a href="fullHistory.php">HISTORIQUE DETAILLE</a>
             </div>
         </div>
         

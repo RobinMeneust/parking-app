@@ -1,4 +1,3 @@
-window.onload = createFullTable;
 let isFullMode = false;
 
 async function getListOfVisits(fullMode) {
@@ -77,6 +76,7 @@ async function createTable(fullMode) {
 
 async function createFullTable() {
 	if(!isFullMode) {
+		console.log("a")
 		createTable(true);
 		isFullMode = true;
 	}

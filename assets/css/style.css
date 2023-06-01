@@ -201,6 +201,7 @@ header {
     color: var(--clr);
     letter-spacing: 0.23em;
     box-shadow: 0 0 20px var(--clr);
+    cursor: pointer;
 }
 
 #connectButton::before{
@@ -270,6 +271,7 @@ header {
     letter-spacing: 0.23em;
     border: 3px;
     box-shadow: 0 0 20px var(--clr);
+    cursor: pointer;
 }
 
 #disconnectButton::before{
