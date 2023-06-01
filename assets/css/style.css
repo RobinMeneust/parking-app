@@ -154,16 +154,6 @@ header {
     margin-right: 15px;
 }
 
-.sub-menu-link span {
-    font-size: 22px;
-    transition: transform 0.5s;
-}
-
-.sub-menu-link:hover span {
-    transform: translateX(5px);
-    color: #e74c3c;
-}
-
 .sub-menu-link:hover p {
     font-weight: 600;
 }
@@ -183,161 +173,6 @@ header {
         transform: translateX(-70%);
     }
 }
-
-#connectButton {
-    position: relative;
-    background-color: #27282c;
-    color: #27282c;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 0.7em;
-    letter-spacing: 0.1em;
-    padding: 10px 15px;
-    transition: 0.5s;
-}
-
-#connectButton:hover {
-    background: var(--clr);
-    color: var(--clr);
-    letter-spacing: 0.23em;
-    box-shadow: 0 0 20px var(--clr);
-    cursor: pointer;
-}
-
-#connectButton::before{
-    content: '';
-    position: absolute;
-    inset: 2px;
-    background: #fff;
-}
-
-#connectButton span {
-    position: relative;
-    z-index: 1;
-}
-
-#connectButton i {
-    position: absolute;
-    inset: 0;
-    display: block;
-}
-
-#connectButton i::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 80%;
-    width: 10px;
-    height: 4px;
-    background-color: #fff;
-    transform: translateX(-50%) skewX(325deg);
-    transition: 0.5s;
-}
-
-#connectButton:hover i::before {
-    width: 20px;
-    left: 20%;
-}
-
-#connectButton i::after{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 20%;
-    width: 10px;
-    height: 4px;
-    background-color: #fff;
-    transform: translateX(-50%) skewX(325deg);
-    transition: 0.5s;
-}
-
-#connectButton:hover i::after {
-    width: 20px;
-    left: 80%;
-}
-
-#disconnectButton {
-    position: relative;
-    background-color: #fff;
-    color: #fff;
-    text-decoration: none;
-    padding: 5px 5px;
-    transition: 0.5s;
-}
-
-#disconnectButton:hover {
-    background: var(--clr);
-    color: var(--clr);
-    letter-spacing: 0.23em;
-    border: 3px;
-    box-shadow: 0 0 20px var(--clr);
-    cursor: pointer;
-}
-
-#disconnectButton::before{
-    content: '';
-    position: absolute;
-    inset: 2px;
-    background: #27282c;
-}
-
-#disconnectButton span {
-    position: relative;
-    font-size: 1em;
-    padding: 2px 5px 2px 5px;
-    letter-spacing: 0.2em;
-    z-index: 1;
-    transition: letter-spacing 0.5s;
-}
-
-#disconnectButton:hover span {
-    position: relative;
-    font-size: 1em;
-    padding: 2px 5px 2px 5px;
-    letter-spacing: 0.34em;
-    z-index: 1;
-}
-
-#disconnectButton i {
-    position: absolute;
-    inset: 0;
-    display: block;
-}
-
-#disconnectButton i::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 80%;
-    width: 10px;
-    height: 4px;
-    background-color: #27282c;
-    transform: translateX(-50%) skewX(325deg);
-    transition: 0.5s;
-}
-
-#disconnectButton:hover i::before {
-    width: 20px;
-    left: 20%;
-}
-
-#disconnectButton i::after{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 20%;
-    width: 10px;
-    height: 4px;
-    background-color: #27282c;
-    transform: translateX(-50%) skewX(325deg);
-    transition: 0.5s;
-}
-
-#disconnectButton:hover i::after {
-    width: 20px;
-    left: 80%;
-}
-
 
 .search-bar {
     flex: 1;
@@ -738,6 +573,7 @@ hr {
 /* Profile */
 
 .contentProfilPage {
+    padding-left: 2%;
     background: var(--primary-color);
     margin: 5% 10% 5% 10%;
 }
@@ -953,6 +789,10 @@ hr {
     cursor: default;
 }
 
+.dark-mode #tableFullHistory th, .dark-mode #tableFullHistory td {
+    color: white;
+}
+
 #tableFullHistory th,td {
     padding: 12px;
     text-align: left;
@@ -969,16 +809,6 @@ hr {
         width: 90%;
     }
 }
-
-/* #tableFullHistory td, #tableFullHistory th {
-    border: black solid 1px;
-    padding: 20px 30px;
-    text-align: center;
-}
-
-#tableFullHistory {
-    border-collapse: collapse;
-} */
 
 .detailsButtons {
     position: relative;
@@ -1001,7 +831,6 @@ hr {
 .detailsButtons:hover {
     background: var(--clr);
     color: var(--clr);
-    letter-spacing: 0.23em;
     box-shadow: 0 0 20px var(--clr);
 	cursor: pointer;
 }
@@ -1011,10 +840,6 @@ hr {
     position: absolute;
     inset: 2px;
     background: #fff;
-}
-
-.dark-mode .detailsButtons::before {
-	background-color: #22202f;
 }
 
 .detailsButtons span, .detailsButtons input {
@@ -1034,6 +859,10 @@ hr {
     position: absolute;
     inset: 0;
     display: block;
+}
+
+.dark-mode .detailsButtons::before {
+    background-color: #27282c;
 }
 
 .detailsButtons i::before{

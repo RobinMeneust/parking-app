@@ -14,7 +14,7 @@
 	<body>
 		<?php include_once("Header.php"); ?>
 
-		<?php 
+		<?php
 			if (isset($_GET["message"]) && !empty($_GET["message"]) ) {
 				$error_msg = htmlspecialchars($_GET["message"]);
 				include("./PHP/errorMessage.php");
