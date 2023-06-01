@@ -18,12 +18,10 @@
             <div class="service_area">
                 <ul class="service_header">
                     <li class="service_name">A PROPOS</li>
-                    <li><a href="#">Données Personnelles</a></li>
-                    <li><a href="./legalNotice.php">Mentions Légales</a></li>
+                    <li><a href="./personalData.php">Données Personnelles</a></li>
                 </ul>
                 <ul class="service_header">
                     <li class="service_name">AIDE</li>
-                    <li><a href="./needHelp.php">Besoin d'aide</a></li>
                     <li><a href="./form.php">Contactez-nous</a></li>
                 </ul>
                 <ul class="service_header_last">
@@ -42,5 +40,80 @@
             </div>
         </div>
     </div>
-    <script src="JS/footer.js"></script>
 </footer>
+
+<script>
+    const darkModeButton = document.getElementById("moon");
+    const lightModeButton = document.getElementById("sun");
+    const graphs = document.getElementsByClassName("graph");
+
+    darkModeButton.addEventListener('click', () => { switchThemeEvent(true); });
+    lightModeButton.addEventListener('click', () => { switchThemeEvent(false); });
+
+    window.onload = refreshTheme;
+
+    async function getCurrentTheme() {
+        let url = "./PHP/theme.php?action=get";
+        
+        return fetch(url).then(function(response) {
+            if(response.status >= 200 && response.status < 300) {
+                return response.text();
+            }
+            throw new Error(response.statusText);
+        }).catch((err)=>{
+            console.error(err);
+        });
+    }
+
+    /*
+        Check what is the current theme and set it to the page
+    */
+    async function refreshTheme() {
+        console.log("refresh");
+        let currentTheme = await getCurrentTheme();
+        if(currentTheme == "dark") {
+            switchThemeEvent(true);
+        } else {
+            switchThemeEvent(false);
+        }
+    }
+
+    /*
+        Get the theme or toggle dark mode
+    */
+    async function switchTheme(){
+        let url = "./PHP/theme.php?action=switch";
+        
+        return fetch(url).then(function(response) {
+            if(response.status >= 200 && response.status < 300) {
+                return response.text();
+            }
+            throw new Error(response.statusText);
+        }).catch((err)=>{
+            console.error(err);
+        });
+    }
+
+    /*
+        Event use to switch the theme mode
+    */
+
+    async function switchThemeEvent(darkModeOn) {
+        if((!document.body.classList.contains('dark-mode') && darkModeOn) || document.body.classList.contains('dark-mode') && !darkModeOn) {
+            let currentTheme = await getCurrentTheme();
+            let newTheme = (darkModeOn ? "dark" : "light");
+            if(currentTheme != newTheme)
+                await switchTheme();
+            document.body.classList.toggle('dark-mode');
+            darkModeButton.classList.toggle('hide');
+            lightModeButton.classList.toggle('hide');
+            
+            if(graphs != null) {
+                for(let i=0; i<graphs.length; i++) {
+                    //graph[i];
+                    //TODO
+                }
+            }
+        }
+    }
+</script>

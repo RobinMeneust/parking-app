@@ -27,23 +27,24 @@ if(session_status() != PHP_SESSION_ACTIVE){
       <div class="sub-menu">
         <div class="user-info">
           <img id="user_logo" src="./assets/img/user_picture.jpg" alt="" />
+          <!--<h2></h2>-->
           <h2><?php echo $_SESSION['VAR_profil']['firstName'] . " " .$_SESSION['VAR_profil']['lastName']?></h2>
         </div>
         <hr/>
 
         <a href="./profile.php" class="sub-menu-link">
           <img src="./assets/img/edit.png">
-          <p>Edit profile</p>
+          <p>Profil</p>
           <span>></span>
         </a>
-        <a href="./profile.php" class="sub-menu-link">
-          <img src="./assets/img/setting.png">
-          <p>Paramètre & Historique</p>
+        <a href="./history.php" class="sub-menu-link">
+          <img src="./assets/img/history_icon.png">
+          <p>Historique</p>
           <span>></span>
         </a>
         <a href="./form.php" class="sub-menu-link">
-          <img src="./assets/img/setting.png">
-          <p>Help & support</p>
+          <img src="./assets/img/support_icon.png">
+          <p>Support</p>
           <span>></span>
         </a>
         <a href="#" class="sub-menu-link">

@@ -733,7 +733,56 @@ hr {
     text-align: center;
 }
 
-/* Profil */
+/* Profile */
+
+.contentProfilPage {
+    background: var(--primary-color);
+    margin: 5% 10% 5% 10%;
+}
+
+.contentPage {
+    width: 50%;
+}
+
+.dataProfile h2 {
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin: 1%;
+}
+
+#lastNameProfile {
+    border-bottom: 1px solid #3fB6A8;
+    margin: 2% 0 2% 1%;
+    width: 50%;
+    font-size: 18px;
+}
+
+#firstNameProfile {
+    border-bottom: 1px solid #3fB6A8;
+    margin: 2% 0 2% 1%;
+    width: 50%;
+    font-size: 18px;
+}
+
+#emailProfile {
+    border-bottom: 1px solid #3fB6A8;
+    margin: 2% 0 2% 1%;
+    width: 50%;
+    font-size: 18px;
+}
+
+#passwordProfile {
+    border-bottom: 1px solid #3fB6A8;
+    margin: 2% 0 2% 1%;
+    width: 50%;
+    font-size: 18px;
+}
+
+/* End of Profile */
+
+/* History */
 
 /* A supprimier apres
 .navProfile {
@@ -775,7 +824,7 @@ hr {
 }
 
 #profileTitle {
-    text-decoration-line: underline;
+    color : white;
 }
 
 #signOutProfile:hover {
@@ -1059,8 +1108,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 #bandeau {
     background-color: #22202f;
     margin: 0;
-    padding: 50px 50%;
-    color: rgb(167, 198, 207);
+    padding: 50px 50%;    
 }
 
 .cells {
@@ -1078,9 +1126,9 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     transition: box-shadow 1s;
 }
 
-/* End of Profil */
+/* End of History */
 
-/* Personnal Data and Legal Mention */
+/* Personnal Data */
 
 .helpcontent {
     padding: 0 30px 0;
@@ -1089,7 +1137,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 .helpcontent h1 {
-    color: #f5b027;
+    color: var(--secondary-color);
     text-align: center;
     font-size: 2.7em;
     font-weight: bold;
@@ -1097,6 +1145,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 .helpcontent .titlehelp {
+    color: var(--secondary-color);
     font-size : 1.5em;
     font-weight: bold;
     margin: 20px;
@@ -1125,10 +1174,11 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     font-size: 20px;
     border-radius: 5px;
     background-color: #f5b027;
-    color: white;
+    color: var(--secondary-color);
     padding: 0.5em 1.25em;
     text-decoration: none;
     line-height: 1.1;
+
 }
 
 .helpcontent .idz_btn_fix .chat-cta-label {
@@ -1137,9 +1187,10 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 .helpcontent p {
+    color: var(--secondary-color);
     font-size: 1em;
     line-height: 1.5em;
-    margin: 0 20px 10px 20px;
+    margin: 10px 20px 10px 20px;
     text-align: justify;
 }
 
@@ -1148,6 +1199,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 .helpcontent a {
+    color: #333333;
     text-decoration: underline;
 }
 

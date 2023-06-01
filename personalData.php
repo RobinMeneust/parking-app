@@ -22,7 +22,7 @@
                         </a>
                     </div>
                     <p>
-                        <strong> Dernière mise à jour : Avril 2023 </strong>
+                        <strong> Dernière mise à jour : Juin 2023 </strong>
                     </p>
                     <p>
                         Le groupe PARK'O TOP est soucieux de la protection des données personnelles. Il met en œuvre une démarche d'amélioration continue de sa conformité au Règlement général de protection des données (RGPD), à la Directive ePrivacy, ainsi qu'à la loi n° 78-17 du 6 janvier 1978 dite Informatique et Libertés pour assurer le meilleur niveau de protection à vos données personnelles.
