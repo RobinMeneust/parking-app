@@ -860,6 +860,15 @@ hr {
     font-weight: bold;
 }
 
+#tableFullHistory td, #tableFullHistory th {
+    border: black solid 1px;
+    padding: 20px 30px;
+    text-align: center;
+}
+
+#tableFullHistory {
+    border-collapse: collapse;
+}
 
 .detailsButtons {
     position: relative;
@@ -1127,21 +1136,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     }
 }
 
-/*@media screen and (max-width: 480px) {
-    .service_header {
-        margin-bottom: 8px;
-    }
 
-    .copy_right {
-        margin-bottom: 8px;
-    }
-}
-A 343px, mettre tous en colonne droit A PROPOS - AIDE - NOTRE GROUPE avec display: block, un petit padding etc.
-*/
-
-/* Tableau Resultat */
-
-/* Ne pas le prendre en compte dans la largueur de la page s'il n'est pas affiche avec display: collapse; normalement */
 
 @media screen and (max-width: 768px) {
     #selectedParkingTable,
