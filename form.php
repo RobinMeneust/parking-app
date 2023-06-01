@@ -49,7 +49,7 @@
         <div class="contact-info">
           <h3 class="title">Demande de contact</h3>
           <p class="text">
-          Un problème ? Une question ? Une suggestion? Ou juste envie de nous envoyer un message? N'hésitez pas à utiliser ce formulaire pour prendre contact avec l'équipe Park'o Top !
+          Un problème ? Une question ? Une suggestion ? Ou juste envie de nous envoyer un message ? N'hésitez pas à utiliser ce formulaire pour prendre contact avec l'équipe Park'O Top !
           </p>
         </div>
 

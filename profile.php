@@ -14,51 +14,29 @@ if(!isset($_SESSION['VAR_profil'])){
         <script src="JS/userProfile.js"></script>
     </head>
 
-    <body>
+    <body onload="profileData()">
         <?php include_once("Header.php"); ?>
 
         <div id="bandeau" class="contentProfil">
-                <h1 id="profileTitle">HISTORIQUE</h1>
+            <h1 id="profileTitle">INFORMATIONS PERSONNELLES</h1>
         </div>
 
-        <div class="contentProfil">
-            <div id="navProfileTime">
-
-                <div>
-                    <label for=date>Du</label>
-                    <input type="date" id="Start_date" class="date_input" name="Start_date" oninput="refreshDate()" min="2010-01-01" max="2030-12-31" require>
-
-                    <label for=date>au</label>
-                    <input type="date" id="End_date" class="date_input" name="End_date" oninput="refreshDate()" min="2010-01-01" max="2030-12-31" require>
+        <div class="contentProfilPage">
+            <div class="contentPage">
+                <div class="dataProfile">
+                    <h2>Nom</h2>
+                    <div id="lastNameProfile"><?php echo $_SESSION['VAR_profil']['lastName']?></div>
                 </div>
-                    
-
-                <p id="date_error_message" style="display: none;"> La date de fin est inférieure à la date de début</p>
+                <div class="dataProfile">
+                    <h2>Prénom</h2>
+                    <div id="firstNameProfile"><?php echo $_SESSION['VAR_profil']['firstName']?></div>
+                </div>
+                <div class="dataProfile">
+                    <h2>Adresse email</h2>
+                    <div id="emailProfile"><?php echo $_SESSION['VAR_profil']['email']?></div>
+                </div>
             </div>
-            
-            <table id="profileTable">
-                <tr>
-                    <th>DEPENSES TOTALES</th>
-                    <th>PARKING FAVORI</th>
-                    <th>NOMBRE DE STATIONNEMENTS</th>
-                </tr>
-                <tr id="profileTableRowData">
-                    <td id="expensesProfileTable"></td>
-                    <td id="favoriteParkingProfileTable"></td>
-                    <td id="visitedProfileTable"></td>
-                </tr>
-                <tr id="profileTableLink">
-                    <td class="hideBorderCells"><a href="userGraphs.php" class="detailsButtons" style="--clr:#1e9bff"><span>DETAIL GRAPHIQUE</span><i></i></a></td>
-                    <td class="hideBorderCells"><a href="predictExpenses.php" class="detailsButtons" style="--clr:#ffba42"><span>Prédiction des dépenses</span><i></i></a></td></td>
-                    <td class="hideBorderCells"><a href="userGraphs.php" class="detailsButtons" style="--clr:#6eff3e"><span>DETAIL HISTOGRAMME</span><i></i></a></td>
-                </tr>
-			</table>
-
-            <div id="linkDetailledProfile">
-                <a href="fullHistory.php">HISTORIQUE DETAILLE</a>
-            </div>
-        </div>
-        
+        </div>        
         <?php include_once("Footer.php"); ?>
     </body>
 </html>
