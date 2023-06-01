@@ -19,7 +19,7 @@ if(session_status() != PHP_SESSION_ACTIVE){
   </div>
 
   <div class="account">
-    <a href=<?php echo isset($_SESSION['VAR_profil']) ? '#' : '"registerLogin.php" style="--clr:#6eff3e" id="connectButton"'; ?>>
+    <a href=<?php echo isset($_SESSION['VAR_profil']) ? '#' : '"registerLogin.php" style="--clr:#6eff3e" id="connectButton" class="detailsButtons"'; ?>>
       <?php echo isset($_SESSION['VAR_profil']) ? '<img id="user_logo" src="./assets/img/user_picture.jpg" onclick="toggleMenu()" alt="" />' : '<span>Se connecter</span><i></i>'; ?>
     </a>  
 
@@ -49,7 +49,7 @@ if(session_status() != PHP_SESSION_ACTIVE){
         </a>
         <a href="#" class="sub-menu-link">
           <form action="PHP/signOut.php" methode="POST">
-            <button style="--clr:#ff1867" id="disconnectButton"><span>Se Déconnecter</span><i></i></button>
+            <button style="--clr:#ff1867" id="disconnectButton" class="detailsButtons"><span>Se Déconnecter</span><i></i></button>
           </form>
         </a>
       </div>
