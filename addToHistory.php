@@ -13,9 +13,7 @@ if(!isset($_SESSION['VAR_profil'])){
 	<body>
 		<?php include_once("Header.php"); ?>
 		<div class="contentAddToHistory">
-			
-
-			<div id="bandeauAddToHistory" >
+			<div id="bannerAddToHistory" >
 				<h1 id="titleAddHistory">Ajouter ce parking à votre historique</h1>
         	</div>
 			<form>

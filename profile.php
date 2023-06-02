@@ -1,4 +1,4 @@
-<?php if(session_status() != PHP_SESSION_ACTIVE) session_start(); 
+<?php session_start(); 
 
 if(!isset($_SESSION['VAR_profil'])){
 	header('location:../registerLogin.php?message=Veuillez vous connecter');
@@ -17,13 +17,12 @@ if(!isset($_SESSION['VAR_profil'])){
     <body>
         <?php include_once("Header.php"); ?>
 
-        <div id="bandeau" class="contentProfil">
+        <div id="banner" class="contentProfil">
             <h1 id="profileTitle">INFORMATIONS PERSONNELLES</h1>
         </div>
 
         <div class="contentProfilPage">
-            <img src="./assets/img/logoProfilebg.png"></button>
-            <div class="pro_content">
+            <div class="contentPage">
                 <div class="dataProfile">
                     <h2>Nom</h2>
                     <div id="lastNameProfile"><?php echo $_SESSION['VAR_profil']['lastName']?></div>
