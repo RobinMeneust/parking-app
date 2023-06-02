@@ -9,7 +9,6 @@ async function getDataProfile(startDate, endDate, dataProfile) {
         if(response.status >= 200 && response.status < 300) {
             return response.text();
         }
-        console.log("sdfs" + response.statusText);
         throw new Error(response.statusText);
     })
     .then(function(response) {

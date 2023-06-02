@@ -201,14 +201,8 @@ async function predict() {
 		predictionResult[i] /= 2;
 		month++;
 	}
-	//console.log("mean=",meanMonths);
-	//console.log("last=",lastMonths);
-	//console.log("predict=",predictionResult);
 
 	let yAxis = yAxisKnown.concat(predictionResult);
-	//console.log(yAxis);
-
-	//console.log(lastMonths.length );
 	
 	// The color of the predicted curve is set to red
 	const color = (ctx) => ctx.p1.parsed.x >= yAxisKnown.length ? "red" : "blue";

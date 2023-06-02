@@ -33,16 +33,14 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["h"]) && isset($_GET["s"])
 			} else{
 				exit;
 			}
+		} else {
+			$query = "INSERT INTO Addresses VALUES(NULL,".$houseNumber.",\"".$street."\",\"".$city."\",\"".$country."\",".$postalCode.",".$lat.",".$lng.");";
+		
+			if($resultSQL = mysqli_query($link,$query)) {
+				echo mysqli_insert_id($link);
+				mysqli_close($link);
+			}
 		}
-	} else{
-		exit;
-	}
-	
-	$query = "INSERT INTO Addresses VALUES(NULL,".$houseNumber.",\"".$street."\",\"".$city."\",\"".$country."\",".$postalCode.",".$lat.",".$lng.");";
-
-	if($resultSQL = mysqli_query($link,$query)) {
-		echo mysqli_insert_id($link);
-		mysqli_close($link);
 	}
 }
 
