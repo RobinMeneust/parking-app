@@ -697,7 +697,6 @@ hr {
     display: flex;
     width: 100%;
     margin-top: 5%;
-    border-style: inset;
 }
 
 #profileTable tbody {
@@ -1594,4 +1593,25 @@ span {
     border-radius: 4px;
     cursor: pointer;
     box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+}
+
+
+.dark-mode .overlay { 
+    color: #212f3d;
+}
+
+.dark-mode .form {
+    background-color: #212f3d;
+}
+
+.dark-mode .container_INS_CONN {
+    background-color: #212f3d;
+}
+
+.dark-mode .titleLogin {
+    color: #fff
+}
+
+.dark-mode .checkmark {
+    color: #fff;
 }

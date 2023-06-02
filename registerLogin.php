@@ -29,7 +29,7 @@
             <div class="container_INS_CONN" id="container">
                 <div class="form-container sign-up-container"> 
                     <form action="./PHP/registrationCheck.php" method="POST" class="form"> 
-                        <h1>Créer un compte</h1>
+                        <h1 class="titleLogin">Créer un compte</h1>
                         
 
                         <div class="input-container">
@@ -60,7 +60,7 @@
 
                 <div class="form-container sign-in-container">
                     <form action="./PHP/connectionCheck.php" method="POST" class="form"> 
-                        <h1>Se connecter</h1>
+                        <h1 class="titleLogin">Se connecter</h1>
                         <div class="input-container">
                             <input type="email" name="email" class="text-input"id="mail" placeholder="" value="<?= isset($_SESSION["VAR_profil"]["email"]) && $_SESSION["VAR_profil"]["email"] != "error" ? $_SESSION["VAR_profil"]["email"] : "";?>" required >
                             <label for="email" class="label">adresse-mail</label>
@@ -77,12 +77,13 @@
                     <div class="overlay">
                         <div class="overlay-panel overlay-left">
                             <h1>Bienvenue sur Park'o Top</h1>
+                            <img class="imgLogin" src="./assets/img/logo3.png" alt=""/>
                             <button class="press btn" id="signIn">Se connecter</button>
                         </div>
 
                         <div class="overlay-panel overlay-right">
                             <h1>Bienvenue sur Park'o Top</h1>
-                            <p> Ajouter une image standard</p>
+                            <img class="imgLogin" src="./assets/img/logo3.png" alt=""/>
                             <button class="press btn" id="signUp" >S'inscrire</button>
                         </div>
                     </div>
