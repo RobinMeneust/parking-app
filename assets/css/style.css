@@ -572,6 +572,7 @@ hr {
 #searchMsgBox{
 	color: rgb(56, 24, 201);
 	font-weight: bold;
+    margin-left: 1%;
 }
 
 .graphsContainer{
@@ -644,7 +645,6 @@ hr {
     align-items: center;    
 }*/ 
 
-
 @keyframes animationProfileTime {
     0% {
         box-shadow: none;
@@ -672,9 +672,13 @@ hr {
     padding: 20px 20px;
 }
 
-
 #navProfileTime label {
     color: #fff;
+}
+
+#date_error_message {
+    padding-top: 5px;
+    color: red;
 }
 
 .date_input {
@@ -973,11 +977,6 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     border: none;
 }
 
-
-#expensesProfileTable:hover {
-    box-shadow: 0 0 20px #f5b027;
-    transition: box-shadow 1s;
-}
 
 /* End of History */
 

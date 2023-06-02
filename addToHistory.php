@@ -20,7 +20,7 @@ if(!isset($_SESSION['VAR_profil'])){
         	</div>
 			<form>
 				<div class="input-container">
-					<input required id="expenses" type="number" class="text-input" name="expenses" value="0" min="0", max="100", step="0.01">
+					<input required id="expenses" type="number" class="text-input" name="expenses" value="0" min="0", max="100", step="0.5">
 					<label for="expenses" class="label">Argent dépensé (€)</label>
 				</div>
 				<div class="input-container">
