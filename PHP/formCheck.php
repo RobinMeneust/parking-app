@@ -79,8 +79,8 @@ $mail = new PHPMailer;
 $mail->isSMTP();                            // Set mailer to use SMTP 
 $mail->Host = 'smtp.gmail.com';           // Specify main and backup SMTP servers 
 $mail->SMTPAuth = true;                     // Enable SMTP authentication 
-$mail->Username = 'parkotop.website@gmail.com';       // SMTP username 
-$mail->Password = 'parkotopCeciEstUnTest@';         // SMTP password 
+$mail->Username = 'baat01.p@gmail.com';       // SMTP username 
+$mail->Password = 'irrufbegunznzfjb';         // SMTP password 
 $mail->SMTPSecure = 'ssl';                  // Enable TLS encryption
 $mail->Port = 465;                          // TCP port to connect to 
  
@@ -88,7 +88,7 @@ $mail->Port = 465;                          // TCP port to connect to
 $mail->setFrom('parkotop@app.com', 'ParkOTop'); 
  
 // Add a recipient 
-$mail->addAddress('parkotop.website@gmail.com'); //receiving address
+$mail->addAddress('baat01.p@gmail.com'); //receiving address
  
 // Set email format to HTML 
 $mail->isHTML(true); 
