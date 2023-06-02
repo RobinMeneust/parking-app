@@ -11,7 +11,7 @@ A web app that searches for nearby parking lots (in France) and stores the user 
 
 Please note that this project doesn't work offline
 
-# Important
+## Important
 
 You may need to wait a little after setting up the website, before using elements using the database, since it needs to load before.
 For instance you may get the warning : `Warning: mysqli_connect(): (HY000/2002)`. In that case, just wait a couple of minutes.

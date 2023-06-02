@@ -44,7 +44,7 @@ function searchData(startDate, endDate) {
     let visited = document.getElementById('visitedProfileTable');   
     
     getDataProfile(startDate, endDate, 'expensesProfile').then((response)=> {
-        expenses.innerHTML = response ? response : "0€";
+        expenses.innerHTML = response ? response+" €" : "0 €";
     }).catch((err)=>{
         console.error(err);
     });

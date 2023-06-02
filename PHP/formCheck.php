@@ -3,7 +3,7 @@
 $file =fopen("../data/infoContact.json","a+") or die ("Fail");// Create the file if it doesn't exist
 fclose($file);
 
-clearstatcache();
+//clearstatcache();
 
 if(filesize("../data/infoContact.json") == 0) {
     $arr['messages'] = array();
@@ -89,6 +89,7 @@ $mail->setFrom('parkotop@app.com', 'ParkOTop');
  
 // Add a recipient 
 $mail->addAddress('baat01.p@gmail.com'); //receiving address
+$mail->addAddress($email); //receiving address
  
 // Set email format to HTML 
 $mail->isHTML(true); 
@@ -111,8 +112,7 @@ if(!$mail->send()) { //we write the informations on a json file if we can't send
         'email' => $email,
         'typeMessage' => $typeMessage,
         'subject' => $subject,
-        'message' => $message,
-        'error' => $mail->ErrorInfo
+        'message' => $message
     ];
 
     $previousContent = file_get_contents('../data/infoContact.json');
