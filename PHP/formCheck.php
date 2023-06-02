@@ -102,8 +102,6 @@ $bodyContent .= '<p>' . $message . '</p>';
 $bodyContent .=  '<br><p> Message envoyé par '. $firstName ." " . $lastName ." le ".$dateContact.". Pour le contacter : ".$email."</p>";
 $mail->Body    = $bodyContent; 
 
-header("location:../form.php?success=".json_encode($mail));
-exit;
 // Send email 
 if(!$mail->send()) { //we write the informations on a json file if we can't send a mail
     $msg = (object) [

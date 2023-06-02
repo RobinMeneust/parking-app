@@ -113,7 +113,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["data"])){
 
 			if($resultSQL = mysqli_query($link,$query)) {
 				if($row = mysqli_fetch_assoc($resultSQL)) {
-					echo $row["total"];
+					echo $row["total"]." €";
 				}
 			}
 

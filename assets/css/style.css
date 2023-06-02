@@ -155,6 +155,16 @@ header {
     margin-right: 15px;
 }
 
+.sub-menu-link .arrow {
+    font-size: 22px;
+    transition: transform 0.5s;
+}
+
+.sub-menu-link:hover .arrow {
+    transform: translateX(5px);
+    color: #e74c3c;
+}
+
 .sub-menu-link:hover p {
     font-weight: 600;
 }
@@ -252,12 +262,17 @@ a {
     color: #c7c7c7;
 }
 
+.dark-mode .map-button {
+    color: #000;
+}
+
 body.dark-mode {
 	background-color: #39364b;
 }
 
 .dark-mode header {
 	background-color: #22202f;
+    border-bottom: solid 2px #fff;
 }
 
 .dark-mode header a {
@@ -512,7 +527,7 @@ hr {
     margin-bottom: 5px;
     margin: 10px auto;
     color: white;
-    box-shadow: 0 0 20px #d52b18;
+    box-shadow: 0 0 20px #fff;
 }
 
 
@@ -561,6 +576,7 @@ hr {
 #searchMsgBox{
 	color: rgb(56, 24, 201);
 	font-weight: bold;
+    margin-left: 1%;
 }
 
 .graphsContainer{
@@ -633,7 +649,6 @@ hr {
     align-items: center;    
 }*/ 
 
-
 @keyframes animationProfileTime {
     0% {
         box-shadow: none;
@@ -661,9 +676,13 @@ hr {
     padding: 20px 20px;
 }
 
-
 #navProfileTime label {
     color: #fff;
+}
+
+#date_error_message {
+    padding-top: 5px;
+    color: red;
 }
 
 .date_input {
@@ -682,7 +701,6 @@ hr {
     display: flex;
     width: 100%;
     margin-top: 5%;
-    border-style: inset;
 }
 
 #profileTable tbody {
@@ -963,14 +981,18 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 
-#expensesProfileTable:hover {
-    box-shadow: 0 0 20px #f5b027;
-    transition: box-shadow 1s;
-}
-
 /* End of History */
 
 /* Personnal Data */
+
+.contentPersonnalData {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 50px auto;
+    padding: 20px 20px;
+}
 
 .helpcontent {
     padding: 0 30px 0;
@@ -1020,7 +1042,14 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     padding: 0.5em 1.25em;
     text-decoration: none;
     line-height: 1.1;
+    margin-top: 15px;
+    margin-bottom: 35px;
+    transition: all 0.2s;
+}
 
+.helpcontent .idz_btn_fix .chat-cta:hover{
+    transform: scale(1.02);
+    border: black solid 2px;
 }
 
 .helpcontent .idz_btn_fix .chat-cta-label {
@@ -1038,6 +1067,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 
 .helpcontent strong {
     font-weight: bold;
+    text-decoration: underline;
 }
 
 .helpcontent a {
@@ -1368,7 +1398,6 @@ span {
     position: relative;
 }
 
-
 .label {
     position: absolute;
     left: 10px;
@@ -1384,6 +1413,38 @@ span {
     content: "";
     height: 15px;
     background-color: white;
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 100%;
+    z-index: -1;
+}
+
+.dark-mode .text-input {
+    background-color: #39364b;
+    border: solid 2px #fff;
+    text-decoration: none;
+    margin: 12px 0;
+    padding: 12px 15px;
+    width: 100%;
+    color: #fff;
+}
+
+.dark-mode .label {
+    position: absolute;
+    left: 10px;
+    top: 3px;
+    transition: all 0.2s;
+    padding: 0 2px;
+    z-index: 1;
+    color: #fff;
+    font-size: 14px;
+}
+
+.dark-mode .label::before{
+    content: "";
+    height: 15px;
+    background-color: #39364b;
     position: absolute;
     left: 0;
     top: 5px;
@@ -1485,4 +1546,76 @@ span {
     border-radius: 4px;
     cursor: pointer;
     box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+}
+
+.dark-mode .popupAddToHistory {
+    width: 400px;
+    background-color: #484465;
+    border-radius: 6px;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%,-50%) scale(0.1);
+    text-align: center;
+    padding: 0 30px 30px;
+    color: #fff;
+    visibility: hidden;
+    transition: all 0.4s;
+    border: black solid 3px;
+    z-index: 3;
+}
+
+.dark-mode .open-popupAddToHistory {
+    z-index: 3;
+    visibility: visible;
+    top: 50%;
+    transform: translate(-50%,-50%) scale(1);
+}
+
+.dark-mode .popupAddToHistory img {
+    width: 100px;
+    margin-top: -50px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.dark-mode .popupAddToHistory h2 {
+    font-size: 38px;
+    font-weight: 500;
+    margin: 30px 0 10px;
+}
+
+.dark-mode .popupAddToHistory button {
+    width: 100%;
+    margin-top: 50px;
+    padding: 10px 0;
+    background: #2a7310;
+    color: #fff;
+    border: 0;
+    outline: none;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+}
+
+
+.dark-mode .overlay { 
+    color: #212f3d;
+}
+
+.dark-mode .form {
+    background-color: #212f3d;
+}
+
+.dark-mode .container_INS_CONN {
+    background-color: #212f3d;
+}
+
+.dark-mode .titleLogin {
+    color: #fff
+}
+
+.dark-mode .checkmark {
+    color: #fff;
 }

@@ -35,17 +35,17 @@ if(session_status() != PHP_SESSION_ACTIVE){
         <a href="./profile.php" class="sub-menu-link">
           <img src="./assets/img/edit.png">
           <p>Profil</p>
-          <span>></span>
+          <span class="arrow">></span>
         </a>
         <a href="./history.php" class="sub-menu-link">
           <img src="./assets/img/history_icon.png">
           <p>Historique</p>
-          <span>></span>
+          <span class="arrow">></span>
         </a>
         <a href="./form.php" class="sub-menu-link">
           <img src="./assets/img/support_icon.png">
           <p>Support</p>
-          <span>></span>
+          <span class="arrow">></span>
         </a>
         <a href="#" class="sub-menu-link">
           <form action="PHP/signOut.php" methode="POST">

@@ -33,7 +33,7 @@ if(!isset($_SESSION['VAR_profil'])){
                 </div>
                     
 
-                <p id="date_error_message" style="display: none;"> La date de fin est inférieur à la date de début</p>
+                <p id="date_error_message" style="display: none;"> La date de fin est inférieure à la date de début !</p>
             </div>
             
             <table id="profileTable">
