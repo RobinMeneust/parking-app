@@ -262,6 +262,10 @@ a {
     color: #c7c7c7;
 }
 
+.dark-mode .map-button {
+    color: #000;
+}
+
 body.dark-mode {
 	background-color: #39364b;
 }
