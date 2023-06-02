@@ -262,6 +262,10 @@ a {
     color: #c7c7c7;
 }
 
+.dark-mode .map-button {
+    color: #000;
+}
+
 body.dark-mode {
 	background-color: #39364b;
 }
@@ -523,7 +527,7 @@ hr {
     margin-bottom: 5px;
     margin: 10px auto;
     color: white;
-    box-shadow: 0 0 20px #d52b18;
+    box-shadow: 0 0 20px #fff;
 }
 
 
