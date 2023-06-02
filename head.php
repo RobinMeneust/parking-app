@@ -12,4 +12,4 @@
 
 <!-- Styling css file -->
 <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
-<link rel="icon" type="image/x-icon" href="/assets/img/logo.png">
+<link rel="icon" type="image/x-icon" href="/assets/img/logo3.png">
