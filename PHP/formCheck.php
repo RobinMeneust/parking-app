@@ -1,84 +1,65 @@
 <?php session_start(); 
 
-$file =fopen("../data/infoContact.json","a+") or die ("Fail");//we open a file to write the informations on it if we can't send a mail
+$file =fopen("../data/infoContact.json","a+") or die ("Fail");// Create the file if it doesn't exist
+fclose($file);
 
-$Nom =$_GET['Nom'];
-$Prenom =$_GET['Prenom'];
-$datecontact =$_GET['datecontact'];
-$email =$_GET['mail'];
-$gender =$_GET['gender'];
-$naissance =$_GET['naissance'];
-$typeMessage =$_GET['typeMessage'];
-$sujet =$_GET['sujet'];
-$contenu =$_GET['contenu'];
-$erreur="erreur=";
+clearstatcache();
+
+if(filesize("../data/infoContact.json") == 0) {
+    $arr['messages'] = array();
+    file_put_contents('../data/infoContact.json', json_encode($arr));
+}
+
+$lastName = "";
+$firstName = "";
+$dateContact = date("Y-m-d");
+$email = "";
+$typeMessage = "";
+$subject = "";
+$message = "";
+
 //We get all the data we need from the url :
 
-
-//we check if all the data is correct
-if(!(gettype($Nom) == "string" && (strlen($Nom)>0 && strlen($Nom)<40))) {
-    $erreur=$erreur . "Nom";
+if(isset($_POST["lastName"]) && !empty($_POST["lastName"]) && preg_match("/^[A-Za-z-]*$/", $_POST["lastName"]) && (strlen($_POST["lastName"])>0 && strlen($_POST["lastName"])<41)) {
+    $lastName = $_POST["lastName"];
+} else {
+    header('location:../form.php?error=Nom invalide');
+    exit;
 }
 
-if(!(gettype($Prenom) == "string" && (strlen($Prenom)>0 && strlen($Prenom)<40))){
-      if($erreur != "erreur="){
-        $erreur=$erreur . "+,+";
-    }
-    $erreur=$erreur . "Prenom";
+if(isset($_POST["firstName"]) && !empty($_POST["firstName"]) && preg_match("/^[a-zA-Z\s-]*$/", $_POST["firstName"]) && (strlen($_POST["firstName"])>0 && strlen($_POST["firstName"])<41)) {
+    $firstName = $_POST["firstName"];
+} else {
+    header('location:../form.php?error=Prénom invalide');
+    exit;
 }
 
-if(!(((string)(int) explode("-",$datecontact,3)[0] == explode("-",$datecontact,3)[0] && (string)(int) explode("-",$datecontact,3)[1] == explode("-",$datecontact,3)[1] && (string)(int) explode("-",$datecontact,3)[2] == explode("-",$datecontact,3)[2]) && checkdate(explode("-",$datecontact,3)[1],explode("-",$datecontact,3)[2],explode("-",$datecontact,3)[0]))){
-    if($erreur != "erreur="){
-        $erreur=$erreur . "+,+";
-    }
-    $erreur=$erreur . "Date+du+Message";
+if(isset($_POST["email"]) && !empty($_POST["email"]) && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+    $email = $_POST["email"];
+} else {
+    header('location:../form.php?error=Email invalide');
+    exit;
 }
 
-if(!(filter_var($email, FILTER_VALIDATE_EMAIL) == true && (strlen($email)>0 && strlen($email)<40))){
-    if($erreur != "erreur="){
-        $erreur=$erreur . "+,+";
-    }
-    $erreur=$erreur . "Email";
+if(isset($_POST["typeMessage"]) && ($_POST["typeMessage"] == "issue" || $_POST["typeMessage"] == "question" || $_POST["typeMessage"] == "suggestion")) {
+    $typeMessage = $_POST["typeMessage"];
+} else {
+    header('location:../form.php?error=Type de message invalide'.$typeMessage);
+    exit;
 }
 
-if(!($gender == "male" || $gender == "female")){
-    if($erreur != "erreur="){
-        $erreur=$erreur . "+,+";
-    }
-    $erreur=$erreur . "Genre";
+if(isset($_POST["subject"]) && !empty($_POST["subject"]) && gettype($_POST["subject"]) == "string" && (strlen($_POST["subject"])>0 && strlen($_POST["subject"])<41)) {
+    $subject = $_POST["subject"];
+} else {
+    header('location:../form.php?error=Sujet vide ou trop long');
+    exit;
 }
 
-if(!(((string)(int) explode("-",$naissance,3)[0] == explode("-",$naissance,3)[0] && (string)(int) explode("-",$naissance,3)[1] == explode("-",$naissance,3)[1] && (string)(int) explode("-",$naissance,3)[2] == explode("-",$naissance,3)[2]) && checkdate(explode("-",$naissance,3)[1],explode("-",$naissance,3)[2],explode("-",$naissance,3)[0]))){
-    if($erreur != "erreur="){
-        $erreur=$erreur . "+,+";
-    }
-    $erreur=$erreur . "Date+de+Naissance";
-}
-
-if(!($typeMessage == "probleme" || $typeMessage == "question" || $typeMessage == "suggestion" || $typeMessage == "message")){
-    if($erreur != "erreur="){
-        $erreur=$erreur . "+,+";
-    }
-    $erreur=$erreur . "Type+du+Message";
-}
-
-if(!(gettype($sujet) == "string" && (strlen($sujet)>0 && strlen($sujet)<40))){
-    if($erreur != "erreur="){
-        $erreur=$erreur . "+,+";
-    }
-    $erreur=$erreur . "Sujet";
-}
-
-if(!(gettype($contenu) == "string" && (strlen($contenu)>0 && strlen($contenu)<400))){
-    if($erreur != "erreur="){
-        $erreur=$erreur . "+,+";
-    }
-    $erreur=$erreur . "Contenu+" . $contenu;
-}
-
-//redirect if an error occur
-if($erreur != "erreur="){
-   header('location:../form.php?' . $erreur);
+if(isset($_POST["message"]) && !empty($_POST["message"]) && gettype($_POST["message"]) == "string" && (strlen($_POST["message"])>0 && strlen($_POST["message"])<501)) {
+    $message = $_POST["message"];
+} else {
+    header('location:../form.php?error=Message vide ou trop long');
+    exit;
 }
 
 // Import PHPMailer classes into the global namespace 
@@ -98,8 +79,8 @@ $mail = new PHPMailer;
 $mail->isSMTP();                            // Set mailer to use SMTP 
 $mail->Host = 'smtp.gmail.com';           // Specify main and backup SMTP servers 
 $mail->SMTPAuth = true;                     // Enable SMTP authentication 
-$mail->Username = 'baat01.p@gmail.com';       // SMTP username 
-$mail->Password = 'irrufbegunznzfjb';         // SMTP password 
+$mail->Username = 'parkotop.website@gmail.com';       // SMTP username 
+$mail->Password = 'parkotopCeciEstUnTest@';         // SMTP password 
 $mail->SMTPSecure = 'ssl';                  // Enable TLS encryption
 $mail->Port = 465;                          // TCP port to connect to 
  
@@ -107,7 +88,7 @@ $mail->Port = 465;                          // TCP port to connect to
 $mail->setFrom('parkotop@app.com', 'ParkOTop'); 
  
 // Add a recipient 
-$mail->addAddress('baat01.p@gmail.com'); //receiving address
+$mail->addAddress('parkotop.website@gmail.com'); //receiving address
  
 // Set email format to HTML 
 $mail->isHTML(true); 
@@ -116,19 +97,33 @@ $mail->isHTML(true);
 $mail->Subject = 'ParkOTop : ' . $typeMessage; 
  
 // Mail body content 
-$bodyContent = '<h1>'. $sujet . "</h1>"; 
-$bodyContent .= '<p>' . $contenu . '</p>'; 
-$bodyContent .=  '<br><p> Message envoyé par '. $Nom ." " . $Prenom ." (". $naissance.") le ".$datecontact.". Pour le contacter : ".$email."</p>";
+$bodyContent = '<h1>'. $subject . "</h1>"; 
+$bodyContent .= '<p>' . $message . '</p>'; 
+$bodyContent .=  '<br><p> Message envoyé par '. $firstName ." " . $lastName ." le ".$dateContact.". Pour le contacter : ".$email."</p>";
 $mail->Body    = $bodyContent; 
- 
+
+header("location:../form.php?success=".json_encode($mail));
+exit;
 // Send email 
 if(!$mail->send()) { //we write the informations on a json file if we can't send a mail
-    fwrite($file, $Nom.";".$Prenom.";".$datecontact.";".$email.";".$gender.";".$naissance.";".$typeMessage.";".$sujet.";".$contenu.";".$email->ErrorInfo."\r\n");
-    fclose($file);
-    header('location:../form.php?Message=' . "<br>Merci pour votre confiance monsieur ".$Nom. "! Votre message est enregistré et nos équipes vont l'examiner pour vous contacter dans les plus brefs délais. ");
-} else { 
-    header('location:../form.php?Message=' . "<br>Merci pour votre confiance monsieur ".$Nom. "! Votre message est transmis à nos équipes qui vous contacterons dans les plus brefs délais. " );
-}
+    $msg = (object) [
+        'lastName' => $lastName,
+        'firstName' => $firstName,
+        'dateContact' => $dateContact,
+        'email' => $email,
+        'typeMessage' => $typeMessage,
+        'subject' => $subject,
+        'message' => $message,
+        'error' => $mail->ErrorInfo
+    ];
 
+    $previousContent = file_get_contents('../data/infoContact.json');
+    $json = json_decode($previousContent, true);
+    array_push($json['messages'], $msg);
+    $jsonData = json_encode($json, JSON_PRETTY_PRINT);
+    file_put_contents('../data/infoContact.json', $jsonData);
+    
+}
+header("location:../form.php?success=" . "<br>Merci pour votre confiance ".$firstName." ".$lastName. "! Votre message est transmis à nos équipes qui vous contacterons dans les plus brefs délais.");
 
 ?>

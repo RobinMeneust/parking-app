@@ -17,14 +17,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
         die("Erreur de connexion à la base de données : " . mysqli_connect_error());
     }
 
-    if(isset($_POST["lastName"]) && !empty($_POST["lastName"]) && preg_match("/^[A-Za-z]*$/", $_POST["lastName"])) {
+    if(isset($_POST["lastName"]) && !empty($_POST["lastName"]) && preg_match("/^[A-Za-z-]*$/", $_POST["lastName"])) {
         $_SESSION["lastName"] = $_POST["lastName"];
     } else {
         $_SESSION["lastName"] = "error"; 
     }
     $VAR_profil["lastName"] = $_SESSION["lastName"];
     
-    if(isset($_POST["firstName"]) && !empty($_POST["firstName"]) && preg_match("/^[a-zA-Z\s]*$/", $_POST["firstName"])) { 
+    if(isset($_POST["firstName"]) && !empty($_POST["firstName"]) && preg_match("/^[a-zA-Z\s-]*$/", $_POST["firstName"])) { 
         $_SESSION["firstName"] = $_POST["firstName"];
     } else {
         $_SESSION["firstName"] = "error"; 
