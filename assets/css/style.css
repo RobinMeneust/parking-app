@@ -258,6 +258,7 @@ body.dark-mode {
 
 .dark-mode header {
 	background-color: #22202f;
+    border-bottom: solid 2px #fff;
 }
 
 .dark-mode header a {
@@ -1389,6 +1390,38 @@ span {
     z-index: -1;
 }
 
+.dark-mode .text-input {
+    background-color: #39364b;
+    border: solid 2px #fff;
+    text-decoration: none;
+    margin: 12px 0;
+    padding: 12px 15px;
+    width: 100%;
+    color: #fff;
+}
+
+.dark-mode .label {
+    position: absolute;
+    left: 10px;
+    top: 3px;
+    transition: all 0.2s;
+    padding: 0 2px;
+    z-index: 1;
+    color: #fff;
+    font-size: 14px;
+}
+
+.dark-mode .label::before{
+    content: "";
+    height: 15px;
+    background-color: #39364b;
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 100%;
+    z-index: -1;
+}
+
 .text-input {
     padding: 0.8rem;
     width: 100%;
@@ -1476,6 +1509,57 @@ span {
     margin-top: 50px;
     padding: 10px 0;
     background: #6fd649;
+    color: #fff;
+    border: 0;
+    outline: none;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+}
+
+.dark-mode .popupAddToHistory {
+    width: 400px;
+    background-color: #484465;
+    border-radius: 6px;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%,-50%) scale(0.1);
+    text-align: center;
+    padding: 0 30px 30px;
+    color: #fff;
+    visibility: hidden;
+    transition: all 0.4s;
+    border: black solid 3px;
+    z-index: 3;
+}
+
+.dark-mode .open-popupAddToHistory {
+    z-index: 3;
+    visibility: visible;
+    top: 50%;
+    transform: translate(-50%,-50%) scale(1);
+}
+
+.dark-mode .popupAddToHistory img {
+    width: 100px;
+    margin-top: -50px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.dark-mode .popupAddToHistory h2 {
+    font-size: 38px;
+    font-weight: 500;
+    margin: 30px 0 10px;
+}
+
+.dark-mode .popupAddToHistory button {
+    width: 100%;
+    margin-top: 50px;
+    padding: 10px 0;
+    background: #2a7310;
     color: #fff;
     border: 0;
     outline: none;
