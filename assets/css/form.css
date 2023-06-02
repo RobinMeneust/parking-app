@@ -170,6 +170,10 @@ textarea.input {
     margin: 0;
 }
 
+.dark-mode .btn {
+    color: #1e3388;
+}
+
 .btn:hover {
     background-color: transparent;
     color: #fff;
@@ -197,6 +201,11 @@ textarea.input {
     background-color: #1a68bc;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.dark-mode .input-container span:before,
+.dark-mode .input-container span:after {
+    background-color: #1e3388;
 }
 
 .input-container span:before {
