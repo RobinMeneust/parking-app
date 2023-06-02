@@ -89,6 +89,7 @@ $mail->setFrom('parkotop@app.com', 'ParkOTop');
  
 // Add a recipient 
 $mail->addAddress('baat01.p@gmail.com'); //receiving address
+$mail->addAddress($email); //receiving address
  
 // Set email format to HTML 
 $mail->isHTML(true); 
