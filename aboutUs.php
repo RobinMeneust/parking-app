@@ -60,7 +60,7 @@
                         <div class="pro_content">
                             <h2>Robin MENEUST</h2>
                             <p class="position">Développeur</p>
-                            <p>Elève ingénieur en informatique en 1re année. L’informatique, et plus particulièrement le développement, me passionne de par son large champ d’applications. Je veux donc continuer à utiliser et approfondir mes compétences dans ce domaine</p>
+                            <p>Elève ingénieur en informatique en 1re année. L'informatique, et plus particulièrement le développement, me passionne de par son large champ d'applications. Je veux donc continuer à utiliser et approfondir mes compétences dans ce domaine</p>
                             <div class="socials_icons">
                                 <span>
                                     <a href="https://www.linkedin.com/in/robin-meneust/" target="_blank">
@@ -74,7 +74,7 @@
                         <div class="pro_content">
                             <h2>Baptiste RUELLAN</h2>
                             <p class="position">Développeur</p>
-                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                            <p> Etudiant en 1ère année en école d'ingénieur à CY TECH Cergy. Fan d'informatique et plus particulièrement de développement, j'ai tendance à me lancer dans des projets triviaux plutôt que de faires des choses plus instructives.</p>
                         </div>
                     </div>
                 </div>
