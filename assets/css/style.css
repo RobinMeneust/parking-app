@@ -579,10 +579,33 @@ hr {
     margin-left: 1%;
 }
 
+.contentUserGraphs {
+    display: flex;
+    flex-direction: column;
+    margin: 50px 10px;
+}
+
 .graphsContainer{
-    display: flexbox;
-	width: 800px;
+    display: flex;
+    flex-direction: column;
+    min-width: 50%;
+	max-width: 100%;
 	margin: auto;
+}
+
+.contentPredictExpenses{
+    display: flex;
+    flex-direction: column;
+    margin: 70px 5px 150px 5px;
+}
+
+#expensesPredict{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    max-height: 100%;
+    min-width: 80%;
+	max-width: 100%;
 }
 
 #connecte {
@@ -701,6 +724,7 @@ hr {
     display: flex;
     width: 100%;
     margin-top: 5%;
+    border: solid black 3px;
 }
 
 #profileTable tbody {
@@ -821,6 +845,10 @@ hr {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+}
+
+#fullList {
+    padding: 5px 8px
 }
 
  #headerTable {

@@ -18,7 +18,7 @@ if(!isset($_SESSION['VAR_profil'])){
 <body>
 	<?php include_once("Header.php"); ?>
 
-	<div class="content">
+	<div class="contentUserGraphs">
 		<div class="horizontalMenu">
 			<input class="date_input" id="yearGraph" name="yearGraph" style="text-align:center;" type="number" value="2023" min="1900" max="2050">
 			<a id="refreshDate" class="detailsButtons" style="text-align:center; color:black; --clr:#1e9bff"><span>Valider</span><i></i></a>

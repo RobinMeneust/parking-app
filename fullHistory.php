@@ -22,7 +22,7 @@ if(!isset($_SESSION['VAR_profil'])){
 		<h1 id="titleAddHistory">Liste détaillée des parkings utilisés</h1>
 	</div>
 	<div id="contentFullHistory">
-		<a class="detailsButtons" style="--clr:#6eff3e" onclick="createFullTable();"><span>Liste complète</span><i></i></a>
+		<a class="detailsButtons" style="--clr:#6eff3e" onclick="createFullTable();"><span id="fullList">Liste complète</span><i></i></a>
 		<a class="detailsButtons" style="--clr:#6eff3e" onclick="createTableByParking();"><span>Liste par parking</span><i></i></a>
 		<table id="tableFullHistory"></table>
 	</div>

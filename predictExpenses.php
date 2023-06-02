@@ -18,7 +18,7 @@ if(!isset($_SESSION['VAR_profil'])){
 <body>
 	<?php include_once("Header.php"); ?>
 
-	<div class="content">
+	<div class="contentPredictExpenses">
 		<div class="graphsContainer">
 			<div id="graphLegend">
 				<!-- <b style="color:blue; font-size:20px;">-</b> -->
@@ -32,7 +32,7 @@ if(!isset($_SESSION['VAR_profil'])){
                     <span style="font-size:20px;" class="legendPredict"> : Valeurs prédites</span>
                 </div>
 			</div>
-			<canvas class="graph" id="expensesPredict" style="height:500px;width:800px"></canvas>
+			<canvas class="graph" id="expensesPredict" ></canvas>
 		</div>
 	</div>
 	<?php include_once("Footer.php"); ?>

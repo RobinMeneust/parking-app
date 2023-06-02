@@ -46,7 +46,7 @@
                         <div class="pro_content">
                             <h2>David KUSMIDER</h2>
                             <p class="position">Développeur</p>
-                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                            <p> Etudiant en 1ère année en école d'ingénieur à CY TECH Cergy et stagiaire chez CS SZWEDO. Je suis capable d'analyser, d'identifier les problèmes et de mettre en œuvre des solutions correctives en utilisant les techniques d'ingénierie acquises dans le cadre des cours et des projets. Je vise à devenir un expert en cybersécurité.</p>
                             <div class="socials_icons">
                                 <span>
                                     <a href="https://www.linkedin.com/in/david-kusmider-b54304253/" target="_blank">
