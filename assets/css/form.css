@@ -81,7 +81,7 @@ textarea {
     width: 100%;
     outline: none;
     border: 2px solid #fafafa;
-    background: none;
+    background-color: #1a68bc;
     padding: 0.6rem 1.2rem;
     color: #fff;
     font-weight: 400;
@@ -91,12 +91,23 @@ textarea {
     transition: 0.3s;
 }
 
-.select-gender{
+.dark-mode .select-type {
+    background-color: #1e3388;
+}
+
+.subjectMessage {
     font-family: "Poppins", sans-serif;
     color: #fff;
-    font-weight: 500;
-    font-size: 0.95rem;
-    font-style: normal;
+}
+
+.option {
+    font-family: "Poppins", sans-serif;
+    background-color: #1a68bc;
+    color: #fff;
+}
+
+.dark-mode .option {
+    background-color: #1e3388;
 }
 
 .input-container {
@@ -136,7 +147,7 @@ textarea.input {
     font-size: 0.9rem;
     font-weight: 400;
     pointer-events: none;
-    transition: 0.5s;
+    transition: 0.3s;
     z-index: 1;
 }
 
@@ -215,7 +226,11 @@ textarea.input {
 }
 
 .contact-info .title {
-    color: #1a68bc;
+    color: black;
+}
+
+.dark-mode .contact-info .title {
+    color: white;
 }
 
 .text {

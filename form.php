@@ -58,12 +58,6 @@
         <form action="./PHP/formCheck.php" method="get" id="formMsg">
             <h3 class="title">Contactez-nous</h3>
             <div class="input-container">
-            <input class="input" type="text" name="datecontact"
-            onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" required>
-            <label for="">Date du message</label>
-              <span>Date du message</span>
-            </div>
-            <div class="input-container">
               <input class="input" type="text" name="nom" size='40' required>
               <label for="">Nom</label>
               <span>Nom</span>
@@ -78,27 +72,14 @@
               <label for="">Email</label>
               <span>Email</span>
             </div>
-
-            <div class="input-container">
-                <input type="radio" name="gender" value="female"><em class="select-gender">Femme</em>
-                <input type="radio" name="gender" value="male"><em class="select-gender">Homme</em>
-                <span style="color: #fff;">Genre</span>
-            </div>
-            
-            <div class="input-container">
-            <input class="input" type="text" name="naissance" required onfocus="this.type='date'" onblur="if(!this.value) this.type='text'">
-            <label for="">Date de naissance</label>
-              <span>Date de naissance</span>
-            </div>
             
             <div class="input-container">
                 <select name="typeMessage" class="select-type">
-                    <option value="probleme">Problème</option>
-                    <option value="question">Question</option>
-                    <option value="suggestion">Suggestion</option>
-                    <option value="message">Message Lambda</option>
+                    <option value="probleme" class="option">Problème</option>
+                    <option value="question" class="option">Question</option>
+                    <option value="suggestion" class="option">Suggestion</option>
                 </select>
-              <span style="color: #fff;">Type du message</span>
+              <span class="subjectMessage">Type du message</span>
             </div>
 
             <div class="input-container">
