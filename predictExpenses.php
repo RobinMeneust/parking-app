@@ -21,7 +21,6 @@ if(!isset($_SESSION['VAR_profil'])){
 	<div class="contentPredictExpenses">
 		<div class="graphsContainer">
 			<div id="graphLegend">
-				<!-- <b style="color:blue; font-size:20px;">-</b> -->
                 <div style="display:flex;">
                     <div style="background-color: blue; height:10px; width:25px; margin:7px"></div>
                     <span style="font-size:20px;" class="legendPredict"> : Valeurs réelles</span>
