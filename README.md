@@ -18,6 +18,12 @@ For instance you may get the warning : `Warning: mysqli_connect(): (HY000/2002)`
 
 ## Installation
 
+### API keys
+
+For security reasons we disabled the API keys that are used in this project.
+So, you will need to add your own ones in the JS and PHP files.
+The API keys needed are for Google Maps API and OpenCage A
+
 ### How to install Docker & Docker Compose
 
 #### Linux
